@@ -1,0 +1,48 @@
+:focus-visible {
+  outline: 3px solid rgba(200, 16, 46, 0.55);
+  outline-offset: 2px;
+}
+
+@media (max-width: 639px) {
+  #header-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 44px;
+    min-height: 92px;
+    overflow: visible;
+    padding-block: 8px;
+  }
+
+  #header-institution {
+    min-width: 0;
+    padding-right: 0;
+  }
+
+  #header-hours,
+  #header-contact,
+  #primary-navigation {
+    display: none;
+  }
+
+  #header-address {
+    min-width: 44px;
+    justify-content: center;
+    border-left: 0;
+    padding: 0;
+  }
+
+  #header-address > div:first-child,
+  #header-address > div.h-10 {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

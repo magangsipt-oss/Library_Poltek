@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Perpustakaan - Politeknik Sinar Mas Berau Coal</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              red: '#C8102E',      /* Merah Resmi Poltek Sinar Mas Berau */
+              darkred: '#85071B',  /* Merah Marun Aksen */
+              lightred: '#EA1836',
+              dark: '#0B1120',
+            }
+          },
+          animation: {
+            'kenburns': 'kenburnsMotion 22s ease-in-out infinite alternate',
+          },
+          keyframes: {
+            kenburnsMotion: {
+              '0%': { transform: 'scale(1.0) translate(0%, 0%)' },
+              '50%': { transform: 'scale(1.06) translate(-1%, -0.8%)' },
+              '100%': { transform: 'scale(1.02) translate(0.8%, -0.4%)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Kustom Scrollbar Halus */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-brand-red selection:text-white">
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP HEADER 4 KOLOM                                                     -->
+  <!-- ========================================================================= -->
+  <header class="bg-white border-b border-slate-200 shadow-sm relative z-30">
+    <div class="max-w-[1560px] mx-auto px-4 lg:px-6">
+      <div id="header-row" class="flex items-center justify-between py-3 min-h-[110px] gap-2 lg:gap-4 overflow-x-auto lg:overflow-visible">
+
+        <!-- KOLOM 1: LOGO + INSTITUSI -->
+        <div id="header-institution" class="flex items-center shrink-0 pr-3 lg:pr-7 py-1 cursor-pointer" onclick="navigateToPage('beranda')">
+          <div class="flex items-center gap-2">
+            <div class="w-[96px] h-[96px] flex items-center justify-center">
+              <img src="./assets/img/logo-poltek.png" alt="Logo Politeknik Sinar Mas Berau Coal" class="w-full h-full object-contain select-none">
+            </div>
+            <span class="text-[13px] font-black tracking-wider text-brand-red uppercase leading-none">LIBRARY</span>
+          </div>
+        </div>
+
+        <!-- KOLOM 2: JAM OPERASIONAL -->
+        <div id="header-hours" class="flex items-center px-3 lg:px-6 border-l border-slate-300 shrink-0">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-brand-red text-white flex items-center justify-center shrink-0 shadow-sm">
+              <i data-lucide="clock" class="w-5 h-5 stroke-[2.2]"></i>
+            </div>
+            <div>
+              <div class="text-sm lg:text-[15px] font-black text-slate-900 leading-tight whitespace-nowrap">08.00 - 17.00 WITA</div>
+              <div class="text-[11px] font-bold text-slate-500 mt-0.5 uppercase tracking-wide whitespace-nowrap">Senin – Jum'at</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KOLOM 3: HP, EMAIL, INSTAGRAM -->
+        <div id="header-contact" class="flex items-center px-3 lg:px-6 border-l border-slate-300 shrink-0">
+          <div class="flex flex-col justify-center gap-1.5 text-xs py-0.5">
+            <div class="flex items-center gap-2">
+              <div class="w-5 h-5 rounded-full bg-red-100 text-brand-red flex items-center justify-center shrink-0">
+                <i data-lucide="phone" class="w-3 h-3 stroke-[2.4]"></i>
+              </div>
+              <div class="text-slate-800 text-xs font-semibold leading-none whitespace-nowrap">
+                <span class="text-slate-500 font-medium mr-1">HP :</span>
+                <a href="tel:082254431189" class="font-mono font-bold text-slate-900 hover:text-brand-red transition">(0822) 5443-1189</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-5 h-5 rounded-full bg-red-100 text-brand-red flex items-center justify-center shrink-0">
+                <i data-lucide="mail" class="w-3 h-3 stroke-[2.2]"></i>
+              </div>
+              <div class="text-slate-800 text-xs font-semibold leading-none whitespace-nowrap">
+                <span class="text-slate-500 font-medium mr-1">Email :</span>
+                <a href="mailto:library@polteksimasberau.ac.id" class="text-slate-700 hover:text-brand-red transition">library@polteksimasberau.ac.id</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-5 h-5 rounded-full bg-red-100 text-brand-red flex items-center justify-center shrink-0">
+                <i data-lucide="instagram" class="w-3 h-3 stroke-[2.2]"></i>
+              </div>
+              <div class="text-slate-800 text-xs font-semibold leading-none whitespace-nowrap">
+                <span class="text-slate-500 font-medium mr-1">Instagram :</span>
+                <a href="https://instagram.com/librarypoltek" target="_blank" class="text-brand-red font-bold hover:underline transition">@librarypoltek</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KOLOM 4: ALAMAT & MAPS + DRAWER BUTTON -->
+        <div id="header-address" class="flex items-center pl-3 lg:pl-6 border-l border-slate-300 shrink-0">
+          <div class="flex items-center gap-3 mr-3 lg:mr-5">
+            <div class="w-10 h-10 rounded-full bg-brand-red text-white flex items-center justify-center shrink-0 shadow-sm">
+              <i data-lucide="map-pin" class="w-5 h-5 stroke-[2.2]"></i>
+            </div>
+            <div>
+              <div class="text-xs lg:text-[13px] font-bold text-slate-900 leading-snug whitespace-nowrap">Jl. Raja Alam 2, Sei Bedungun</div>
+              <div class="text-[11px] text-slate-500 font-medium leading-tight mt-0.5 whitespace-nowrap">Tanjung Redeb, Berau, Kaltim</div>
+              <button onclick="openMapsModal()" class="inline-flex items-center gap-1 text-[11px] font-bold text-brand-red hover:underline mt-0.5 group">
+                <i data-lucide="navigation" class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform"></i>
+                <span>Buka Google Maps</span>
+              </button>
+            </div>
+          </div>
+          <div class="h-10 w-[1px] bg-slate-300 shrink-0 mr-3"></div>
+          <button onclick="toggleSideMenu()" aria-label="Buka Menu Navigasi" class="w-10 h-10 rounded-xl flex flex-col items-center justify-center gap-1.5 text-slate-800 hover:text-brand-red hover:bg-slate-100 transition p-2 focus:outline-none">
+            <span class="w-5 h-0.5 bg-current rounded-full"></span>
+            <span class="w-5 h-0.5 bg-current rounded-full"></span>
+            <span class="w-5 h-0.5 bg-current rounded-full"></span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 2. NAVBAR (BERANDA TANPA TANDA PANAH, MENU LAIN POLOS SEPERTI E-RESOURCES)-->
+  <!-- ========================================================================= -->
+  <nav id="primary-navigation" class="bg-brand-red text-white shadow-md sticky top-0 z-40 overflow-visible">
+    <div class="max-w-[1560px] mx-auto px-4 lg:px-6 flex items-center justify-between h-12 text-xs font-bold overflow-visible">
+      
+      <div class="flex items-center space-x-1 sm:space-x-2 lg:space-x-3 py-1 overflow-visible">
+        
+        <!-- 1. BERANDA (LANGSUNG TAUTAN TANPA TANDA PANAH KE BAWAH) -->
+        <a href="javascript:void(0)" onclick="navigateToPage('beranda')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-white/10 transition opacity-95 hover:opacity-100 whitespace-nowrap">
+          <i data-lucide="home" class="w-3.5 h-3.5"></i>
+          <span>Beranda</span>
+        </a>
+
+        <!-- 2. TENTANG PERPUSTAKAAN (MUNCUL PILIHAN SAAT DIKLIK, POLOS TANPA GAMBAR) -->
+        <div class="relative nav-dropdown-wrapper">
+          <button 
+            type="button"
+            onclick="toggleNavDropdown('dropdown-tentang', event)" 
+            id="btn-tentang" 
+            aria-expanded="false" 
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-white/10 active:bg-white/20 transition opacity-95 hover:opacity-100 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-white/40 cursor-pointer select-none"
+          >
+            <span>Tentang Perpustakaan</span>
+            <i data-lucide="chevron-down" id="arrow-tentang" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+          </button>
+          
+          <div 
+            id="dropdown-tentang" 
+            class="nav-dropdown-menu absolute left-0 top-full mt-2 w-64 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 hidden text-xs font-semibold z-50"
+          >
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToPage('npp')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Nomor Pokok Perpustakaan</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToPage('profil')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Profil Perpustakaan</a>
+          </div>
+        </div>
+
+        <!-- 3. LAYANAN (MUNCUL 10 PILIHAN SAAT DIKLIK, POLOS TANPA GAMBAR SEPERTI E-RESOURCES) -->
+        <div class="relative nav-dropdown-wrapper">
+          <button 
+            type="button"
+            onclick="toggleNavDropdown('dropdown-layanan', event)" 
+            id="btn-layanan" 
+            aria-expanded="false"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-white/10 active:bg-white/20 transition opacity-95 hover:opacity-100 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-white/40 cursor-pointer select-none"
+          >
+            <span>Layanan</span>
+            <i data-lucide="chevron-down" id="arrow-layanan" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+          </button>
+          
+          <div 
+            id="dropdown-layanan" 
+            class="nav-dropdown-menu absolute left-0 top-full mt-2 w-64 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 hidden text-xs font-semibold z-50"
+          >
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToPage('opac')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan OPAC</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-sirkulasi')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Sirkulasi</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-kelas-literasi')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Kelas Literasi</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-tata-bahasa')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Tata Bahasa</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-cek-similarity')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Cek Similarity</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-bebas-pustaka')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Bebas Pustaka</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-repository')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Repository</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('usul-buku')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Usul Buku</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-fotocopy')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Fotocopy</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-bimbingan-pemustaka')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Bimbingan Pemustaka</a>
+          </div>
+        </div>
+
+        <!-- 4. E-RESOURCES -->
+        <div class="relative nav-dropdown-wrapper">
+          <button 
+            type="button"
+            onclick="toggleNavDropdown('dropdown-eresources', event)" 
+            id="btn-eresources" 
+            class="flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-white/10 transition opacity-95 hover:opacity-100 whitespace-nowrap focus:outline-none"
+          >
+            <span>E-resources</span>
+            <i data-lucide="chevron-down" id="arrow-eresources" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+          </button>
+          <div id="dropdown-eresources" class="nav-dropdown-menu absolute left-0 top-full mt-2 w-64 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 hidden text-xs font-semibold z-50">
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToPage('eresources', 'scopus')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Scopus</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToPage('eresources', 'kubuku')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Kubuku</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToPage('eresources', 'perpusnas')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">E-resources Perpusnas RI</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToPage('eresources', 'doaj')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Directory Open Access Journal</a>
+          </div>
+        </div>
+
+        <!-- 5. PUBLIKASI JURNAL -->
+        <div class="relative nav-dropdown-wrapper">
+          <button 
+            type="button"
+            onclick="toggleNavDropdown('dropdown-publikasi', event)" 
+            id="btn-publikasi" 
+            class="flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-white/10 transition opacity-95 hover:opacity-100 whitespace-nowrap focus:outline-none"
+          >
+            <span>Publikasi Jurnal</span>
+            <i data-lucide="chevron-down" id="arrow-publikasi" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+          </button>
+          <div id="dropdown-publikasi" class="nav-dropdown-menu absolute left-0 top-full mt-2 w-60 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 hidden text-xs font-semibold z-50">
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToPage('publikasi')" class="block px-4 py-2.5 hover:bg-red-50 hover:text-brand-red">List publikasi dosen</a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN WRAPPER BERANDA (HANYA BERISI 3 BAGIAN SESUAI PERMINTAAN!)           -->
+  <!-- 1. JELAJAHI SUMBER DAYA PENGETAHUAN                                       -->
+  <!-- 2. JAM LAYANAN                                                            -->
+  <!-- 3. 10 LAYANAN PERPUSTAKAAN                                                -->
+  <!-- ========================================================================= -->
+  <main id="view-beranda" class="flex-1">
+
+    <!-- BAGIAN 1: JELAJAHI SUMBER DAYA PENGETAHUAN (HERO BANNER) -->
+    <section class="relative text-white py-24 sm:py-32 lg:py-36 px-4 overflow-hidden bg-slate-950 flex items-center justify-center min-h-[440px]">
+      <div class="absolute inset-0 z-0 overflow-hidden">
+        <img 
+          src="https://images.weserv.nl/?url=polteksimasberau.ac.id/wp-content/uploads/2024/07/Poltek-hd-6-11zon.jpg&w=1800&q=85" 
+          alt="Gedung Politeknik Sinar Mas Berau Coal" 
+          class="w-full h-full object-cover object-center filter brightness-[0.55] contrast-[1.08] animate-kenburns scale-100 will-change-transform"
+          onerror="this.onerror=null; this.src='https://polteksimasberau.ac.id/wp-content/uploads/2024/09/Poltek-hd-6-11zon.jpg';"
+        >
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/50 to-slate-950/90 pointer-events-none"></div>
+      </div>
+
+      <div class="max-w-4xl mx-auto text-center relative z-10 space-y-4 px-2">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-black tracking-tight leading-tight text-white drop-shadow-lg">
+          Jelajahi Sumber Daya Pengetahuan
+        </h1>
+        <p class="text-slate-200 text-sm sm:text-base md:text-lg max-w-2xl mx-auto font-normal leading-relaxed drop-shadow">
+          Pusat literatur terintegrasi untuk mendukung keunggulan riset, teknologi mesin, rekayasa logistik, serta pemetaan wilayah Politeknik Sinar Mas Berau Coal.
+        </p>
+        <div class="pt-2 flex items-center justify-center">
+          <a href="#layanan-section" class="px-6 py-2.5 rounded-xl bg-brand-red hover:bg-brand-darkred text-white text-xs sm:text-sm font-bold shadow-lg transition flex items-center gap-2">
+            <i data-lucide="layers" class="w-4 h-4"></i>
+            <span>Lihat 10 Layanan Perpustakaan</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BAGIAN 2: JAM LAYANAN -->
+    <section id="jam-layanan-section" class="max-w-7xl mx-auto px-4 -mt-10 relative z-20">
+      <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+        
+        <!-- Status Operasional Hari Ini -->
+        <div class="bg-gradient-to-br from-red-50 to-slate-50 p-6 rounded-2xl border border-red-100 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[10px] font-black uppercase tracking-widest text-brand-red">Jam Layanan</span>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Buka Hari Ini
+              </span>
+            </div>
+            <h3 class="text-base sm:text-lg font-black text-slate-900 leading-snug">
+              Layanan Tatap Muka di Gedung Perpustakaan
+            </h3>
+            <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+              Pustakawan siap melayani peminjaman fisik, bimbingan tugas akhir, dan penelusuran buku di lantai 2 Politeknik Sinar Mas Berau Coal.
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-red-100 flex items-center justify-between text-xs font-bold text-slate-800">
+            <span>Hari Kerja Aktif:</span>
+            <span class="font-mono text-brand-red">08.00 – 17.00 WITA</span>
+          </div>
+        </div>
+
+        <!-- Rincian Jam Kerja -->
+        <div class="p-6 rounded-2xl bg-white border border-slate-200 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 mb-3 text-slate-900 font-extrabold text-sm">
+              <div class="w-8 h-8 rounded-lg bg-red-100 text-brand-red flex items-center justify-center shrink-0">
+                <i data-lucide="calendar" class="w-4 h-4"></i>
+              </div>
+              <span>Jadwal Jam Kerja Pemustaka</span>
+            </div>
+            <div class="space-y-2.5 text-xs text-slate-600 mt-3">
+              <div class="flex justify-between items-center py-1 border-b border-slate-100">
+                <span class="font-medium">Senin – Kamis</span>
+                <span class="font-mono font-bold text-slate-900">08.00 – 17.00 WITA</span>
+              </div>
+              <div class="flex justify-between items-center py-1 border-b border-slate-100">
+                <span class="font-medium">Jum'at</span>
+                <div class="text-right">
+                  <span class="font-mono font-bold text-slate-900">08.00 – 17.00 WITA</span>
+                  <span class="text-[10px] text-slate-400 block">(Istirahat 11.30 – 13.30)</span>
+                </div>
+              </div>
+              <div class="flex justify-between items-center py-1 text-slate-400">
+                <span>Sabtu, Minggu & Libur</span>
+                <span class="font-semibold text-slate-500">Tutup Fisik</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-500 flex items-center gap-1.5">
+            <i data-lucide="info" class="w-3.5 h-3.5 text-brand-red shrink-0"></i>
+            <span>Wajib membawa Kartu Tanda Mahasiswa (KTM) aktif.</span>
+          </div>
+        </div>
+
+        <!-- Layanan Daring Mandiri -->
+        <div class="p-6 rounded-2xl bg-slate-900 text-white flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 mb-3 font-extrabold text-sm text-red-200">
+              <div class="w-8 h-8 rounded-lg bg-white/10 text-white flex items-center justify-center shrink-0">
+                <i data-lucide="cloud" class="w-4 h-4 text-red-400"></i>
+              </div>
+              <span>Layanan Daring Mandiri</span>
+            </div>
+            <h4 class="text-lg font-black text-white leading-snug">
+              Akses Digital 24 Jam Non-Stop
+            </h4>
+            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+              Katalog OPAC, repositori tugas akhir, dan akses e-resources dapat diakses mandiri kapan saja secara online.
+            </p>
+          </div>
+          <div class="mt-5 pt-4 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-xs text-slate-400 font-mono">Status: Online 24 Jam</span>
+            <a href="#layanan-section" class="text-xs font-bold text-red-400 hover:text-white flex items-center gap-1 transition">
+              10 Layanan &darr;
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- BAGIAN 3: 10 LAYANAN PERPUSTAKAAN -->
+    <section id="layanan-section" class="max-w-7xl mx-auto px-4 py-16 space-y-8 scroll-mt-14">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <span class="text-brand-red text-xs font-bold uppercase tracking-widest">Fasilitas Pemustaka</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+          10 Layanan Perpustakaan
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500">
+          Daftar seluruh layanan penelusuran pustaka, administrasi kelulusan, dan pengayaan literasi ilmiah.
+        </p>
+      </div>
+
+      <!-- GRID 10 KARTU LAYANAN -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        
+        <!-- 1. Layanan OPAC (Membuka ke Halaman Khusus OPAC) -->
+        <div id="layanan-opac" onclick="navigateToPage('opac')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
+              <i data-lucide="search" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">1. Layanan OPAC</h3>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Katalog online pencarian buku fisik, cek ketersediaan rak & peminjaman.</p>
+          </div>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Buka Halaman OPAC &rarr;</span>
+        </div>
+
+        <!-- 2. Layanan Sirkulasi -->
+        <div id="layanan-sirkulasi" onclick="showNotification('Informasi Peminjaman & Pengembalian Koleksi Fisik...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
+              <i data-lucide="repeat" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">2. Layanan Sirkulasi</h3>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Peminjaman, perpanjangan, dan pengembalian buku dengan KTM aktif.</p>
+          </div>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">SOP Sirkulasi &rarr;</span>
+        </div>
+
+        <!-- 3. Layanan Kelas Literasi -->
+        <div id="layanan-kelas-literasi" onclick="showNotification('Pendaftaran Kelas Literasi Informasi & Sitasi Mendeley...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
+              <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">3. Layanan Kelas Literasi</h3>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Workshop pencarian jurnal bereputasi dan penggunaan software sitasi Mendeley.</p>
+          </div>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Ikuti Kelas &rarr;</span>
+        </div>
+
+        <!-- 4. Layanan Tata Bahasa -->
+        <div id="layanan-tata-bahasa" onclick="showNotification('Pendampingan Tata Bahasa Naskah & Abstrak...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
+              <i data-lucide="spell-check" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">4. Layanan Tata Bahasa</h3>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Pemeriksaan kaidah bahasa baku Indonesia dan proofreading abstrak Inggris.</p>
+          </div>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Konsultasi &rarr;</span>
+        </div>
+
+        <!-- 5. Layanan Cek Similarity -->
+        <div id="layanan-cek-similarity" onclick="showNotification('Pengecekan Similarity Turnitin Tugas Akhir & Artikel...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
+              <i data-lucide="scan-line" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">5. Layanan Cek Similarity</h3>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Uji kemiripan naskah tugas akhir dan manuskrip dosen melalui Turnitin resmi.</p>
+          </div>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Unggah Naskah &rarr;</span>
+        </div>
+
+        <!-- 6. Layanan Bebas Pustaka -->
+        <div id="layanan-bebas-pustaka" onclick="showNotification('Pengajuan Surat Keterangan Bebas Pustaka Kelulusan...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
+              <i data-lucide="file-check-2" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">6. Layanan Bebas Pustaka</h3>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Penerbitan surat keterangan bebas pinjaman buku sebagai syarat yudisium wisuda.</p>
+          </div>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Ajukan Surat &rarr;</span>
+        </div>
+
+        <!-- 7. Layanan Repository -->
+        <div id="layanan-repository" onclick="showNotification('Membuka Repositori Laporan Tugas Akhir & PKL...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
+              <i data-lucide="archive" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">7. Layanan Repository</h3>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Arsip naskah digital laporan PKL, proyek akhir, dan publikasi institusi.</p>
+          </div>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Akses Repo &rarr;</span>
+        </div>
+
+        <!-- 8. Usul Buku -->
+        <div id="usul-buku" onclick="showNotification('Formulir Pengusulan Pengadaan Buku Baru...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
+              <i data-lucide="bookmark-plus" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">8. Usul Buku</h3>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Usulan judul buku teks atau referensi kuliah baru untuk dibeli perpustakaan.</p>
+          </div>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Form Usulan &rarr;</span>
+        </div>
+
+        <!-- 9. Layanan Fotocopy -->
+        <div id="layanan-fotocopy" onclick="showNotification('Informasi Layanan Fotocopy & Penggandaan Modul...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
+              <i data-lucide="printer" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">9. Layanan Fotocopy</h3>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Fasilitas cetak naskah, scan bab buku, dan penggandaan modul praktikum mahasiswa.</p>
+          </div>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Info Layanan &rarr;</span>
+        </div>
+
+        <!-- 10. Layanan Bimbingan Pemustaka -->
+        <div id="layanan-bimbingan-pemustaka" onclick="showNotification('Jadwal Konsultasi Bimbingan Pemustaka...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+          <div>
+            <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
+              <i data-lucide="user-check" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">10. Bimbingan Pemustaka</h3>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Konsultasi penelusuran bahan rujukan tugas akhir bersama staf pustakawan.</p>
+          </div>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Jadwalkan &rarr;</span>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- HALAMAN KHUSUS 1: NOMOR POKOK PERPUSTAKAAN (TERPISAH DARI BERANDA)        -->
+  <!-- ========================================================================= -->
+  <main id="view-npp" class="flex-1 hidden max-w-5xl mx-auto px-4 py-12 w-full">
+    <div class="mb-6 flex items-center justify-between">
+      <button onclick="navigateToPage('beranda')" class="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-brand-red transition bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span>Kembali ke Beranda</span>
+      </button>
+      <span class="text-xs font-mono text-slate-400">Tentang Perpustakaan</span>
+    </div>
+
+    <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-brand-darkred text-white rounded-3xl p-8 sm:p-12 shadow-2xl space-y-8">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-brand-red text-white flex items-center justify-center font-black text-2xl shadow-lg">
+          <i data-lucide="award" class="w-7 h-7"></i>
+        </div>
+        <div>
+          <span class="text-xs text-red-200 uppercase font-black tracking-widest block">Legalitas Perguruan Tinggi</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-white">Nomor Pokok Perpustakaan (NPP)</h1>
+        </div>
+      </div>
+
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-8 text-center space-y-3">
+        <span class="text-xs text-slate-300 uppercase tracking-widest block font-semibold">Kode NPP Resmi dari Perpustakaan Nasional Republik Indonesia</span>
+        <div class="text-3xl sm:text-4xl md:text-5xl font-mono font-black tracking-wider text-white select-all">
+          64.03.01.2001.00001
+        </div>
+        <div class="pt-2">
+          <span class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-4 py-1.5 rounded-full text-xs font-bold">
+            <i data-lucide="check-circle" class="w-4 h-4"></i> Terverifikasi Nasional di Pusat Data Perpusnas RI
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-200">
+        <div class="bg-white/5 rounded-2xl p-5 border border-white/10 space-y-2">
+          <h3 class="font-bold text-white text-sm">Fungsi Legalitas NPP:</h3>
+          <p class="leading-relaxed text-slate-300">
+            Nomor Pokok Perpustakaan (NPP) merupakan kode identitas unik resmi yang diberikan oleh Perpustakaan Nasional RI bagi perpustakaan di seluruh Indonesia guna standarisasi dan pembinaan koleksi.
+          </p>
+        </div>
+        <div class="bg-white/5 rounded-2xl p-5 border border-white/10 space-y-2">
+          <h3 class="font-bold text-white text-sm">Manfaat Akreditasi Institusi:</h3>
+          <p class="leading-relaxed text-slate-300">
+            Menjadi dokumen penunjang utama dalam proses akreditasi perpustakaan dan pemenuhan butir sarana-prasarana BAN-PT maupun LAM untuk 3 program studi vokasi Politeknik Sinar Mas Berau Coal.
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-white/10 flex justify-between items-center text-xs text-slate-300">
+        <span>Lokasi: Kabupaten Berau, Kalimantan Timur</span>
+        <span>UPT Perpustakaan Poltek Simas Berau</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- HALAMAN KHUSUS 2: PROFIL PERPUSTAKAAN (TERPISAH DARI BERANDA)             -->
+  <!-- ========================================================================= -->
+  <main id="view-profil" class="flex-1 hidden max-w-5xl mx-auto px-4 py-12 w-full">
+    <div class="mb-6 flex items-center justify-between">
+      <button onclick="navigateToPage('beranda')" class="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-brand-red transition bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span>Kembali ke Beranda</span>
+      </button>
+      <span class="text-xs font-mono text-slate-400">Tentang Perpustakaan</span>
+    </div>
+
+    <div class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm space-y-8">
+      <div class="flex items-center gap-4 border-b border-slate-100 pb-6">
+        <div class="w-14 h-14 rounded-2xl bg-red-50 text-brand-red flex items-center justify-center shrink-0">
+          <i data-lucide="building-2" class="w-7 h-7"></i>
+        </div>
+        <div>
+          <span class="text-brand-red text-xs font-bold uppercase tracking-widest block">Identitas Institusi</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900">Profil Perpustakaan</h1>
+        </div>
+      </div>
+
+      <div class="prose max-w-none text-slate-600 text-sm leading-relaxed space-y-4">
+        <p>
+          UPT Perpustakaan Politeknik Sinar Mas Berau Coal berkedudukan di Lantai 2 Gedung Kampus Utama, Jalan Raja Alam 2, Sei Bedungun, Tanjung Redeb, Berau. Didirikan sebagai pusat pembelajaran mandiri, penelitian vokasi, dan rujukan teknologi industri.
+        </p>
+        <p>
+          Koleksi yang tersedia mencakup buku teks teknik mesin, literatur manajemen rantai pasok dan logistik pelabuhan, metodologi survei geodesi dan pemetaan SIG, serta jurnal-jurnal bereputasi internasional.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-base font-extrabold text-slate-900 mb-4">Mendukung 3 Program Studi Vokasi Unggulan:</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center">
+            <i data-lucide="truck" class="w-6 h-6 text-brand-red mx-auto mb-2"></i>
+            <span class="text-xs font-bold text-slate-900 block">D-IV Teknologi Rekayasa Logistik</span>
+            <span class="text-[11px] text-slate-500 mt-1 block">Supply Chain & Pergudangan</span>
+          </div>
+          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center">
+            <i data-lucide="wrench" class="w-6 h-6 text-brand-red mx-auto mb-2"></i>
+            <span class="text-xs font-bold text-slate-900 block">D-III Perawatan Mesin</span>
+            <span class="text-[11px] text-slate-500 mt-1 block">Plant & Heavy Equipment</span>
+          </div>
+          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center">
+            <i data-lucide="compass" class="w-6 h-6 text-brand-red mx-auto mb-2"></i>
+            <span class="text-xs font-bold text-slate-900 block">D-III Survei & Pemetaan</span>
+            <span class="text-[11px] text-slate-500 mt-1 block">Geodesi, SIG & Drone Mapping</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-red-50/70 p-6 rounded-2xl border border-red-100 space-y-2">
+        <h4 class="font-extrabold text-brand-red text-sm">Fasilitas Ruang Baca:</h4>
+        <ul class="text-xs text-slate-700 space-y-1.5 list-disc list-inside">
+          <li>Ruangan ber-AC dan tenang dengan kapasitas 80 pemustaka serentak.</li>
+          <li>Area diskusi kolaboratif dan terminal akses pencarian OPAC mandiri.</li>
+          <li>Akses Wi-Fi kampus berkecepatan tinggi dan stopkontak di setiap meja.</li>
+          <li>Layanan konsultasi naskah dan similarity Turnitin bersama pustakawan.</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- HALAMAN KHUSUS 3: E-RESOURCES (TERPISAH DARI BERANDA)                     -->
+  <!-- ========================================================================= -->
+  <main id="view-eresources" class="flex-1 hidden max-w-6xl mx-auto px-4 py-12 w-full">
+    <div class="mb-6 flex items-center justify-between">
+      <button onclick="navigateToPage('beranda')" class="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-brand-red transition bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span>Kembali ke Beranda</span>
+      </button>
+      <span class="text-xs font-mono text-slate-400">Pangkalan Data Ilmiah</span>
+    </div>
+
+    <div class="mb-8">
+      <span class="text-brand-red text-xs font-bold uppercase tracking-widest">Portal E-resources</span>
+      <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">E-resources Pangkalan Data Ilmiah</h1>
+      <p class="text-xs sm:text-sm text-slate-500 mt-1">Akses database jurnal internasional, e-book resmi, dan referensi global bagi civitas akademika.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      
+      <!-- SUBMENU 1: SCOPUS -->
+      <div id="sub-scopus" class="bg-white rounded-2xl p-6 border border-slate-200 hover:border-amber-400 hover:shadow-lg transition flex flex-col justify-between group">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 text-[11px] font-black tracking-wider">DATABASE GLOBAL</span>
+            <i data-lucide="external-link" class="w-4 h-4 text-slate-400 group-hover:text-amber-500 transition"></i>
+          </div>
+          <h3 class="text-xl font-black text-slate-900 group-hover:text-amber-600 transition">Scopus</h3>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            Pangkalan data sitasi dan abstrak jurnal internasional peer-reviewed terbesar di dunia dari Elsevier.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+          <span class="text-[11px] font-medium text-slate-400">Database Sitasi</span>
+          <a href="https://www.scopus.com" target="_blank" class="text-xs font-bold text-amber-600 hover:underline inline-flex items-center gap-1">
+            Buka Scopus &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- SUBMENU 2: KUBUKU -->
+      <div id="sub-kubuku" class="bg-white rounded-2xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-lg transition flex flex-col justify-between group">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 text-[11px] font-black tracking-wider">E-LIBRARY APP</span>
+            <i data-lucide="external-link" class="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition"></i>
+          </div>
+          <h3 class="text-xl font-black text-slate-900 group-hover:text-blue-600 transition">Kubuku</h3>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            Aplikasi perpustakaan digital e-book buku teks kuliah vokasi yang dapat diakses melalui laptop dan smartphone mahasiswa.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+          <span class="text-[11px] font-medium text-slate-400">E-Book Kampus</span>
+          <button onclick="showNotification('Membuka aplikasi e-library Kubuku kampus...')" class="text-xs font-bold text-blue-600 hover:underline inline-flex items-center gap-1">
+            Buka Kubuku &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- SUBMENU 3: E-RESOURCES PERPUSNAS RI -->
+      <div id="sub-perpusnas" class="bg-white rounded-2xl p-6 border border-slate-200 hover:border-brand-red hover:shadow-lg transition flex flex-col justify-between group">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-2.5 py-1 rounded-lg bg-red-50 text-brand-red text-[11px] font-black tracking-wider">PERPUSNAS RI</span>
+            <i data-lucide="external-link" class="w-4 h-4 text-slate-400 group-hover:text-brand-red transition"></i>
+          </div>
+          <h3 class="text-xl font-black text-slate-900 group-hover:text-brand-red transition">E-resources Perpusnas RI</h3>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            Koleksi jurnal internasional online (ScienceDirect, ProQuest, EBSCO, Springer) dan ribuan e-book gratis resmi dari Perpustakaan Nasional RI.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+          <span class="text-[11px] font-medium text-slate-400">Jurnal & E-Book</span>
+          <a href="https://e-resources.perpusnas.go.id" target="_blank" class="text-xs font-bold text-brand-red hover:underline inline-flex items-center gap-1">
+            Buka Perpusnas &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- SUBMENU 4: DIRECTORY OPEN ACCESS JOURNAL -->
+      <div id="sub-doaj" class="bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-500 hover:shadow-lg transition flex flex-col justify-between group">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-[11px] font-black tracking-wider">OPEN ACCESS</span>
+            <i data-lucide="external-link" class="w-4 h-4 text-slate-400 group-hover:text-emerald-500 transition"></i>
+          </div>
+          <h3 class="text-xl font-black text-slate-900 group-hover:text-emerald-600 transition">Directory Open Access Journal</h3>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            Direktori online independen terpercaya (DOAJ) yang memuat jurnal-jurnal ilmiah akses terbuka berkualitas tinggi dari seluruh dunia.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+          <span class="text-[11px] font-medium text-slate-400">Open Access DOAJ</span>
+          <a href="https://doaj.org" target="_blank" class="text-xs font-bold text-emerald-600 hover:underline inline-flex items-center gap-1">
+            Buka DOAJ &rarr;
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- HALAMAN KHUSUS 4: LIST PUBLIKASI DOSEN (TERPISAH DARI BERANDA)            -->
+  <!-- ========================================================================= -->
+  <main id="view-publikasi" class="flex-1 hidden max-w-6xl mx-auto px-4 py-12 w-full">
+    <div class="mb-6 flex items-center justify-between">
+      <button onclick="navigateToPage('beranda')" class="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-brand-red transition bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span>Kembali ke Beranda</span>
+      </button>
+      <span class="text-xs font-mono text-slate-400">Publikasi Jurnal Ilmiah</span>
+    </div>
+
+    <div class="space-y-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-6">
+        <div>
+          <span class="text-brand-red text-xs font-bold uppercase tracking-widest">Karya Ilmiah Vokasi</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">List Publikasi Dosen</h1>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
+            Daftar karya ilmiah, prosiding konferensi, dan artikel jurnal terakreditasi SINTA & Scopus hasil riset dosen Politeknik Sinar Mas Berau Coal.
+          </p>
+        </div>
+        <span class="text-xs font-bold text-slate-500 bg-white border border-slate-200 px-3.5 py-1.5 rounded-xl font-mono shrink-0 shadow-sm">
+          Total Terdata: <span class="text-brand-red font-black" id="pub-count">3 Publikasi</span>
+        </span>
+      </div>
+
+      <!-- Filter Program Studi & Pencarian -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
+          <button onclick="filterPublications('all')" id="filter-btn-all" class="px-3.5 py-2 rounded-xl bg-brand-red text-white shadow-sm transition">Semua Program Studi</button>
+          <button onclick="filterPublications('TRL')" id="filter-btn-TRL" class="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 hover:text-brand-red transition">D-IV Rekayasa Logistik</button>
+          <button onclick="filterPublications('PM')" id="filter-btn-PM" class="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 hover:text-brand-red transition">D-III Perawatan Mesin</button>
+          <button onclick="filterPublications('SVM')" id="filter-btn-SVM" class="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 hover:text-brand-red transition">D-III Survei & Pemetaan</button>
+        </div>
+
+        <div class="relative min-w-[280px]">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+          <input 
+            type="text" 
+            id="pub-search-input" 
+            onkeyup="searchPublications()" 
+            placeholder="Cari dosen, judul, atau jurnal..." 
+            class="w-full pl-10 pr-4 py-2 bg-slate-50 rounded-xl text-xs font-medium border border-slate-200 focus:outline-none focus:border-brand-red focus:bg-white focus:ring-1 focus:ring-red-200 transition"
+          >
+        </div>
+      </div>
+
+      <!-- Kartu Publikasi -->
+      <div class="space-y-4" id="publication-list-container">
+        
+        <!-- 1. D-IV TRL -->
+        <div class="pub-card bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-md transition space-y-3" data-prodi="TRL">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-red-100 text-brand-red font-mono text-[10px] font-bold">D-IV TRL</span>
+              <span class="px-2.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-bold">SINTA 2</span>
+              <span class="text-xs text-slate-400 font-mono">Tahun 2026</span>
+            </div>
+            <span class="text-[11px] font-mono text-slate-400">DOI: 10.31294/jtp.v14i2.2026</span>
+          </div>
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 hover:text-brand-red transition cursor-pointer">
+              Model Optimasi Jalur Angkut Logistik Batubara Menggunakan Algoritma Dijkstra Terintegrasi Telemetri Fleet Management
+            </h3>
+            <p class="text-xs text-slate-600 mt-1">
+              <span class="font-bold text-slate-900">Penulis:</span> Nur Ainun Musvirah, S.T., M.T., Bambang Haryanto, M.T., dkk.
+            </p>
+            <p class="text-xs text-slate-500 italic mt-0.5">
+              Jurnal Transportasi dan Logistik Vokasi Indonesia, Vol. 14, No. 2, Hal. 142–155.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <span class="text-[11px] text-slate-500">Kata Kunci: <span class="font-medium text-slate-700">Supply Chain, Fleet Management, Optimasi Jalur</span></span>
+            <div class="flex items-center gap-2">
+              <button onclick="showNotification('Menyalin format sitasi naskah...')" class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 flex items-center gap-1 transition">
+                <i data-lucide="quote" class="w-3.5 h-3.5"></i> Sitasi
+              </button>
+              <button onclick="showNotification('Mengunduh dokumen naskah fulltext...');" class="px-3.5 py-1.5 rounded-lg bg-brand-red text-white font-bold hover:bg-brand-darkred flex items-center gap-1 transition shadow-sm">
+                <span>Unduh Fulltext</span>
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. D-III PM -->
+        <div class="pub-card bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-md transition space-y-3" data-prodi="PM">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-800 font-mono text-[10px] font-bold">D-III PM</span>
+              <span class="px-2.5 py-0.5 rounded-md bg-blue-100 text-blue-800 text-[10px] font-bold">SCOPUS Q3</span>
+              <span class="text-xs text-slate-400 font-mono">Tahun 2026</span>
+            </div>
+            <span class="text-[11px] font-mono text-slate-400">DOI: 10.1016/j.proeng.2026.04.112</span>
+          </div>
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 hover:text-brand-red transition cursor-pointer">
+              Analisis Getaran (Vibration Analysis) dan Uji Spektrometri Oli untuk Deteksi Dini Kerusakan Bearing Pompa Slurry Tambang
+            </h3>
+            <p class="text-xs text-slate-600 mt-1">
+              <span class="font-bold text-slate-900">Penulis:</span> Ir. Sudirman, S.T., M.Eng., Ikhsan Leo Darmawan, S.Tr.T., Ongky Elisman, M.B.A.
+            </p>
+            <p class="text-xs text-slate-500 italic mt-0.5">
+              International Journal of Mechanical & Maintenance Engineering, Vol. 19, No. 1, Hal. 88–97.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <span class="text-[11px] text-slate-500">Kata Kunci: <span class="font-medium text-slate-700">Predictive Maintenance, Slurry Pump, Vibration Spectrum</span></span>
+            <div class="flex items-center gap-2">
+              <button onclick="showNotification('Menyalin format sitasi naskah...')" class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 flex items-center gap-1 transition">
+                <i data-lucide="quote" class="w-3.5 h-3.5"></i> Sitasi
+              </button>
+              <button onclick="showNotification('Mengunduh dokumen naskah fulltext...');" class="px-3.5 py-1.5 rounded-lg bg-brand-red text-white font-bold hover:bg-brand-darkred flex items-center gap-1 transition shadow-sm">
+                <span>Unduh Fulltext</span>
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. D-III SVM -->
+        <div class="pub-card bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-md transition space-y-3" data-prodi="SVM">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-blue-100 text-blue-800 font-mono text-[10px] font-bold">D-III SVM</span>
+              <span class="px-2.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-bold">SINTA 3</span>
+              <span class="text-xs text-slate-400 font-mono">Tahun 2025</span>
+            </div>
+            <span class="text-[11px] font-mono text-slate-400">DOI: 10.22146/jgise.59821</span>
+          </div>
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 hover:text-brand-red transition cursor-pointer">
+              Pemetaan Batimetri dan Analisis Laju Sedimentasi Alur Sungai Segah Berau Menggunakan Integrasi Single-Beam Echosounder dan Citra Sentinel-2
+            </h3>
+            <p class="text-xs text-slate-600 mt-1">
+              <span class="font-bold text-slate-900">Penulis:</span> Rahmat Hidayat, S.T., M.Sc., Hendra Wijaya, S.T., dkk.
+            </p>
+            <p class="text-xs text-slate-500 italic mt-0.5">
+              Jurnal Geodesi dan Informasi Geospasial Tropis, Vol. 8, No. 3, Hal. 201–214.
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <span class="text-[11px] text-slate-500">Kata Kunci: <span class="font-medium text-slate-700">Batimetri, Echosounder, Sungai Segah, Sedimentasi</span></span>
+            <div class="flex items-center gap-2">
+              <button onclick="showNotification('Menyalin format sitasi naskah...')" class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 flex items-center gap-1 transition">
+                <i data-lucide="quote" class="w-3.5 h-3.5"></i> Sitasi
+              </button>
+              <button onclick="showNotification('Mengunduh dokumen naskah fulltext...');" class="px-3.5 py-1.5 rounded-lg bg-brand-red text-white font-bold hover:bg-brand-darkred flex items-center gap-1 transition shadow-sm">
+                <span>Unduh Fulltext</span>
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- HALAMAN KHUSUS BARU: LAYANAN OPAC                                         -->
+  <!-- ========================================================================= -->
+  <main id="view-opac" class="flex-1 hidden max-w-6xl mx-auto px-4 py-12 w-full">
+    <!-- Header Sub-Halaman -->
+    <div class="mb-6 flex items-center justify-between">
+      <button onclick="navigateToPage('beranda')" class="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-brand-red transition bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span>Kembali ke Beranda</span>
+      </button>
+      <span class="text-xs font-mono text-slate-400">Katalog Online Terintegrasi</span>
+    </div>
+
+    <!-- Title & Deskripsi OPAC -->
+    <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-6">
+      <div>
+        <span class="text-brand-red text-xs font-bold uppercase tracking-widest">Katalog Akses Terbuka Mandiri</span>
+        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Layanan OPAC (Online Public Access Catalog)</h1>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl">
+          Temukan koleksi buku teks cetak, laporan proyek akhir, modul praktikum, dan referensi perkuliahan Politeknik Sinar Mas Berau Coal secara cepat dan akurat.
+        </p>
+      </div>
+      <div class="flex items-center gap-2 text-xs font-mono bg-red-50 text-brand-red border border-red-200 px-3.5 py-1.5 rounded-xl font-bold shrink-0">
+        <i data-lucide="database" class="w-4 h-4"></i>
+        <span>Koleksi Terhubung: <span id="opac-total-count">memuat</span> Judul</span>
+      </div>
+    </div>
+
+    <!-- PANEL PENCARIAN UTAMA OPAC -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl space-y-6 mb-12">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-red-100 text-brand-red flex items-center justify-center font-bold">
+            <i data-lucide="search" class="w-4 h-4"></i>
+          </div>
+          <h2 class="font-black text-slate-900 text-base">Pencarian Koleksi Pustaka</h2>
+        </div>
+        <span class="text-[11px] text-slate-400 font-medium hidden sm:inline">Pencarian berbasis sistem temu kembali informasi</span>
+      </div>
+
+      <!-- FORM FILTER PENCARIAN -->
+      <form onsubmit="handleOpacSearch(event)" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-end">
+          
+          <!-- Input 1: Kata Kunci -->
+          <div class="md:col-span-5 space-y-1.5">
+            <label for="opac-keyword" class="text-xs font-extrabold text-slate-700 block">
+              Kata Kunci <span class="text-brand-red">*</span>
+            </label>
+            <div class="relative">
+              <i data-lucide="key" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+              <input 
+                type="text" 
+                id="opac-keyword" 
+                placeholder="Masukkan kata kunci pencarian..." 
+                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 rounded-xl text-xs font-medium border border-slate-200 focus:outline-none focus:border-brand-red focus:bg-white focus:ring-2 focus:ring-red-100 transition"
+              >
+            </div>
+          </div>
+
+          <!-- Input 2: Ruas Judul / Spesifikasi -->
+          <div class="md:col-span-3 space-y-1.5">
+            <label for="opac-field" class="text-xs font-extrabold text-slate-700 block">
+              Berdasarkan
+            </label>
+            <div class="relative">
+              <i data-lucide="book-type" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+              <select 
+                id="opac-field" 
+                class="w-full pl-10 pr-8 py-2.5 bg-slate-50 rounded-xl text-xs font-medium border border-slate-200 focus:outline-none focus:border-brand-red focus:bg-white focus:ring-2 focus:ring-red-100 transition appearance-none cursor-pointer"
+              >
+                <option value="judul">Judul Koleksi</option>
+                <option value="pengarang">Nama Pengarang / Penulis</option>
+                <option value="subjek">Subjek / Topik</option>
+                <option value="isbn">ISBN / ISSN</option>
+              </select>
+              <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 absolute right-3 top-3.5 pointer-events-none"></i>
+            </div>
+          </div>
+
+          <!-- Input 3: Filter Bahan (Semua Bahan) -->
+          <div class="md:col-span-2 space-y-1.5">
+            <label for="opac-material" class="text-xs font-extrabold text-slate-700 block">
+              Jenis Bahan
+            </label>
+            <div class="relative">
+              <i data-lucide="layers" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+              <select 
+                id="opac-material" 
+                class="w-full pl-10 pr-8 py-2.5 bg-slate-50 rounded-xl text-xs font-medium border border-slate-200 focus:outline-none focus:border-brand-red focus:bg-white focus:ring-2 focus:ring-red-100 transition appearance-none cursor-pointer"
+              >
+                <option value="all">Semua Bahan</option>
+                <option value="buku">Buku Teks Cetak</option>
+                <option value="ta">Laporan Proyek Akhir</option>
+                <option value="jurnal">Terbitan Berkala / Jurnal</option>
+                <option value="modul">Modul Praktikum</option>
+              </select>
+              <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 absolute right-3 top-3.5 pointer-events-none"></i>
+            </div>
+          </div>
+
+          <!-- Tombol Aksi: TAP CARI -->
+          <div class="md:col-span-2 flex items-center gap-2">
+            <button 
+              type="submit" 
+              class="w-full py-2.5 px-4 bg-brand-red hover:bg-brand-darkred text-white text-xs font-bold rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+            >
+              <i data-lucide="search" class="w-4 h-4"></i>
+              <span>Cari Katalog</span>
+            </button>
+            <button 
+              type="button" 
+              onclick="resetOpacSearch()" 
+              title="Reset Pencarian"
+              class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition cursor-pointer"
+            >
+              <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+        </div>
+      </form>
+
+      <!-- Area Hasil Pencarian Live -->
+      <div id="opac-search-results" class="hidden pt-4 border-t border-slate-100 space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-slate-800" id="opac-results-count">Hasil Pencarian (0 ditemukan)</span>
+          <button onclick="resetOpacSearch()" class="text-brand-red hover:underline font-semibold text-[11px]">Tutup Hasil</button>
+        </div>
+        <div id="opac-results-container" class="space-y-3"></div>
+      </div>
+    </div>
+
+    <!-- SEKSI 1: KOLEKSI SERING DIPINJAM -->
+    <div class="space-y-4 mb-12">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shadow-sm">
+            <i data-lucide="trending-up" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h2 class="text-lg sm:text-xl font-black text-slate-900">Koleksi Sering Dipinjam</h2>
+            <p class="text-xs text-slate-500">Daftar buku dengan frekuensi peminjaman tertinggi oleh pemustaka.</p>
+          </div>
+        </div>
+        <span class="text-xs font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+          Populer Kampus
+        </span>
+      </div>
+
+      <div id="opac-popular-list" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        
+        <!-- Buku Sering Dipinjam 1 -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 hover:border-amber-400 hover:shadow-lg transition flex flex-col justify-between group">
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-red-100 text-brand-red font-mono text-[10px] font-bold">D-III PM</span>
+              <span class="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded">
+                <i data-lucide="flame" class="w-3 h-3 text-amber-500"></i> 184x Dipinjam
+              </span>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition leading-snug">
+                Sistem Hidrolik & Alat Berat Industri Pertambangan
+              </h3>
+              <p class="text-xs text-slate-600 mt-1">Penulis: <span class="font-semibold text-slate-800">Ir. Bambang Sugiarto, M.Sc.</span></p>
+              <p class="text-[11px] text-slate-400 font-mono mt-0.5">Tahun Terbit: 2023 &bull; Edisi ke-4</p>
+            </div>
+            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-[11px] space-y-1 font-mono">
+              <div class="flex justify-between">
+                <span class="text-slate-400">No. Panggil:</span>
+                <span class="font-bold text-slate-800">621.2 SUG s</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Lokasi:</span>
+                <span class="text-slate-700">Rak Mesin 02 (Lantai 2)</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Tersedia (4 Eks)
+            </span>
+            <button onclick="showNotification('Informasi nomor panggil 621.2 SUG s disalin ke catatan peminjaman.')" class="px-3 py-1 bg-slate-100 hover:bg-brand-red hover:text-white rounded-lg text-xs font-bold text-slate-700 transition">
+              Detail Buku
+            </button>
+          </div>
+        </div>
+
+        <!-- Buku Sering Dipinjam 2 -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 hover:border-amber-400 hover:shadow-lg transition flex flex-col justify-between group">
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-blue-100 text-blue-800 font-mono text-[10px] font-bold">D-IV TRL</span>
+              <span class="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded">
+                <i data-lucide="flame" class="w-3 h-3 text-amber-500"></i> 162x Dipinjam
+              </span>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition leading-snug">
+                Manajemen Logistik & Operasional Rantai Pasok Terapan
+              </h3>
+              <p class="text-xs text-slate-600 mt-1">Penulis: <span class="font-semibold text-slate-800">Prof. Dr. Ir. Richardus Eko, M.B.A.</span></p>
+              <p class="text-[11px] text-slate-400 font-mono mt-0.5">Tahun Terbit: 2024 &bull; Edisi Revisi</p>
+            </div>
+            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-[11px] space-y-1 font-mono">
+              <div class="flex justify-between">
+                <span class="text-slate-400">No. Panggil:</span>
+                <span class="font-bold text-slate-800">658.7 EKO m</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Lokasi:</span>
+                <span class="text-slate-700">Rak Logistik 01 (Lantai 2)</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Tersedia (2 Eks)
+            </span>
+            <button onclick="showNotification('Informasi nomor panggil 658.7 EKO m disalin ke catatan peminjaman.')" class="px-3 py-1 bg-slate-100 hover:bg-brand-red hover:text-white rounded-lg text-xs font-bold text-slate-700 transition">
+              Detail Buku
+            </button>
+          </div>
+        </div>
+
+        <!-- Buku Sering Dipinjam 3 -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 hover:border-amber-400 hover:shadow-lg transition flex flex-col justify-between group">
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-mono text-[10px] font-bold">D-III SVM</span>
+              <span class="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded">
+                <i data-lucide="flame" class="w-3 h-3 text-amber-500"></i> 149x Dipinjam
+              </span>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition leading-snug">
+                Ilmu Ukur Tanah & Pengukuran Topografi Total Station
+              </h3>
+              <p class="text-xs text-slate-600 mt-1">Penulis: <span class="font-semibold text-slate-800">Slamet Basuki, S.T., M.Si.</span></p>
+              <p class="text-[11px] text-slate-400 font-mono mt-0.5">Tahun Terbit: 2023 &bull; Jilid 1</p>
+            </div>
+            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-[11px] space-y-1 font-mono">
+              <div class="flex justify-between">
+                <span class="text-slate-400">No. Panggil:</span>
+                <span class="font-bold text-slate-800">526.9 BAS i</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Lokasi:</span>
+                <span class="text-slate-700">Rak Geodesi 03 (Lantai 2)</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span> Sedang Dipinjam (Sisa 1)
+            </span>
+            <button onclick="showNotification('Informasi nomor panggil 526.9 BAS i disalin ke catatan peminjaman.')" class="px-3 py-1 bg-slate-100 hover:bg-brand-red hover:text-white rounded-lg text-xs font-bold text-slate-700 transition">
+              Detail Buku
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SEKSI 2: KOLEKSI TERBARU -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shadow-sm">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h2 class="text-lg sm:text-xl font-black text-slate-900">Koleksi Terbaru</h2>
+            <p class="text-xs text-slate-500">Buku teks dan literatur baru hasil pengadaan semester berjalan.</p>
+          </div>
+        </div>
+        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+          Pengadaan 2026
+        </span>
+      </div>
+
+      <div id="opac-latest-list" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        
+        <!-- Koleksi Terbaru 1 -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 hover:border-emerald-500 hover:shadow-lg transition flex flex-col justify-between group">
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-mono text-[10px] font-bold">Baru Masuk</span>
+              <span class="text-[11px] font-mono text-slate-400">Oktober 2026</span>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition leading-snug">
+                Fotogrametri Drone & Pemodelan 3D LiDAR untuk Pertambangan
+              </h3>
+              <p class="text-xs text-slate-600 mt-1">Penulis: <span class="font-semibold text-slate-800">Dr. Ing. Hendra Setiawan</span></p>
+              <p class="text-[11px] text-slate-400 font-mono mt-0.5">Penerbit: ITB Press &bull; 2026</p>
+            </div>
+            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-[11px] space-y-1 font-mono">
+              <div class="flex justify-between">
+                <span class="text-slate-400">No. Panggil:</span>
+                <span class="font-bold text-slate-800">526.982 SET f</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Lokasi:</span>
+                <span class="text-slate-700">Display Buku Baru (Lantai 2)</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Siap Dipinjam (3 Eks)
+            </span>
+            <button onclick="showNotification('Nomor panggil 526.982 SET f tersimpan.')" class="px-3 py-1 bg-slate-100 hover:bg-brand-red hover:text-white rounded-lg text-xs font-bold text-slate-700 transition">
+              Detail Buku
+            </button>
+          </div>
+        </div>
+
+        <!-- Koleksi Terbaru 2 -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 hover:border-emerald-500 hover:shadow-lg transition flex flex-col justify-between group">
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-mono text-[10px] font-bold">Baru Masuk</span>
+              <span class="text-[11px] font-mono text-slate-400">September 2026</span>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition leading-snug">
+                Predictive Maintenance Berbasis Sensor IoT & Vibrasi Mesin
+              </h3>
+              <p class="text-xs text-slate-600 mt-1">Penulis: <span class="font-semibold text-slate-800">Taufiqurrohman, Ph.D.</span></p>
+              <p class="text-[11px] text-slate-400 font-mono mt-0.5">Penerbit: Erlangga Vokasi &bull; 2026</p>
+            </div>
+            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-[11px] space-y-1 font-mono">
+              <div class="flex justify-between">
+                <span class="text-slate-400">No. Panggil:</span>
+                <span class="font-bold text-slate-800">621.816 TAU p</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Lokasi:</span>
+                <span class="text-slate-700">Display Buku Baru (Lantai 2)</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Siap Dipinjam (5 Eks)
+            </span>
+            <button onclick="showNotification('Nomor panggil 621.816 TAU p tersimpan.')" class="px-3 py-1 bg-slate-100 hover:bg-brand-red hover:text-white rounded-lg text-xs font-bold text-slate-700 transition">
+              Detail Buku
+            </button>
+          </div>
+        </div>
+
+        <!-- Koleksi Terbaru 3 -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 hover:border-emerald-500 hover:shadow-lg transition flex flex-col justify-between group">
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-mono text-[10px] font-bold">Baru Masuk</span>
+              <span class="text-[11px] font-mono text-slate-400">Agustus 2026</span>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition leading-snug">
+                Green Logistics & Smart Warehouse Systems
+              </h3>
+              <p class="text-xs text-slate-600 mt-1">Penulis: <span class="font-semibold text-slate-800">Alan McKinnon & Michael Browne</span></p>
+              <p class="text-[11px] text-slate-400 font-mono mt-0.5">Penerbit: Kogan Page &bull; Edisi 2025</p>
+            </div>
+            <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-[11px] space-y-1 font-mono">
+              <div class="flex justify-between">
+                <span class="text-slate-400">No. Panggil:</span>
+                <span class="font-bold text-slate-800">658.78 MCK g</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Lokasi:</span>
+                <span class="text-slate-700">Display Buku Baru (Lantai 2)</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Siap Dipinjam (3 Eks)
+            </span>
+            <button onclick="showNotification('Nomor panggil 658.78 MCK g tersimpan.')" class="px-3 py-1 bg-slate-100 hover:bg-brand-red hover:text-white rounded-lg text-xs font-bold text-slate-700 transition">
+              Detail Buku
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- FOOTER RESMI                                                              -->
+  <!-- ========================================================================= -->
+  <footer class="bg-slate-950 text-slate-400 text-xs mt-auto border-t border-slate-800">
+    <div class="max-w-[1560px] mx-auto px-4 lg:px-6 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
+      
+      <div class="space-y-3">
+        <div class="flex items-center gap-2 text-white font-black text-sm">
+          <span class="w-3 h-3 rounded-full bg-brand-red"></span>
+          <span>UPT PERPUSTAKAAN</span>
+        </div>
+        <p class="text-slate-400 leading-relaxed text-[11px]">
+          Politeknik Sinar Mas Berau Coal berdedikasi melahirkan tenaga vokasi berdaya saing global melalui literatur sains terapan dan keunggulan teknologi.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white text-sm mb-3">Navigasi Langsung</h4>
+        <ul class="space-y-2 text-slate-400">
+          <li><a href="javascript:void(0)" onclick="navigateToPage('beranda')" class="hover:text-white transition">Beranda Utama</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateToPage('npp')" class="hover:text-white transition">Nomor Pokok Perpustakaan</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateToPage('profil')" class="hover:text-white transition">Profil Perpustakaan</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateToPage('eresources')" class="hover:text-white transition">E-resources</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateToPage('publikasi')" class="hover:text-white transition">List Publikasi Dosen</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white text-sm mb-3">Program Studi Vokasi</h4>
+        <ul class="space-y-2 text-slate-400">
+          <li>&bull; D-IV Teknologi Rekayasa Logistik</li>
+          <li>&bull; D-III Perawatan Mesin</li>
+          <li>&bull; D-III Survei dan Pemetaan</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white text-sm mb-3">Bantuan & Konsultasi</h4>
+        <p class="text-slate-400 leading-relaxed mb-3">
+          Konsultasi bebas pustaka, keanggotaan, atau penelusuran buku:
+        </p>
+        <a href="https://wa.me/6282254431189" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-red text-white font-bold hover:bg-brand-darkred transition shadow">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          <span>Hubungi WhatsApp Pustakawan</span>
+        </a>
+      </div>
+
+    </div>
+
+    <div class="max-w-[1560px] mx-auto px-4 lg:px-6 pt-6 pb-6 border-t border-slate-900 text-center text-slate-500 text-[11px]">
+      &copy; 2026 UPT Perpustakaan Politeknik Sinar Mas Berau Coal. Hak Cipta Dilindungi Undang-Undang.
+    </div>
+  </footer>
+
+  <!-- MODAL GOOGLE MAPS -->
+  <div id="maps-modal" class="fixed inset-0 z-50 invisible transition-all duration-300">
+    <div onclick="closeMapsModal()" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"></div>
+    <div class="relative max-w-3xl mx-auto mt-12 bg-white rounded-3xl shadow-2xl overflow-hidden z-10 m-4 border border-slate-200">
+      <div class="flex items-center justify-between p-5 bg-white border-b border-slate-100">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-red-50 text-brand-red flex items-center justify-center">
+            <i data-lucide="map-pin" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-sm sm:text-base font-extrabold text-slate-900">Lokasi Politeknik Sinar Mas Berau Coal</h3>
+            <p class="text-xs text-slate-500">Jl. Raja Alam 2, Sei Bedungun, Tanjung Redeb, Berau, Kalimantan Timur</p>
+          </div>
+        </div>
+        <button onclick="closeMapsModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="w-full h-80 sm:h-96 bg-slate-100">
+        <iframe 
+          title="Peta Kampus Politeknik Sinar Mas Berau Coal"
+          src="https://maps.google.com/maps?q=Politeknik+Sinar+Mas+Berau+Coal&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+          width="100%" 
+          height="100%" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy">
+        </iframe>
+      </div>
+
+      <div class="p-4 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <span class="text-slate-500">Kabupaten Berau, Kalimantan Timur 77312</span>
+        <a href="https://maps.google.com/?cid=15225946175964067884" target="_blank" class="px-4 py-2 bg-brand-red text-white font-bold rounded-xl hover:bg-brand-darkred transition flex items-center justify-center gap-1.5 shadow">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          <span>Buka Langsung di Google Maps</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDE DRAWER UNTUK MOBILE -->
+  <div id="side-drawer" class="fixed inset-0 z-50 invisible transition-all duration-300">
+    <div onclick="toggleSideMenu()" class="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"></div>
+    <div id="drawer-panel" class="absolute right-0 top-0 bottom-0 w-80 bg-white shadow-2xl p-6 flex flex-col justify-between translate-x-full transition-transform duration-300">
+      <div>
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+          <span class="font-black text-brand-red text-sm">NAVIGASI PERPUSTAKAAN</span>
+          <button onclick="toggleSideMenu()" class="p-1 rounded-lg text-slate-400 hover:text-slate-800">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <nav class="space-y-1.5 text-xs font-bold text-slate-700">
+          <a href="javascript:void(0)" onclick="navigateToPage('beranda'); toggleSideMenu()" class="block py-2 px-3 rounded-xl bg-red-50 text-brand-red transition">Beranda</a>
+          
+          <div class="rounded-xl border border-slate-100 overflow-hidden">
+            <button onclick="toggleMobileSubmenu('mobile-sub-tentang', 'mobile-arrow-tentang')" class="w-full flex items-center justify-between py-2 px-3 hover:bg-red-50 hover:text-brand-red transition text-left">
+              <span>Tentang Perpustakaan</span>
+              <i data-lucide="chevron-down" id="mobile-arrow-tentang" class="w-3.5 h-3.5 transition-transform"></i>
+            </button>
+            <div id="mobile-sub-tentang" class="hidden bg-slate-50 px-3 py-2 space-y-1 text-slate-600 font-medium">
+              <a href="javascript:void(0)" onclick="navigateToPage('npp'); toggleSideMenu()" class="block py-1.5 px-2 rounded-lg hover:text-brand-red hover:bg-white text-[11px]">&bull; Nomor Pokok Perpustakaan</a>
+              <a href="javascript:void(0)" onclick="navigateToPage('profil'); toggleSideMenu()" class="block py-1.5 px-2 rounded-lg hover:text-brand-red hover:bg-white text-[11px]">&bull; Profil Perpustakaan</a>
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-slate-100 overflow-hidden">
+            <button onclick="toggleMobileSubmenu('mobile-sub-layanan', 'mobile-arrow-layanan')" class="w-full flex items-center justify-between py-2 px-3 hover:bg-red-50 hover:text-brand-red transition text-left">
+              <span>Layanan (10 Pilihan)</span>
+              <i data-lucide="chevron-down" id="mobile-arrow-layanan" class="w-3.5 h-3.5 transition-transform"></i>
+            </button>
+            <div id="mobile-sub-layanan" class="hidden bg-slate-50 px-3 py-2 space-y-1 text-slate-600 font-medium max-h-60 overflow-y-auto">
+              <a href="javascript:void(0)" onclick="navigateToPage('opac'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px] font-bold text-brand-red">1. Layanan OPAC</a>
+              <a href="javascript:void(0)" onclick="scrollToService('layanan-sirkulasi'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">2. Layanan Sirkulasi</a>
+              <a href="javascript:void(0)" onclick="scrollToService('layanan-kelas-literasi'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">3. Layanan Kelas Literasi</a>
+              <a href="javascript:void(0)" onclick="scrollToService('layanan-tata-bahasa'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">4. Layanan Tata Bahasa</a>
+              <a href="javascript:void(0)" onclick="scrollToService('layanan-cek-similarity'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">5. Layanan Cek Similarity</a>
+              <a href="javascript:void(0)" onclick="scrollToService('layanan-bebas-pustaka'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">6. Layanan Bebas Pustaka</a>
+              <a href="javascript:void(0)" onclick="scrollToService('layanan-repository'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">7. Layanan Repository</a>
+              <a href="javascript:void(0)" onclick="scrollToService('usul-buku'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">8. Usul Buku</a>
+              <a href="javascript:void(0)" onclick="scrollToService('layanan-fotocopy'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">9. Layanan Fotocopy</a>
+              <a href="javascript:void(0)" onclick="scrollToService('layanan-bimbingan-pemustaka'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">10. Layanan Bimbingan Pemustaka</a>
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-slate-100 overflow-hidden">
+            <button onclick="toggleMobileSubmenu('mobile-sub-eresources', 'mobile-arrow-eresources')" class="w-full flex items-center justify-between py-2 px-3 hover:bg-red-50 hover:text-brand-red transition text-left">
+              <span>E-resources</span>
+              <i data-lucide="chevron-down" id="mobile-arrow-eresources" class="w-3.5 h-3.5 transition-transform"></i>
+            </button>
+            <div id="mobile-sub-eresources" class="hidden bg-slate-50 px-3 py-2 space-y-1 text-slate-600 font-medium">
+              <a href="javascript:void(0)" onclick="navigateToPage('eresources', 'scopus'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">&bull; Scopus</a>
+              <a href="javascript:void(0)" onclick="navigateToPage('eresources', 'kubuku'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">&bull; Kubuku</a>
+              <a href="javascript:void(0)" onclick="navigateToPage('eresources', 'perpusnas'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">&bull; E-resources Perpusnas RI</a>
+              <a href="javascript:void(0)" onclick="navigateToPage('eresources', 'doaj'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">&bull; Directory Open Access Journal</a>
+            </div>
+          </div>
+
+          <a href="javascript:void(0)" onclick="navigateToPage('publikasi'); toggleSideMenu()" class="block py-2 px-3 rounded-xl hover:bg-red-50 hover:text-brand-red transition">List Publikasi Dosen</a>
+        </nav>
+      </div>
+
+      <div class="pt-6 border-t border-slate-100 text-center text-[11px] text-slate-400">
+        Politeknik Sinar Mas Berau Coal
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFIKASI TOAST -->
+  <div id="toast-notif" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl text-xs font-semibold flex items-center gap-2 transform translate-y-24 opacity-0 transition-all duration-300">
+    <i data-lucide="bell" class="w-4 h-4 text-brand-red"></i>
+    <span id="toast-text">Notifikasi</span>
+  </div>
+
+  <script>
+    // Render ikon Lucide
+    lucide.createIcons();
+
+    // Database Mock Koleksi OPAC untuk Pencarian Interaktif
+    const opacCatalogDB = [
+      { id: 1, title: 'Sistem Hidrolik & Alat Berat Industri Pertambangan', author: 'Ir. Bambang Sugiarto, M.Sc.', callNo: '621.2 SUG s', type: 'buku', year: 2023, shelf: 'Rak Mesin 02', status: 'Tersedia (4 Eks)' },
+      { id: 2, title: 'Manajemen Logistik & Operasional Rantai Pasok Terapan', author: 'Prof. Dr. Ir. Richardus Eko, M.B.A.', callNo: '658.7 EKO m', type: 'buku', year: 2024, shelf: 'Rak Logistik 01', status: 'Tersedia (2 Eks)' },
+      { id: 3, title: 'Ilmu Ukur Tanah & Pengukuran Topografi Total Station', author: 'Slamet Basuki, S.T., M.Si.', callNo: '526.9 BAS i', type: 'buku', year: 2023, shelf: 'Rak Geodesi 03', status: 'Sedang Dipinjam (Sisa 1)' },
+      { id: 4, title: 'Fotogrametri Drone & Pemodelan 3D LiDAR untuk Pertambangan', author: 'Dr. Ing. Hendra Setiawan', callNo: '526.982 SET f', type: 'buku', year: 2026, shelf: 'Display Buku Baru', status: 'Tersedia (3 Eks)' },
+      { id: 5, title: 'Predictive Maintenance Berbasis Sensor IoT & Vibrasi Mesin', author: 'Taufiqurrohman, Ph.D.', callNo: '621.816 TAU p', type: 'buku', year: 2026, shelf: 'Display Buku Baru', status: 'Tersedia (5 Eks)' },
+      { id: 6, title: 'Green Logistics & Smart Warehouse Systems', author: 'Alan McKinnon & Michael Browne', callNo: '658.78 MCK g', type: 'buku', year: 2025, shelf: 'Display Buku Baru', status: 'Tersedia (3 Eks)' },
+      { id: 7, title: 'Laporan Tugas Akhir: Analisis Efisiensi Fuel Consumption Dump Truck Komatsu HD785-7', author: 'Irfan Maulana (NIM: 2023-PM-041)', callNo: 'TA-PM 2025/012', type: 'ta', year: 2025, shelf: 'Lemari Repositori TA', status: 'Tersedia (1 Eks - Referensi Ruang)' },
+      { id: 8, title: 'Modul Praktikum: Survey Terestris dan Pengolahan Data GNSS RTK', author: 'Laboratorium Geodesi Poltek Simas Berau', callNo: 'MOD-SVM 2026', type: 'modul', year: 2026, shelf: 'Rak Modul Kuliah', status: 'Tersedia (10 Eks)' }
+    ];
+
+    // Sistem Navigasi Halaman SPA (Single Page Application)
+    function navigateToPage(pageKey, targetSubId) {
+      closeAllNavDropdowns();
+
+      // Sembunyikan semua tampilan
+      const views = ['view-beranda', 'view-npp', 'view-profil', 'view-eresources', 'view-publikasi', 'view-opac'];
+      views.forEach(v => {
+        const el = document.getElementById(v);
+        if (el) el.classList.add('hidden');
+      });
+
+      // Tampilkan halaman tujuan
+      let targetEl = null;
+      if (pageKey === 'beranda') {
+        targetEl = document.getElementById('view-beranda');
+      } else if (pageKey === 'npp') {
+        targetEl = document.getElementById('view-npp');
+      } else if (pageKey === 'profil') {
+        targetEl = document.getElementById('view-profil');
+      } else if (pageKey === 'eresources') {
+        targetEl = document.getElementById('view-eresources');
+      } else if (pageKey === 'publikasi') {
+        targetEl = document.getElementById('view-publikasi');
+      } else if (pageKey === 'opac') {
+        targetEl = document.getElementById('view-opac');
+      }
+
+      if (targetEl) {
+        targetEl.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Jika ada target kartu khusus pada e-resources
+      if (pageKey === 'eresources' && targetSubId) {
+        setTimeout(() => {
+          const subCard = document.getElementById('sub-' + targetSubId);
+          if (subCard) {
+            subCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            subCard.classList.add('ring-2', 'ring-brand-red');
+            setTimeout(() => subCard.classList.remove('ring-2', 'ring-brand-red'), 2000);
+          }
+        }, 150);
+      }
+
+      lucide.createIcons();
+    }
+
+    // Penanganan Pencarian OPAC (Tap Cari)
+    function handleOpacSearch(event) {
+      if (event) event.preventDefault();
+      
+      const keyword = (document.getElementById('opac-keyword').value || '').trim().toLowerCase();
+      const field = document.getElementById('opac-field').value;
+      const material = document.getElementById('opac-material').value;
+
+      const resultsDiv = document.getElementById('opac-search-results');
+      const resultsContainer = document.getElementById('opac-results-container');
+      const countEl = document.getElementById('opac-results-count');
+
+      // Filter data sesuai kata kunci, pilihan bidang, dan jenis bahan
+      const filtered = opacCatalogDB.filter(item => {
+        // Filter Jenis Bahan
+        const matchMaterial = (material === 'all' || item.type === material);
+        if (!matchMaterial) return false;
+
+        // Jika tidak mengisi kata kunci, tampilkan semua bahan yang cocok
+        if (!keyword) return true;
+
+        if (field === 'judul') {
+          return item.title.toLowerCase().includes(keyword);
+        } else if (field === 'pengarang') {
+          return item.author.toLowerCase().includes(keyword);
+        } else if (field === 'subjek') {
+          return item.title.toLowerCase().includes(keyword) || item.shelf.toLowerCase().includes(keyword);
+        } else if (field === 'isbn') {
+          return item.callNo.toLowerCase().includes(keyword);
+        }
+        return (item.title + ' ' + item.author + ' ' + item.callNo).toLowerCase().includes(keyword);
+      });
+
+      resultsDiv.classList.remove('hidden');
+      countEl.innerText = `Hasil Pencarian (${filtered.length} judul ditemukan):`;
+
+      if (filtered.length === 0) {
+        resultsContainer.innerHTML = `
+          <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-center text-xs text-slate-500">
+            Tidak ditemukan koleksi dengan kata kunci "<strong>${keyword}</strong>". Silakan coba kata kunci lain atau pilih "Semua Bahan".
+          </div>
+        `;
+      } else {
+        resultsContainer.innerHTML = filtered.map(item => `
+          <div class="p-4 rounded-2xl bg-slate-50 hover:bg-white border border-slate-200 hover:border-brand-red transition flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="px-2 py-0.5 rounded bg-red-100 text-brand-red font-mono text-[10px] font-bold uppercase">${item.type}</span>
+                <span class="font-mono text-slate-400 text-[11px]">${item.callNo}</span>
+              </div>
+              <h4 class="font-bold text-slate-900 text-sm hover:text-brand-red cursor-pointer">${item.title}</h4>
+              <p class="text-slate-600 mt-0.5">${item.author} &bull; <span class="font-mono text-slate-400">Tahun ${item.year}</span></p>
+              <p class="text-[11px] text-slate-500 mt-0.5">Lokasi: <span class="font-semibold text-slate-700">${item.shelf}</span></p>
+            </div>
+            <div class="shrink-0 text-left sm:text-right flex sm:flex-col items-center sm:items-end justify-between gap-2">
+              <span class="inline-flex items-center gap-1 font-bold text-emerald-600 text-[11px]">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ${item.status}
+              </span>
+              <button onclick="showNotification('Nomor panggil ${item.callNo} disalin!')" class="px-3 py-1.5 bg-brand-red text-white font-bold rounded-lg hover:bg-brand-darkred transition shadow-sm">
+                Salin No. Panggil
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      lucide.createIcons();
+    }
+
+    // Reset Pencarian OPAC
+    function resetOpacSearch() {
+      document.getElementById('opac-keyword').value = '';
+      document.getElementById('opac-field').value = 'judul';
+      document.getElementById('opac-material').value = 'all';
+      document.getElementById('opac-search-results').classList.add('hidden');
+    }
+
+    // Scroll langsung ke kartu layanan di halaman Beranda
+    function scrollToService(serviceId) {
+      navigateToPage('beranda');
+      setTimeout(() => {
+        const el = document.getElementById(serviceId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.classList.add('ring-2', 'ring-brand-red');
+          setTimeout(() => el.classList.remove('ring-2', 'ring-brand-red'), 2000);
+        }
+      }, 100);
+    }
+
+    // Dropdown Header Menu
+    function toggleNavDropdown(dropdownId, event) {
+      if (event) {
+        event.stopPropagation();
+      }
+
+      const target = document.getElementById(dropdownId);
+      const isCurrentlyOpen = target && !target.classList.contains('hidden');
+
+      closeAllNavDropdowns();
+
+      if (!isCurrentlyOpen && target) {
+        target.classList.remove('hidden');
+        const arrowId = dropdownId.replace('dropdown-', 'arrow-');
+        const arrow = document.getElementById(arrowId);
+        if (arrow) arrow.classList.add('rotate-180');
+
+        const btnId = dropdownId.replace('dropdown-', 'btn-');
+        const btn = document.getElementById(btnId);
+        if (btn) btn.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    function closeAllNavDropdowns() {
+      document.querySelectorAll('.nav-dropdown-menu').forEach(menu => {
+        menu.classList.add('hidden');
+      });
+      document.querySelectorAll('[id^="arrow-"]').forEach(arrow => {
+        arrow.classList.remove('rotate-180');
+      });
+      document.querySelectorAll('[id^="btn-"]').forEach(btn => {
+        btn.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-dropdown-wrapper')) {
+        closeAllNavDropdowns();
+      }
+    });
+
+    // Submenu Mobile Drawer
+    function toggleMobileSubmenu(submenuId, arrowId) {
+      const sub = document.getElementById(submenuId);
+      const arrow = document.getElementById(arrowId);
+      if (sub) sub.classList.toggle('hidden');
+      if (arrow) arrow.classList.toggle('rotate-180');
+    }
+
+    // Modal Maps
+    function openMapsModal() {
+      document.getElementById('maps-modal').classList.remove('invisible');
+    }
+    function closeMapsModal() {
+      document.getElementById('maps-modal').classList.add('invisible');
+    }
+
+    // Side Drawer
+    function toggleSideMenu() {
+      const drawer = document.getElementById('side-drawer');
+      const panel = document.getElementById('drawer-panel');
+      if (drawer.classList.contains('invisible')) {
+        drawer.classList.remove('invisible');
+        setTimeout(() => panel.classList.remove('translate-x-full'), 10);
+      } else {
+        panel.classList.add('translate-x-full');
+        setTimeout(() => drawer.classList.add('invisible'), 300);
+      }
+    }
+
+    // Filter Publikasi Dosen
+    let currentProdiFilter = 'all';
+    function filterPublications(prodi) {
+      currentProdiFilter = prodi;
+      const filters = ['all', 'TRL', 'PM', 'SVM'];
+      
+      filters.forEach(f => {
+        const btn = document.getElementById('filter-btn-' + f);
+        if (btn) {
+          if (f === prodi) {
+            btn.className = 'px-3.5 py-2 rounded-xl bg-brand-red text-white shadow-sm transition';
+          } else {
+            btn.className = 'px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 hover:text-brand-red transition';
+          }
+        }
+      });
+
+      applyPublicationFilters();
+    }
+
+    function searchPublications() {
+      applyPublicationFilters();
+    }
+
+    function applyPublicationFilters() {
+      const query = (document.getElementById('pub-search-input').value || '').toLowerCase().trim();
+      const cards = document.querySelectorAll('.pub-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cardProdi = card.getAttribute('data-prodi');
+        const textContent = card.innerText.toLowerCase();
+
+        const matchProdi = (currentProdiFilter === 'all' || cardProdi === currentProdiFilter);
+        const matchQuery = (!query || textContent.includes(query));
+
+        if (matchProdi && matchQuery) {
+          card.style.display = 'block';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      const countEl = document.getElementById('pub-count');
+      if (countEl) {
+        countEl.innerText = `${visibleCount} Publikasi`;
+      }
+    }
+
+    // Toast Notifikasi
+    function showNotification(msg) {
+      const toast = document.getElementById('toast-notif');
+      const text = document.getElementById('toast-text');
+      text.innerText = msg;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3500);
+    }
+  </script>
+
+  <script src="./assets/js/api.js"></script>
+  <script src="./assets/js/opac.js"></script>
+  <script src="./assets/js/publikasi.js"></script>
+  <script src="./assets/js/main.js"></script>
+</body>
+</html>
