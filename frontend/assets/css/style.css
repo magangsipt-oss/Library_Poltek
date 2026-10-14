@@ -3,7 +3,17 @@
   outline-offset: 2px;
 }
 
+.hero-section {
+  min-height: calc(100vh - 158px);
+  min-height: calc(100svh - 158px);
+}
+
 @media (max-width: 639px) {
+  .hero-section {
+    min-height: calc(100vh - 92px);
+    min-height: calc(100svh - 92px);
+  }
+
   #header-row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 44px;
