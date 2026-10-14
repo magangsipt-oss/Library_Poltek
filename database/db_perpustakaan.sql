@@ -61,6 +61,14 @@ CREATE INDEX IF NOT EXISTS idx_publications_year ON publications (publication_ye
 CREATE INDEX IF NOT EXISTS idx_service_requests_status ON service_requests (status);
 CREATE INDEX IF NOT EXISTS idx_service_requests_created_at ON service_requests (created_at DESC);
 
+DELETE FROM publications
+WHERE (title = 'Model Optimasi Jalur Angkut Logistik Batubara Menggunakan Algoritma Dijkstra Terintegrasi Telemetri Fleet Management'
+       AND doi = '10.31294/jtp.v14i2.2026')
+   OR (title = 'Analisis Getaran dan Uji Spektrometri Oli untuk Deteksi Dini Kerusakan Bearing Pompa Slurry Tambang'
+       AND doi = '10.1016/j.proeng.2026.04.112')
+   OR (title = 'Pemetaan Batimetri dan Analisis Laju Sedimentasi Alur Sungai Segah Berau Menggunakan Integrasi Single-Beam Echosounder dan Citra Sentinel-2'
+       AND doi = '10.22146/jgise.59821');
+
 INSERT INTO books
   (title, author, publisher, publication_year, material_type, category, subject,
    call_number, shelf_location, total_copies, available_copies, loan_count)
@@ -79,14 +87,3 @@ FROM (VALUES
 ) AS seed(title, author, publisher, publication_year, material_type, category, subject,
           call_number, shelf_location, total_copies, available_copies, loan_count)
 WHERE NOT EXISTS (SELECT 1 FROM books existing WHERE existing.title = seed.title);
-
-INSERT INTO publications
-  (title, authors, prodi, journal, publication_year, ranking, doi, volume_info, keywords)
-SELECT seed.title, seed.authors, seed.prodi, seed.journal, seed.publication_year,
-       seed.ranking, seed.doi, seed.volume_info, seed.keywords
-FROM (VALUES
-  ('Model Optimasi Jalur Angkut Logistik Batubara Menggunakan Algoritma Dijkstra Terintegrasi Telemetri Fleet Management', 'Nur Ainun Musvirah, S.T., M.T., Bambang Haryanto, M.T., dkk.', 'TRL', 'Jurnal Transportasi dan Logistik Vokasi Indonesia', 2026, 'SINTA 2', '10.31294/jtp.v14i2.2026', 'Vol. 14, No. 2, Hal. 142-155', 'Supply Chain, Fleet Management, Optimasi Jalur'),
-  ('Analisis Getaran dan Uji Spektrometri Oli untuk Deteksi Dini Kerusakan Bearing Pompa Slurry Tambang', 'Ir. Sudirman, S.T., M.Eng., Ikhsan Leo Darmawan, S.Tr.T., Ongky Elisman, M.B.A.', 'PM', 'International Journal of Mechanical & Maintenance Engineering', 2026, 'SCOPUS Q3', '10.1016/j.proeng.2026.04.112', 'Vol. 19, No. 1, Hal. 88-97', 'Predictive Maintenance, Slurry Pump, Vibration Spectrum'),
-  ('Pemetaan Batimetri dan Analisis Laju Sedimentasi Alur Sungai Segah Berau Menggunakan Integrasi Single-Beam Echosounder dan Citra Sentinel-2', 'Rahmat Hidayat, S.T., M.Sc., Hendra Wijaya, S.T., dkk.', 'SVM', 'Jurnal Geodesi dan Informasi Geospasial Tropis', 2025, 'SINTA 3', '10.22146/jgise.59821', 'Vol. 8, No. 3, Hal. 201-214', 'Batimetri, Echosounder, Sungai Segah, Sedimentasi')
-) AS seed(title, authors, prodi, journal, publication_year, ranking, doi, volume_info, keywords)
-WHERE NOT EXISTS (SELECT 1 FROM publications existing WHERE existing.title = seed.title);
