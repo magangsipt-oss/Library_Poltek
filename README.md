@@ -39,3 +39,21 @@ File `database/db_perpustakaan.sql` berisi skema tabel dan data contoh proyek, b
 Buka `http://localhost:3000`. Status koneksi database dapat diperiksa di `/api/health`.
 
 File `database/db_perpustakaan.sql` kompatibel dengan PostgreSQL. Seed data contoh bersifat idempotent berdasarkan judul; perintah ini tidak menjalankan `DROP TABLE`.
+
+## Menyiapkan database di Windows
+
+Jika PostgreSQL lokal memakai instalasi default versi 18 dan password user `postgres` tidak diketahui, buka PowerShell dengan **Run as administrator**, lalu jalankan:
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\database\setup-windows.ps1
+```
+
+Skrip meminta password baru dua kali lewat prompt tersembunyi, mengatur ulang password user `postgres`, membuat database dan tabel, serta menyiapkan `backend/.env`. Aturan autentikasi sementara hanya mengizinkan koneksi `postgres` dari `127.0.0.1` dan langsung dipulihkan setelah reset. Setelah skrip berhasil, buka PowerShell biasa dan jalankan:
+
+```powershell
+npm ci --prefix backend
+npm run dev --prefix backend
+```
+
+Buka `http://localhost:3000`. Jika password PostgreSQL masih diketahui, tidak perlu reset; buat `backend/.env` dari `.env.example`, isi kredensial lokal, lalu jalankan `psql` dan perintah backend seperti panduan di atas.
