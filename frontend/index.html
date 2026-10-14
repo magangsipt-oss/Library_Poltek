@@ -205,15 +205,15 @@
             class="nav-dropdown-menu absolute left-0 top-full mt-2 w-64 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 hidden text-xs font-semibold z-50"
           >
             <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToPage('opac')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan OPAC</a>
-            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-sirkulasi')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Sirkulasi</a>
-            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-kelas-literasi')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Kelas Literasi</a>
-            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-tata-bahasa')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Tata Bahasa</a>
-            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-cek-similarity')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Cek Similarity</a>
-            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-bebas-pustaka')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Bebas Pustaka</a>
-            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-repository')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Repository</a>
-            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('usul-buku')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Usul Buku</a>
-            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-fotocopy')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Fotocopy</a>
-            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); scrollToService('layanan-bimbingan-pemustaka')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Bimbingan Pemustaka</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToService('sirkulasi')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Sirkulasi</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToService('literasi')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Kelas Literasi</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToService('tata-bahasa')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Tata Bahasa</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToService('similarity')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Cek Similarity</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToService('bebas-pustaka')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Bebas Pustaka</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToService('repository')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Repository</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToService('usul-buku')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Usul Buku</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToService('fotocopy')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Fotocopy</a>
+            <a href="javascript:void(0)" onclick="closeAllNavDropdowns(); navigateToService('bimbingan')" class="block px-4 py-2 hover:bg-red-50 hover:text-brand-red">Layanan Bimbingan Pemustaka</a>
           </div>
         </div>
 
@@ -406,7 +406,7 @@
         </div>
 
         <!-- 2. Layanan Sirkulasi -->
-        <div id="layanan-sirkulasi" onclick="showNotification('Informasi Peminjaman & Pengembalian Koleksi Fisik...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+        <div id="layanan-sirkulasi" onclick="navigateToService('sirkulasi')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
           <div>
             <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
               <i data-lucide="repeat" class="w-5 h-5"></i>
@@ -414,108 +414,125 @@
             <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">2. Layanan Sirkulasi</h3>
             <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Peminjaman, perpanjangan, dan pengembalian buku dengan KTM aktif.</p>
           </div>
-          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">SOP Sirkulasi &rarr;</span>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Lihat informasi &rarr;</span>
         </div>
 
         <!-- 3. Layanan Kelas Literasi -->
-        <div id="layanan-kelas-literasi" onclick="showNotification('Pendaftaran Kelas Literasi Informasi & Sitasi Mendeley...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+        <div id="layanan-kelas-literasi" onclick="navigateToService('literasi')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
           <div>
             <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
               <i data-lucide="graduation-cap" class="w-5 h-5"></i>
             </div>
             <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">3. Layanan Kelas Literasi</h3>
-            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Workshop pencarian jurnal bereputasi dan penggunaan software sitasi Mendeley.</p>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Kelas untuk meningkatkan kemampuan mengakses, mengevaluasi, dan memanfaatkan sumber informasi.</p>
           </div>
-          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Ikuti Kelas &rarr;</span>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Lihat informasi &rarr;</span>
         </div>
 
         <!-- 4. Layanan Tata Bahasa -->
-        <div id="layanan-tata-bahasa" onclick="showNotification('Pendampingan Tata Bahasa Naskah & Abstrak...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+        <div id="layanan-tata-bahasa" onclick="navigateToService('tata-bahasa')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
           <div>
             <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
               <i data-lucide="spell-check" class="w-5 h-5"></i>
             </div>
             <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">4. Layanan Tata Bahasa</h3>
-            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Pemeriksaan kaidah bahasa baku Indonesia dan proofreading abstrak Inggris.</p>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Pemeriksaan tata bahasa, ejaan, dan gaya penulisan menggunakan Grammarly Premium.</p>
           </div>
-          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Konsultasi &rarr;</span>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Lihat informasi &rarr;</span>
         </div>
 
         <!-- 5. Layanan Cek Similarity -->
-        <div id="layanan-cek-similarity" onclick="showNotification('Pengecekan Similarity Turnitin Tugas Akhir & Artikel...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+        <div id="layanan-cek-similarity" onclick="navigateToService('similarity')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
           <div>
             <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
               <i data-lucide="scan-line" class="w-5 h-5"></i>
             </div>
             <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">5. Layanan Cek Similarity</h3>
-            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Uji kemiripan naskah tugas akhir dan manuskrip dosen melalui Turnitin resmi.</p>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Pemeriksaan kemiripan karya tulis menggunakan Turnitin untuk mendukung integritas akademik.</p>
           </div>
-          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Unggah Naskah &rarr;</span>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Lihat prosedur &rarr;</span>
         </div>
 
         <!-- 6. Layanan Bebas Pustaka -->
-        <div id="layanan-bebas-pustaka" onclick="showNotification('Pengajuan Surat Keterangan Bebas Pustaka Kelulusan...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+        <div id="layanan-bebas-pustaka" onclick="navigateToService('bebas-pustaka')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
           <div>
             <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
               <i data-lucide="file-check-2" class="w-5 h-5"></i>
             </div>
             <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">6. Layanan Bebas Pustaka</h3>
-            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Penerbitan surat keterangan bebas pinjaman buku sebagai syarat yudisium wisuda.</p>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Surat keterangan bebas pinjaman koleksi buku sebagai persyaratan kelulusan (wisuda).</p>
           </div>
-          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Ajukan Surat &rarr;</span>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Lihat persyaratan &rarr;</span>
         </div>
 
         <!-- 7. Layanan Repository -->
-        <div id="layanan-repository" onclick="showNotification('Membuka Repositori Laporan Tugas Akhir & PKL...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+        <div id="layanan-repository" onclick="navigateToService('repository')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
           <div>
             <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
               <i data-lucide="archive" class="w-5 h-5"></i>
             </div>
             <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">7. Layanan Repository</h3>
-            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Arsip naskah digital laporan PKL, proyek akhir, dan publikasi institusi.</p>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Kunjungi repository Perpustakaan Politeknik Sinar Mas Berau Coal.</p>
           </div>
-          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Akses Repo &rarr;</span>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Lihat informasi &rarr;</span>
         </div>
 
         <!-- 8. Usul Buku -->
-        <div id="usul-buku" onclick="showNotification('Formulir Pengusulan Pengadaan Buku Baru...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+        <div id="usul-buku" onclick="navigateToService('usul-buku')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
           <div>
             <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
               <i data-lucide="bookmark-plus" class="w-5 h-5"></i>
             </div>
             <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">8. Usul Buku</h3>
-            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Usulan judul buku teks atau referensi kuliah baru untuk dibeli perpustakaan.</p>
           </div>
-          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Form Usulan &rarr;</span>
         </div>
 
         <!-- 9. Layanan Fotocopy -->
-        <div id="layanan-fotocopy" onclick="showNotification('Informasi Layanan Fotocopy & Penggandaan Modul...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+        <div id="layanan-fotocopy" onclick="navigateToService('fotocopy')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
           <div>
             <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
               <i data-lucide="printer" class="w-5 h-5"></i>
             </div>
-            <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">9. Layanan Fotocopy</h3>
-            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Fasilitas cetak naskah, scan bab buku, dan penggandaan modul praktikum mahasiswa.</p>
+            <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">9. Layanan Fotokopi/Print</h3>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Layanan fotokopi dan cetak untuk mendukung kebutuhan akademik sivitas kampus.</p>
           </div>
-          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Info Layanan &rarr;</span>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Lihat informasi &rarr;</span>
         </div>
 
         <!-- 10. Layanan Bimbingan Pemustaka -->
-        <div id="layanan-bimbingan-pemustaka" onclick="showNotification('Jadwal Konsultasi Bimbingan Pemustaka...')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
+        <div id="layanan-bimbingan-pemustaka" onclick="navigateToService('bimbingan')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
           <div>
             <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
               <i data-lucide="user-check" class="w-5 h-5"></i>
             </div>
             <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">10. Bimbingan Pemustaka</h3>
-            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Konsultasi penelusuran bahan rujukan tugas akhir bersama staf pustakawan.</p>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bimbingan pemanfaatan koleksi, layanan, katalog, dan sumber informasi perpustakaan.</p>
           </div>
-          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Jadwalkan &rarr;</span>
+          <span class="text-xs font-bold text-brand-red mt-3 inline-flex items-center gap-1">Lihat informasi &rarr;</span>
         </div>
 
       </div>
     </section>
 
+  </main>
+
+  <!-- HALAMAN DETAIL LAYANAN -->
+  <main id="view-service" class="flex-1 hidden max-w-6xl mx-auto px-4 py-12 w-full">
+    <div class="mb-6 flex items-center justify-between">
+      <button onclick="navigateToPage('beranda')" class="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-brand-red transition bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span>Kembali ke Beranda</span>
+      </button>
+      <span class="text-xs font-mono text-slate-400">Informasi Layanan Perpustakaan</span>
+    </div>
+    <article class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+      <div class="h-2 bg-brand-red"></div>
+      <div class="p-6 sm:p-10">
+        <span class="text-xs font-bold uppercase tracking-widest text-brand-red">UPT Perpustakaan</span>
+        <h1 id="service-page-title" class="mt-2 text-3xl font-black text-slate-900 sm:text-4xl"></h1>
+        <div id="service-page-content" class="mt-8 max-w-none space-y-6 text-base leading-8 text-slate-700"></div>
+      </div>
+    </article>
   </main>
 
   <!-- ========================================================================= -->
@@ -692,7 +709,7 @@
         </div>
         <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
           <span class="text-[11px] font-medium text-slate-400">Database Sitasi</span>
-          <a href="https://www.scopus.com" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-amber-600 hover:underline inline-flex items-center gap-1">
+          <a href="https://www.scopus.com/pages/home?display=basic#basic" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-amber-600 hover:underline inline-flex items-center gap-1">
             Buka Scopus &rarr;
           </a>
         </div>
@@ -712,9 +729,10 @@
         </div>
         <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
           <span class="text-[11px] font-medium text-slate-400">E-Book Kampus</span>
-          <span class="text-xs font-bold text-slate-400 cursor-not-allowed" aria-label="Tautan Kubuku kampus belum tersedia">
-            Tautan kampus belum tersedia
-          </span>
+          <div class="flex flex-wrap justify-end gap-x-3 gap-y-1 text-xs font-bold">
+            <a href="https://kubuku.id/download/perpustakaan-poltek-simas-berau" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Landing page &rarr;</a>
+            <a href="https://play.google.com/store/apps/details?id=id.kubuku.kbk51615f4" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Play Store &rarr;</a>
+          </div>
         </div>
       </div>
 
@@ -732,7 +750,7 @@
         </div>
         <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
           <span class="text-[11px] font-medium text-slate-400">Jurnal & E-Book</span>
-          <a href="https://e-resources.perpusnas.go.id" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-brand-red hover:underline inline-flex items-center gap-1">
+          <a href="https://e-resources.perpusnas.go.id/" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-brand-red hover:underline inline-flex items-center gap-1">
             Buka Perpusnas &rarr;
           </a>
         </div>
@@ -777,13 +795,13 @@
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-6">
         <div>
           <span class="text-brand-red text-xs font-bold uppercase tracking-widest">Karya Ilmiah Vokasi</span>
-          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">List Publikasi Dosen</h1>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Publikasi Jurnal</h1>
           <p class="text-xs sm:text-sm text-slate-500 mt-1">
-            Daftar karya ilmiah, prosiding konferensi, dan artikel jurnal terakreditasi SINTA & Scopus hasil riset dosen Politeknik Sinar Mas Berau Coal.
+            Daftar publikasi dosen akan ditambahkan setelah data resmi tersedia.
           </p>
         </div>
         <span class="text-xs font-bold text-slate-500 bg-white border border-slate-200 px-3.5 py-1.5 rounded-xl font-mono shrink-0 shadow-sm">
-          Total Terdata: <span class="text-brand-red font-black" id="pub-count">3 Publikasi</span>
+          Total Terdata: <span class="text-brand-red font-black" id="pub-count">0 Publikasi</span>
         </span>
       </div>
 
@@ -808,114 +826,8 @@
         </div>
       </div>
 
-      <!-- Kartu Publikasi -->
-      <div class="space-y-4" id="publication-list-container">
-        
-        <!-- 1. D-IV TRL -->
-        <div class="pub-card bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-md transition space-y-3" data-prodi="TRL">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-md bg-red-100 text-brand-red font-mono text-[10px] font-bold">D-IV TRL</span>
-              <span class="px-2.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-bold">SINTA 2</span>
-              <span class="text-xs text-slate-400 font-mono">Tahun 2026</span>
-            </div>
-            <span class="text-[11px] font-mono text-slate-400">DOI: 10.31294/jtp.v14i2.2026</span>
-          </div>
-          <div>
-            <h3 class="text-base sm:text-lg font-bold text-slate-900 hover:text-brand-red transition cursor-pointer">
-              Model Optimasi Jalur Angkut Logistik Batubara Menggunakan Algoritma Dijkstra Terintegrasi Telemetri Fleet Management
-            </h3>
-            <p class="text-xs text-slate-600 mt-1">
-              <span class="font-bold text-slate-900">Penulis:</span> Nur Ainun Musvirah, S.T., M.T., Bambang Haryanto, M.T., dkk.
-            </p>
-            <p class="text-xs text-slate-500 italic mt-0.5">
-              Jurnal Transportasi dan Logistik Vokasi Indonesia, Vol. 14, No. 2, Hal. 142–155.
-            </p>
-          </div>
-          <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
-            <span class="text-[11px] text-slate-500">Kata Kunci: <span class="font-medium text-slate-700">Supply Chain, Fleet Management, Optimasi Jalur</span></span>
-            <div class="flex items-center gap-2">
-              <button onclick="showNotification('Menyalin format sitasi naskah...')" class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 flex items-center gap-1 transition">
-                <i data-lucide="quote" class="w-3.5 h-3.5"></i> Sitasi
-              </button>
-              <button onclick="showNotification('Mengunduh dokumen naskah fulltext...');" class="px-3.5 py-1.5 rounded-lg bg-brand-red text-white font-bold hover:bg-brand-darkred flex items-center gap-1 transition shadow-sm">
-                <span>Unduh Fulltext</span>
-                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. D-III PM -->
-        <div class="pub-card bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-md transition space-y-3" data-prodi="PM">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-800 font-mono text-[10px] font-bold">D-III PM</span>
-              <span class="px-2.5 py-0.5 rounded-md bg-blue-100 text-blue-800 text-[10px] font-bold">SCOPUS Q3</span>
-              <span class="text-xs text-slate-400 font-mono">Tahun 2026</span>
-            </div>
-            <span class="text-[11px] font-mono text-slate-400">DOI: 10.1016/j.proeng.2026.04.112</span>
-          </div>
-          <div>
-            <h3 class="text-base sm:text-lg font-bold text-slate-900 hover:text-brand-red transition cursor-pointer">
-              Analisis Getaran (Vibration Analysis) dan Uji Spektrometri Oli untuk Deteksi Dini Kerusakan Bearing Pompa Slurry Tambang
-            </h3>
-            <p class="text-xs text-slate-600 mt-1">
-              <span class="font-bold text-slate-900">Penulis:</span> Ir. Sudirman, S.T., M.Eng., Ikhsan Leo Darmawan, S.Tr.T., Ongky Elisman, M.B.A.
-            </p>
-            <p class="text-xs text-slate-500 italic mt-0.5">
-              International Journal of Mechanical & Maintenance Engineering, Vol. 19, No. 1, Hal. 88–97.
-            </p>
-          </div>
-          <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
-            <span class="text-[11px] text-slate-500">Kata Kunci: <span class="font-medium text-slate-700">Predictive Maintenance, Slurry Pump, Vibration Spectrum</span></span>
-            <div class="flex items-center gap-2">
-              <button onclick="showNotification('Menyalin format sitasi naskah...')" class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 flex items-center gap-1 transition">
-                <i data-lucide="quote" class="w-3.5 h-3.5"></i> Sitasi
-              </button>
-              <button onclick="showNotification('Mengunduh dokumen naskah fulltext...');" class="px-3.5 py-1.5 rounded-lg bg-brand-red text-white font-bold hover:bg-brand-darkred flex items-center gap-1 transition shadow-sm">
-                <span>Unduh Fulltext</span>
-                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3. D-III SVM -->
-        <div class="pub-card bg-white p-6 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-md transition space-y-3" data-prodi="SVM">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-md bg-blue-100 text-blue-800 font-mono text-[10px] font-bold">D-III SVM</span>
-              <span class="px-2.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-bold">SINTA 3</span>
-              <span class="text-xs text-slate-400 font-mono">Tahun 2025</span>
-            </div>
-            <span class="text-[11px] font-mono text-slate-400">DOI: 10.22146/jgise.59821</span>
-          </div>
-          <div>
-            <h3 class="text-base sm:text-lg font-bold text-slate-900 hover:text-brand-red transition cursor-pointer">
-              Pemetaan Batimetri dan Analisis Laju Sedimentasi Alur Sungai Segah Berau Menggunakan Integrasi Single-Beam Echosounder dan Citra Sentinel-2
-            </h3>
-            <p class="text-xs text-slate-600 mt-1">
-              <span class="font-bold text-slate-900">Penulis:</span> Rahmat Hidayat, S.T., M.Sc., Hendra Wijaya, S.T., dkk.
-            </p>
-            <p class="text-xs text-slate-500 italic mt-0.5">
-              Jurnal Geodesi dan Informasi Geospasial Tropis, Vol. 8, No. 3, Hal. 201–214.
-            </p>
-          </div>
-          <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
-            <span class="text-[11px] text-slate-500">Kata Kunci: <span class="font-medium text-slate-700">Batimetri, Echosounder, Sungai Segah, Sedimentasi</span></span>
-            <div class="flex items-center gap-2">
-              <button onclick="showNotification('Menyalin format sitasi naskah...')" class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 flex items-center gap-1 transition">
-                <i data-lucide="quote" class="w-3.5 h-3.5"></i> Sitasi
-              </button>
-              <button onclick="showNotification('Mengunduh dokumen naskah fulltext...');" class="px-3.5 py-1.5 rounded-lg bg-brand-red text-white font-bold hover:bg-brand-darkred flex items-center gap-1 transition shadow-sm">
-                <span>Unduh Fulltext</span>
-                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
+      <div class="space-y-4" id="publication-list-container" aria-live="polite">
+        <p class="p-6 rounded-2xl bg-white border border-slate-200 text-center text-sm text-slate-500">Memuat daftar publikasi...</p>
       </div>
     </div>
   </main>
@@ -1443,15 +1355,16 @@
             </button>
             <div id="mobile-sub-layanan" class="hidden bg-slate-50 px-3 py-2 space-y-1 text-slate-600 font-medium max-h-60 overflow-y-auto">
               <a href="javascript:void(0)" onclick="navigateToPage('opac'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px] font-bold text-brand-red">1. Layanan OPAC</a>
-              <a href="javascript:void(0)" onclick="scrollToService('layanan-sirkulasi'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">2. Layanan Sirkulasi</a>
-              <a href="javascript:void(0)" onclick="scrollToService('layanan-kelas-literasi'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">3. Layanan Kelas Literasi</a>
-              <a href="javascript:void(0)" onclick="scrollToService('layanan-tata-bahasa'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">4. Layanan Tata Bahasa</a>
-              <a href="javascript:void(0)" onclick="scrollToService('layanan-cek-similarity'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">5. Layanan Cek Similarity</a>
-              <a href="javascript:void(0)" onclick="scrollToService('layanan-bebas-pustaka'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">6. Layanan Bebas Pustaka</a>
-              <a href="javascript:void(0)" onclick="scrollToService('layanan-repository'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">7. Layanan Repository</a>
-              <a href="javascript:void(0)" onclick="scrollToService('usul-buku'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">8. Usul Buku</a>
-              <a href="javascript:void(0)" onclick="scrollToService('layanan-fotocopy'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">9. Layanan Fotocopy</a>
-              <a href="javascript:void(0)" onclick="scrollToService('layanan-bimbingan-pemustaka'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">10. Layanan Bimbingan Pemustaka</a>
+              <a href="javascript:void(0)" onclick="navigateToPage('opac'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px] font-bold text-brand-red">1. Layanan OPAC</a>
+              <a href="javascript:void(0)" onclick="navigateToService('sirkulasi'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">2. Layanan Sirkulasi</a>
+              <a href="javascript:void(0)" onclick="navigateToService('literasi'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">3. Layanan Kelas Literasi</a>
+              <a href="javascript:void(0)" onclick="navigateToService('tata-bahasa'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">4. Layanan Tata Bahasa</a>
+              <a href="javascript:void(0)" onclick="navigateToService('similarity'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">5. Layanan Cek Similarity</a>
+              <a href="javascript:void(0)" onclick="navigateToService('bebas-pustaka'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">6. Layanan Bebas Pustaka</a>
+              <a href="javascript:void(0)" onclick="navigateToService('repository'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">7. Layanan Repository</a>
+              <a href="javascript:void(0)" onclick="navigateToService('usul-buku'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">8. Usul Buku</a>
+              <a href="javascript:void(0)" onclick="navigateToService('fotocopy'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">9. Layanan Fotokopi/Print</a>
+              <a href="javascript:void(0)" onclick="navigateToService('bimbingan'); toggleSideMenu()" class="block py-1 px-2 rounded hover:text-brand-red hover:bg-white text-[11px]">10. Layanan Bimbingan Pemustaka</a>
             </div>
           </div>
 
@@ -1505,7 +1418,7 @@
       closeAllNavDropdowns();
 
       // Sembunyikan semua tampilan
-      const views = ['view-beranda', 'view-npp', 'view-profil', 'view-eresources', 'view-publikasi', 'view-opac'];
+      const views = ['view-beranda', 'view-service', 'view-npp', 'view-profil', 'view-eresources', 'view-publikasi', 'view-opac'];
       views.forEach(v => {
         const el = document.getElementById(v);
         if (el) el.classList.add('hidden');
@@ -1515,6 +1428,8 @@
       let targetEl = null;
       if (pageKey === 'beranda') {
         targetEl = document.getElementById('view-beranda');
+      } else if (pageKey === 'service') {
+        targetEl = document.getElementById('view-service');
       } else if (pageKey === 'npp') {
         targetEl = document.getElementById('view-npp');
       } else if (pageKey === 'profil') {
@@ -1530,6 +1445,10 @@
       if (targetEl) {
         targetEl.classList.remove('hidden');
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      if (pageKey === 'service' && targetSubId) {
+        renderServicePage(targetSubId);
       }
 
       // Jika ada target kartu khusus pada e-resources
@@ -1624,17 +1543,228 @@
       document.getElementById('opac-search-results').classList.add('hidden');
     }
 
-    // Scroll langsung ke kartu layanan di halaman Beranda
-    function scrollToService(serviceId) {
-      navigateToPage('beranda');
-      setTimeout(() => {
-        const el = document.getElementById(serviceId);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          el.classList.add('ring-2', 'ring-brand-red');
-          setTimeout(() => el.classList.remove('ring-2', 'ring-brand-red'), 2000);
+    const serviceDetails = {
+      sirkulasi: {
+        title: 'Layanan Sirkulasi',
+        paragraphs: ['Layanan sirkulasi adalah kegiatan melayani pemustaka dalam proses peminjaman, pengembalian, dan perpanjangan koleksi di perpustakaan.'],
+        sections: [
+          {
+            title: 'Peraturan dan tata tertib peminjaman buku adalah sebagai berikut:',
+            ordered: true,
+            items: [
+              'Pemustaka merupakan sivitas akademika Politeknik Sinar Mas Berau Coal',
+              'Pemustaka memiliki dan menunjukkan kartu tanda pengenal dari kampus. Untuk mahasiswa menggunakan Nomor Induk Mahasiswa (NIM), dosen dan tenaga kependidikan menggunakan Nomor Pokok Kepegawaian (NPK).',
+              'Tidak ada jumlah maksimal buku.',
+              'Jangka waktu peminjaman buku adalah 6 hari kerja.',
+              'Jika terjadi kehilangan buku, maka pemustaka wajib mengganti buku yang sama persis seperti buku yang di pinjam.'
+            ]
+          },
+          {
+            title: 'Prosedur peminjaman buku:',
+            ordered: true,
+            items: [
+              'Pemustaka membawa koleksi buku yang ingin dipinjam ke meja sirkulasi.',
+              'Pemustaka menunjukkan kartu identitas diri ke pustakawan, Untuk mahasiswa menggunakan Nomor Induk Mahasiswa (NIM), dosen dan tenaga kependidikan menggunakan Nomor Pokok Kepegawaian (NPK).',
+              'Pustakawan memproses peminjaman buku dengan melakukan scan pada kartu identitas pemustaka dan buku yang akan dipinjam.',
+              'Pustakawan memberikan buku yang akan dipinjam beserta lembar kertas yang berisi data buku lengkap dengan tanggal harus kembali.',
+              'Proses peminjaman berhasil.'
+            ]
+          },
+          {
+            title: 'Prosedur pengembalian buku:',
+            ordered: true,
+            items: [
+              'Pemustaka membawa koleksi buku yang akan dikembalikan ke meja sirkulasi.',
+              'Pemustaka menunjukkan kartu identitas diri ke pustakawan, Untuk mahasiswa menggunakan Nomor Induk Mahasiswa (NIM), dosen dan tenaga kependidikan menggunakan Nomor Pokok Kepegawaian (NPK).',
+              'Pustakawan memeriksa kondisi buku. Buku yang dipinjam, wajib dikembalikan dalam kondisi yang baik (tidak terdapat vandalisme pada koleksi buku',
+              'Pustakawan memproses pengembalian dengan melakukan scan pada buku yang akan dikembalikan dan mengeluarkan daftar peminjaman buku pada akun pemustaka',
+              'Proses pengembalian buku berhasil.'
+            ]
+          },
+          {
+            title: 'Prosedur perpanjangan buku:',
+            ordered: true,
+            items: [
+              'Pemustaka membawa buku yang akan diperpanjang masa peminjamannya ke meja layanan sirkulasi.',
+              'Pemustaka menunjukkan identitas diri kepada pustakawan, yaitu Nomor Induk Mahasiswa (NIM) bagi mahasiswa dan Nomor Pokok Kepegawaian (NPK) bagi dosen serta tenaga kependidikan.',
+              'Pustakawan memproses perpanjangan masa peminjaman buku sesuai dengan ketentuan yang berlaku.',
+              'Setelah proses selesai, masa peminjaman buku berhasil diperpanjang dan pemustaka dapat mengetahui batas waktu pengembalian yang baru.'
+            ]
+          }
+        ]
+      },
+      literasi: {
+        title: 'Layanan Kelas Literasi',
+        justify: true,
+        paragraphs: ['Program Kelas Literasi Perpustakaan Politeknik Sinar Mas Berau Coal disusun untuk meningkatkan kemampuan literasi informasi sivitas akademika dalam mengakses, mengevaluasi, dan memanfaatkan sumber informasi secara efektif. Terdiri dari tiga jenjang, setiap kelas dirancang sesuai dengan tingkat kebutuhan dan tujuan pengguna.'],
+        sections: [{
+          title: '',
+          ordered: true,
+          items: [
+            'Kelas Literasi Reference Manager : kelas ini ditujukan bagi mahasiswa tingkat akhir yang membutuhkan keterampilan riset lanjutan. Peserta akan mempelajari alat bantu untuk meningkatkan efisiensi dalam pengelolaan referensi. Materi ini mencakup pembelajaran terkait Mendeley atau manajemen referensi dan penyusunan kutipan otomatis',
+            'Kelas Literasi Literature Searching adalah program pelatihan yang dirancang untuk membantu pemustaka khususnya mahasiswa tingkat akhir untuk menemukan, mengevaluasi, dan mengelola referensi ilmiah (seperti jurnal, buku, dan tesis) secara efektif dan efisien.',
+            'Kelas Literasi Plagiarisme',
+            'Kelas Literasi tentang Serah Simpan Naskah TA'
+          ]
+        }]
+      },
+      'tata-bahasa': {
+        title: 'Layanan Tata Bahasa',
+        justify: true,
+        paragraphs: ['Layanan Tata Bahasa di Perpustakaan Politeknik Sinar Mas Berau Coal adalah layanan yang menyediakan akses ke alat bantu pengecekan tata bahasa dan penulisan pada website Grammarly. Layanan ini membantu pemustaka dalam memeriksa dan memperbaiki kesalahan tata bahasa, ejaan, dan gaya penulisan dalam dokumen. Perpustakaan Politeknik Sinar Mas Berau Coal telah melanggan Grammarly Premium untuk memberikan layanan pengecekan tata bahasa yang lebih berkualitas.']
+      },
+      similarity: {
+        title: 'Layanan Cek Similarity',
+        justify: true,
+        paragraphs: ['Turnitin adalah perangkat lunak yang digunakan untuk memeriksa tingkat kemiripan suatu karya tulis dengan berbagai sumber, seperti jurnal ilmiah, buku, artikel online, dan karya tulis lainnya. Hasil menunjukkan persentase kemiripan serta sumber yang memiliki kesamaan dengan tulisan yang diperiksa. Tujuannya untuk mencegah plagiarisme, meingkiatkan kualitas tulisan, dan sebagai integritas akademik.'],
+        sections: [{
+          title: 'Cara Menggunakan Layanan Turnitin di Perpustakaan Politeknik Sinar Mas Berau Coal',
+          ordered: true,
+          items: [
+            'Pemustaka mengunggah dokumen yang akan diperiksa melalui formulir berikut: https://s.id/ujikemiripan2026',
+            'Setelah mengirimkan dokumen, pemustaka wajib melakukan konfirmasi kepada pustakawan untuk memastikan permohonan pemeriksaan telah diterima.',
+            'Pustakawan melakukan pemeriksaan tingkat kemiripan dokumen menggunakan perangkat lunak Turnitin.',
+            'Setelah proses pemeriksaan selesai, pustakawan menyampaikan hasil pemeriksaan kepada pemustaka melalui WhatsApp.'
+          ]
+        }]
+      },
+      'bebas-pustaka': {
+        title: 'Layanan Bebas Pustaka',
+        justify: true,
+        paragraphs: ['Layanan Bebas Pustaka merupakan layanan yang mengeluarkan surat keterangan bebas pinjaman (tidak memiliki pinjaman) koleksi perpustakaan berupa bahan pustaka tercetak dalam hal ini buku teks. Surat Keterangan Bebas Pustaka perpustakaan digunakan sebagai persyaratan kelulusan (wisuda).'],
+        sections: [{
+          title: 'Persyaratan dan Prosedur Layanan Bebas Pustaka',
+          ordered: true,
+          items: [
+            { title: 'Menyelesaikan Tanggungan Perpustakaan', text: 'Pemustaka tidak memiliki tanggungan peminjaman koleksi maupun denda perpustakaan.' },
+            { title: 'Menyerahkan Tugas Akhir', text: 'Pemustaka menyerahkan tugas akhir (TA) dalam bentuk soft file dan hard file sesuai ketentuan perpustakaan.' },
+            { title: 'Menyumbangkan Buku', text: 'Pemustaka menyerahkan sumbangan buku sebanyak 1 (satu) eksemplar sesuai ketentuan yang berlaku.' },
+            { title: 'Mengisi Formulir Bebas Pustaka', text: 'Pemustaka mengisi formulir pengajuan Surat Keterangan Bebas Pustaka melalui tautan berikut: https://s.id/SKBP2026' },
+            { title: 'Verifikasi Data', text: 'Pustakawan melakukan pemeriksaan terhadap data peminjaman koleksi dan denda perpustakaan.' },
+            { title: 'Penyelesaian Tanggungan', text: 'Apabila masih terdapat tanggungan, pemustaka wajib menyelesaikannya terlebih dahulu sebelum surat diterbitkan.' },
+            { title: 'Penerbitan Surat Keterangan', text: 'Setelah seluruh persyaratan terpenuhi dan tidak terdapat tanggungan, pustakawan menerbitkan Surat Keterangan Bebas Pustaka.' }
+          ]
+        }]
+      },
+      repository: {
+        title: 'Layanan Repository',
+        paragraphs: ['Silakan kunjungi repository Perpustakaan Politeknik Sinar Mas Berau Coal melalui tautan berikut.'],
+        link: { label: 'Buka Repository Perpustakaan', url: 'https://repository.polteksimasberau.ac.id/' }
+      },
+      'usul-buku': {
+        title: 'Usul Buku'
+      },
+      fotocopy: {
+        title: 'Layanan Fotokopy/Print',
+        justify: true,
+        paragraphs: ['Layanan Fotokopy/Print Perpustakaan Politeknik Sinar Mas Berau Coal Perpustakaan Politeknik Sinar Mas Berau Coal menyediakan layanan fotokopy/print untuk membantu memenuhi kebutuhan akademik pemustaka, khususnya mahasiswa, dosen, dan tenaga kependidikan. Layanan ini dihadirkan untuk memudahkan pemustaka dalam memperoleh salinan dokumen dan bahan pembelajaran tanpa harus mencari jasa fotokopy/print di luar kampus. Selain fotokopy/print, layanan ini juga dapat mendukung kebutuhan penggandaan dokumen untuk menunjang kegiatan akademik di lingkungan kampus.']
+      },
+      bimbingan: {
+        title: 'Layanan Bimbingan Pemustaka',
+        justify: true,
+        paragraphs: [
+          'Layanan Bimbingan Pemustaka merupakan layanan Perpustakaan Politeknik Sinar Mas Berau Coal yang bertujuan membantu pemustaka dalam memanfaatkan koleksi, layanan, dan sumber informasi perpustakaan secara optimal. Layanan ini juga mendukung peningkatan kemampuan literasi informasi untuk menunjang kegiatan akademik dan penelitian.',
+          'Adapun layanan bimbingan yang tersedia meliputi:'
+        ],
+        sections: [{
+          title: '',
+          ordered: true,
+          items: [
+            { title: 'Pengenalan Koleksi dan Layanan Perpustakaan', text: 'Memberikan informasi mengenai koleksi, fasilitas, dan layanan yang tersedia di perpustakaan.' },
+            { title: 'Pencarian Informasi dan Sumber Referensi', text: 'Membantu pemustaka menemukan sumber informasi dan referensi yang relevan untuk mendukung kebutuhan pembelajaran maupun penelitian.' },
+            { title: 'Penggunaan Katalog Online (OPAC)', text: 'Memberikan panduan kepada pemustaka dalam menggunakan katalog online untuk menelusuri dan menemukan koleksi perpustakaan.' },
+            { title: 'Pengelolaan Referensi Menggunakan Mendeley', text: 'Membimbing pemustaka dalam mengelola referensi, menyusun sitasi, dan membuat daftar pustaka menggunakan aplikasi Mendeley.' },
+            { title: 'Penyusunan Daftar Pustaka', text: 'Memberikan panduan penyusunan sitasi dan daftar pustaka sesuai dengan kaidah penulisan ilmiah, termasuk gaya sitasi APA style (American Psychological Association).', italicPhrase: 'American Psychological Association' }
+          ]
+        }]
+      }
+    };
+
+    function navigateToService(serviceId) {
+      navigateToPage('service', serviceId);
+    }
+
+    function renderServicePage(serviceId) {
+      const details = serviceDetails[serviceId];
+      if (!details) {
+        console.error(`Informasi layanan tidak ditemukan: ${serviceId}`);
+        return;
+      }
+
+      const title = document.getElementById('service-page-title');
+      const content = document.getElementById('service-page-content');
+      title.textContent = details.title;
+      content.replaceChildren();
+
+      (details.paragraphs || []).forEach(text => {
+        const paragraph = document.createElement('p');
+        if (details.justify) paragraph.className = 'text-justify';
+        paragraph.textContent = text;
+        content.append(paragraph);
+      });
+
+      (details.sections || []).forEach(section => {
+        const wrapper = document.createElement('section');
+        wrapper.className = 'border-t border-slate-200 pt-5';
+        if (section.title) {
+          const heading = document.createElement('h3');
+          heading.className = 'mb-3 text-lg font-bold text-slate-900';
+          heading.textContent = section.title;
+          wrapper.append(heading);
         }
-      }, 100);
+        const list = document.createElement(section.ordered ? 'ol' : 'ul');
+        list.className = `${section.ordered ? 'list-decimal' : 'list-disc'} space-y-2 pl-6${details.justify ? ' text-justify' : ''}`;
+        section.items.forEach(entry => {
+          const item = document.createElement('li');
+          if (typeof entry !== 'string') {
+            const itemTitle = document.createElement('strong');
+            itemTitle.className = 'text-slate-900';
+            itemTitle.textContent = entry.title;
+            item.append(itemTitle, document.createTextNode(' '));
+          }
+          const text = typeof entry === 'string' ? entry : entry.text;
+          if (typeof entry !== 'string' && entry.italicPhrase) {
+            const phraseIndex = text.indexOf(entry.italicPhrase);
+            if (phraseIndex !== -1) {
+              item.append(document.createTextNode(text.slice(0, phraseIndex)));
+              const italic = document.createElement('em');
+              italic.textContent = entry.italicPhrase;
+              item.append(italic, document.createTextNode(text.slice(phraseIndex + entry.italicPhrase.length)));
+              list.append(item);
+              return;
+            }
+          }
+          const urlPattern = /https?:\/\/[^\s]+/g;
+          let lastIndex = 0;
+          for (const match of text.matchAll(urlPattern)) {
+            item.append(document.createTextNode(text.slice(lastIndex, match.index)));
+            const link = document.createElement('a');
+            link.className = 'break-all font-semibold text-brand-red underline hover:text-brand-darkred';
+            link.href = match[0];
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.textContent = match[0];
+            item.append(link);
+            lastIndex = match.index + match[0].length;
+          }
+          item.append(document.createTextNode(text.slice(lastIndex)));
+          list.append(item);
+        });
+        wrapper.append(list);
+        content.append(wrapper);
+      });
+
+      if (details.link) {
+        const link = document.createElement('a');
+        link.className = 'inline-flex items-center gap-2 border-b-2 border-brand-red font-bold text-brand-red hover:text-brand-darkred';
+        link.href = details.link.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = details.link.label;
+        content.append(link);
+      }
+
+      lucide.createIcons();
     }
 
     // Dropdown Header Menu
@@ -1772,6 +1902,5 @@
   <script src="./assets/js/api.js"></script>
   <script src="./assets/js/opac.js"></script>
   <script src="./assets/js/publikasi.js"></script>
-  <script src="./assets/js/main.js"></script>
 </body>
 </html>

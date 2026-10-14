@@ -70,7 +70,10 @@
       container.replaceChildren(...response.items.map(renderPublication));
       count.textContent = `${response.total} Publikasi`;
       if (!response.items.length) {
-        container.append(element('p', 'p-6 rounded-2xl bg-white border border-slate-200 text-center text-sm text-slate-500', 'Belum ada publikasi yang cocok dengan pencarian ini.'));
+        const message = keyword || currentProgram !== 'all'
+          ? 'Tidak ada publikasi yang sesuai dengan filter atau pencarian ini.'
+          : 'Data publikasi dosen belum tersedia.';
+        container.append(element('p', 'p-6 rounded-2xl bg-white border border-slate-200 text-center text-sm text-slate-500', message));
       }
     } catch (error) {
       count.textContent = 'Database tidak terhubung';

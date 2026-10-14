@@ -10,7 +10,7 @@ Pastikan PostgreSQL sudah terpasang dan perintah `psql` tersedia. Dari folder ut
 psql -h localhost -U postgres -d postgres -f database/setup.sql
 ```
 
-Ganti `postgres` dengan role administrator PostgreSQL di komputer tersebut bila namanya berbeda. Skrip membuat database `db_perpustakaan_poltek` jika belum ada, lalu membuat tabel dan mengisi data contoh. Skrip ini tidak menghapus tabel atau data yang sudah ada. Isi `backend/.env` dengan nama database, role aplikasi, dan password lokal komputer tersebut sebelum menjalankan backend.
+Ganti `postgres` dengan role administrator PostgreSQL di komputer tersebut bila namanya berbeda. Skrip membuat database `db_perpustakaan_poltek` jika belum ada, lalu membuat tabel dan mengisi data contoh. Skrip tidak menghapus tabel atau data yang sudah ada, kecuali tiga entri publikasi contoh lama yang bukan data resmi pustakawan. Isi `backend/.env` dengan nama database, role aplikasi, dan password lokal komputer tersebut sebelum menjalankan backend.
 
 File `database/db_perpustakaan.sql` berisi skema tabel dan data contoh proyek, bukan salinan data privat dari database PostgreSQL lain. Untuk memindahkan data tambahan yang sudah dimasukkan ke database sumber, ekspor database tersebut dengan `pg_dump` dan sertakan dump-nya secara terpisah.
 
