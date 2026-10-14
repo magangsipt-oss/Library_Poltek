@@ -11,6 +11,8 @@ const frontendPath = path.resolve(__dirname, '../frontend');
 app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
 app.use(express.json({ limit: '1mb' }));
 
+app.use('/api/admin', require('./routes/adminRoutes'));
+
 app.get('/api/health', async (req, res) => {
   try {
     await checkDatabase();

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#a30d22">
+  <title>Login Admin - Perpustakaan Politeknik Sinar Mas Berau Coal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/admin-login.css">
+</head>
+<body>
+  <main class="login-layout">
+    <section class="campus-panel" aria-label="Informasi kampus">
+      <div class="campus-slideshow" aria-hidden="true">
+        <img class="campus-slide is-active" src="../assets/img/hero-gedung-kampus.png" alt="">
+        <img class="campus-slide" src="../assets/img/login-survei.png" alt="">
+        <img class="campus-slide" src="../assets/img/login-kampus-luar.png" alt="">
+        <img class="campus-slide" src="../assets/img/login-mahasiswa-perpus.png" alt="">
+        <img class="campus-slide" src="../assets/img/login-mahasiswa-kampus.png" alt="">
+      </div>
+      <div class="campus-shade" aria-hidden="true"></div>
+
+      <a class="institution-brand" href="../" aria-label="Portal Perpustakaan Politeknik Sinar Mas Berau Coal">
+        <span class="brand-logo">
+          <img src="../assets/img/logo-poltek.png" alt="">
+        </span>
+        <span class="brand-name">
+          <span>POLITEKNIK</span>
+          <strong>SINAR MAS BERAU COAL</strong>
+        </span>
+      </a>
+
+      <div class="campus-copy">
+        <span class="eyebrow"><span class="eyebrow-dot"></span> PORTAL ADMINISTRATOR</span>
+        <h1>Melayani dengan ilmu,<br>bertumbuh melalui literasi.</h1>
+        <p>Kelola layanan dan koleksi perpustakaan dalam satu ruang kerja yang terintegrasi.</p>
+      </div>
+
+      <div class="slide-controls" aria-label="Pilihan gambar latar">
+        <button class="slide-dot is-active" type="button" aria-label="Tampilkan gambar kampus 1" aria-pressed="true"></button>
+        <button class="slide-dot" type="button" aria-label="Tampilkan gambar kampus 2" aria-pressed="false"></button>
+        <button class="slide-dot" type="button" aria-label="Tampilkan gambar kampus 3" aria-pressed="false"></button>
+        <button class="slide-dot" type="button" aria-label="Tampilkan gambar kampus 4" aria-pressed="false"></button>
+        <button class="slide-dot" type="button" aria-label="Tampilkan gambar kampus 5" aria-pressed="false"></button>
+      </div>
+      <span class="campus-caption">Perpustakaan Politeknik Sinar Mas Berau Coal</span>
+    </section>
+
+    <section class="form-panel" aria-labelledby="login-title">
+      <div class="form-content">
+        <div class="form-heading">
+          <span class="form-kicker">AREA KHUSUS PETUGAS</span>
+          <h2 id="login-title">Selamat datang</h2>
+          <p>Masuk untuk melanjutkan ke panel administrasi perpustakaan.</p>
+        </div>
+
+        <form id="admin-login-form">
+          <label class="field-label" for="username">Username atau email</label>
+          <div class="input-wrap">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="8" r="3.5"></circle>
+              <path d="M5 20c.5-3.1 3.2-5 7-5s6.5 1.9 7 5"></path>
+            </svg>
+            <input id="username" name="username" type="text" autocomplete="username" placeholder="Masukkan username atau email" required>
+          </div>
+
+          <div class="password-heading">
+            <label class="field-label" for="password">Kata sandi</label>
+          </div>
+          <div class="input-wrap">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+              <rect x="5" y="10" width="14" height="11" rx="2"></rect>
+              <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+            </svg>
+            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Masukkan kata sandi" required>
+            <button class="password-toggle" type="button" aria-label="Tampilkan kata sandi" aria-pressed="false">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+                <path d="M2.5 12s3.2-6 9.5-6 9.5 6 9.5 6-3.2 6-9.5 6-9.5-6-9.5-6Z"></path>
+                <circle cx="12" cy="12" r="2.5"></circle>
+              </svg>
+            </button>
+          </div>
+
+          <p class="form-notice" id="login-notice" role="status" hidden></p>
+          <button class="submit-button" type="submit">
+            <span>Masuk ke panel admin</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M13 6l6 6-6 6"></path>
+            </svg>
+          </button>
+        </form>
+
+        <p class="access-note">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+            <path d="M12 3 4.5 6v5.5c0 4.7 3.2 7.9 7.5 9.5 4.3-1.6 7.5-4.8 7.5-9.5V6L12 3Z"></path>
+            <path d="m9 12 2 2 4-4"></path>
+          </svg>
+          Halaman ini hanya untuk petugas perpustakaan.
+        </p>
+
+        <a class="back-link" href="../">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+            <path d="M19 12H5m7 7-7-7 7-7"></path>
+          </svg>
+          Kembali ke website perpustakaan
+        </a>
+      </div>
+      <footer class="form-footer">© Politeknik Sinar Mas Berau Coal</footer>
+    </section>
+  </main>
+  <script src="../assets/js/admin-login.js"></script>
+</body>
+</html>

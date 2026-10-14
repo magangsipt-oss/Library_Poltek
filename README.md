@@ -40,6 +40,24 @@ Buka `http://localhost:3000`. Status koneksi database dapat diperiksa di `/api/h
 
 File `database/db_perpustakaan.sql` kompatibel dengan PostgreSQL. Seed data contoh bersifat idempotent berdasarkan judul; perintah ini tidak menjalankan `DROP TABLE`.
 
+## Login dan beranda admin
+
+Halaman login tersedia di `http://localhost:3000/admin/login.html`; setelah login, dashboard berada di `http://localhost:3000/admin/`. Sebelum menjalankan backend, tambahkan konfigurasi berikut ke `backend/.env` tanpa mengganti pengaturan PostgreSQL yang sudah ada:
+
+```dotenv
+ADMIN_USERNAME=username_admin_anda
+ADMIN_PASSWORD=password_admin_anda
+ADMIN_SESSION_SECRET=secret_acak_minimal_32_karakter
+```
+
+Gunakan username dan password admin yang Anda pilih. Buat secret sesi acak dengan Node.js, lalu salin hasilnya ke `ADMIN_SESSION_SECRET`:
+
+```bash
+node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
+```
+
+Jangan masukkan nilai rahasia tersebut ke repositori atau mengganti placeholder di `.env.example` dengan kredensial asli. Login memakai cookie `HttpOnly` selama 8 jam, sedangkan dashboard hanya membaca ringkasan dari tabel koleksi, publikasi, dan permohonan layanan yang sudah tersedia. Data peminjaman pada grafik koleksi mengikuti nilai `loan_count`; tabel transaksi sirkulasi belum tersedia dalam skema proyek.
+
 ## Menyiapkan database di Windows
 
 Jika PostgreSQL lokal memakai instalasi default versi 18 dan password user `postgres` tidak diketahui, buka PowerShell dengan **Run as administrator**, lalu jalankan:
