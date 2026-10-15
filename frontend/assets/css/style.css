@@ -3,12 +3,149 @@
   outline-offset: 2px;
 }
 
+.portal-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  background: #c8102e;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.portal-footer p,
+.portal-footer ul {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.portal-footer .portal-footer-copyright {
+  border-color: rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.service-hours-section {
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+  padding-bottom: 0;
+  background: transparent;
+}
+
+.service-hours-panel {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.service-hours-card {
+  min-width: 0;
+  border: 1px solid #fff;
+  background: #fff;
+  box-shadow: 0 18px 40px rgba(31, 41, 55, 0.12), 0 4px 12px rgba(133, 7, 27, 0.06);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.service-hours-section .service-hours-card {
+  border-radius: 0;
+}
+
+#layanan-section [id^="layanan-"],
+#layanan-section #usul-buku,
+#view-eresources [id^="sub-"] {
+  border-radius: 0;
+}
+
+.service-hours-card--today,
+.service-hours-card--schedule {
+  background: #fff;
+}
+
+.service-hours-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 24px 48px rgba(31, 41, 55, 0.16), 0 8px 18px rgba(133, 7, 27, 0.08);
+}
+
+.service-card-title { color: #171717; }
+.service-card-copy { color: #3f3f46; }
+.service-card-eyebrow { color: #c8102e; }
+.service-card-accent { color: #c8102e; }
+.service-card-muted { color: #71717a; }
+
+.service-card-footer,
+.service-card-note {
+  border-color: #fff;
+  color: #27272a;
+}
+
+.service-icon {
+  background: #fff1f2;
+  color: #c8102e;
+}
+
+.service-schedule {
+  color: #3f3f46;
+}
+
+.service-schedule > div {
+  gap: 0.75rem;
+  border-color: #fff;
+}
+
+.service-status-pill {
+  background: #fff1f2;
+  color: #a50922;
+}
+
+.service-status-dot {
+  background: #c8102e;
+}
+
+.npp-page {
+  min-height: 100%;
+  background: #fff;
+}
+
+.npp-feature-card {
+  border: 2px solid #c8102e;
+  background: #fff;
+  box-shadow: 0 28px 70px rgba(75, 0, 12, 0.24);
+}
+
+.npp-text { color: #85071b; }
+.npp-eyebrow { color: #c8102e; }
+.npp-muted { color: #a31728; }
+
+.npp-code-panel {
+  border: 1px solid rgba(200, 16, 46, 0.22);
+  background: linear-gradient(135deg, #c8102e, #85071b);
+}
+
+.npp-code-panel .npp-text,
+.npp-code-panel .npp-muted { color: #fff; }
+
+.npp-verified {
+  border: 1px solid #c8102e;
+  background: #fff;
+  color: #a50922;
+}
+
+.npp-caption { color: #a31728; }
+
+.npp-detail-card {
+  border: 1px solid rgba(200, 16, 46, 0.18);
+  background: #fff7f8;
+  color: #85071b;
+}
+
+.npp-footer {
+  border-color: rgba(200, 16, 46, 0.2);
+  color: #a31728;
+}
+
 .hero-section {
   min-height: calc(100vh - 158px);
   min-height: calc(100svh - 158px);
 }
 
 @media (max-width: 639px) {
+  .npp-page-content .npp-feature-card {
+    padding: 1.5rem;
+  }
+
   .hero-section {
     min-height: calc(100vh - 92px);
     min-height: calc(100svh - 92px);
@@ -16,7 +153,7 @@
 
   #header-row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 44px;
+    grid-template-columns: minmax(0, 1fr);
     min-height: 92px;
     overflow: visible;
     padding-block: 8px;
@@ -33,17 +170,7 @@
     display: none;
   }
 
-  #header-address {
-    min-width: 44px;
-    justify-content: center;
-    border-left: 0;
-    padding: 0;
-  }
-
-  #header-address > div:first-child,
-  #header-address > div.h-10 {
-    display: none;
-  }
+  #header-address { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -54,5 +181,9 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .service-hours-card:hover {
+    transform: none;
   }
 }
