@@ -94,6 +94,20 @@
   background: #c8102e;
 }
 
+#layanan-section > .grid > div {
+  text-align: center;
+}
+
+#layanan-section > .grid > div > div > img,
+#layanan-section > .grid > div > div > div:first-child {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#layanan-section > .grid > div > span {
+  justify-content: center;
+}
+
 .npp-page {
   min-height: 100%;
   background: #fff;
