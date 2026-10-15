@@ -461,9 +461,7 @@
         <!-- 8. Usul Buku -->
         <div id="usul-buku" onclick="navigateToService('usul-buku')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
           <div>
-            <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
-              <i data-lucide="bookmark-plus" class="w-5 h-5"></i>
-            </div>
+            <img src="./assets/img/layanan-usul-buku.png" alt="" class="w-[72px] h-14 object-contain mb-3">
             <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">Usul Buku</h3>
           </div>
         </div>
@@ -471,9 +469,7 @@
         <!-- 9. Layanan Fotocopy -->
         <div id="layanan-fotocopy" onclick="navigateToService('fotocopy')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
           <div>
-            <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
-              <i data-lucide="printer" class="w-5 h-5"></i>
-            </div>
+            <img src="./assets/img/layanan-fotokopi.png" alt="" class="w-[72px] h-14 object-contain mb-3">
             <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">Layanan Fotokopi/Print</h3>
             <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Layanan fotokopi dan cetak untuk mendukung kebutuhan akademik sivitas kampus.</p>
           </div>
@@ -483,9 +479,7 @@
         <!-- 10. Layanan Bimbingan Pemustaka -->
         <div id="layanan-bimbingan-pemustaka" onclick="navigateToService('bimbingan')" class="bg-white p-5 rounded-2xl border border-slate-200 hover:border-brand-red hover:shadow-lg transition group flex flex-col justify-between cursor-pointer scroll-mt-20">
           <div>
-            <div class="w-11 h-11 rounded-xl bg-red-50 text-brand-red group-hover:bg-brand-red group-hover:text-white transition flex items-center justify-center mb-3">
-              <i data-lucide="user-check" class="w-5 h-5"></i>
-            </div>
+            <img src="./assets/img/layanan-bimbingan-pemustaka.png" alt="" class="w-[72px] h-14 object-contain mb-3">
             <h3 class="font-extrabold text-sm text-slate-900 group-hover:text-brand-red transition">Bimbingan Pemustaka</h3>
             <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bimbingan pemanfaatan koleksi, layanan, katalog, dan sumber informasi perpustakaan.</p>
           </div>
@@ -499,9 +493,6 @@
 
   <!-- HALAMAN DETAIL LAYANAN -->
   <main id="view-service" class="flex-1 hidden max-w-6xl mx-auto px-4 py-12 w-full">
-    <div class="mb-6 flex justify-end">
-      <span class="text-xs font-mono text-slate-400">Informasi Layanan Perpustakaan</span>
-    </div>
     <article class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
       <div class="h-2 bg-brand-red"></div>
       <div class="p-6 sm:p-10">
@@ -517,10 +508,6 @@
   <!-- ========================================================================= -->
   <main id="view-npp" class="npp-page flex-1 hidden px-4 py-12 w-full">
     <div class="npp-page-content max-w-7xl mx-auto">
-    <div class="mb-6 flex justify-end">
-      <span class="text-xs font-mono text-slate-500">Tentang Perpustakaan</span>
-    </div>
-
     <div class="npp-feature-card rounded-3xl p-8 sm:p-12 shadow-2xl space-y-8">
       <div class="flex items-center gap-4">
         <div class="w-14 h-14 rounded-2xl bg-brand-red text-white flex items-center justify-center font-black text-2xl shadow-lg">
@@ -583,10 +570,6 @@
   <!-- HALAMAN KHUSUS 2: PROFIL PERPUSTAKAAN (TERPISAH DARI BERANDA)             -->
   <!-- ========================================================================= -->
   <main id="view-profil" class="flex-1 hidden max-w-5xl mx-auto px-4 py-12 w-full">
-    <div class="mb-6 flex justify-end">
-      <span class="text-xs font-mono text-slate-400">Tentang Perpustakaan</span>
-    </div>
-
     <div class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm space-y-8">
       <div class="flex items-center gap-4 border-b border-slate-100 pb-6">
         <div class="w-14 h-14 rounded-2xl bg-red-50 text-brand-red flex items-center justify-center shrink-0">
@@ -650,10 +633,6 @@
   <!-- HALAMAN KHUSUS 3: E-RESOURCES (TERPISAH DARI BERANDA)                     -->
   <!-- ========================================================================= -->
   <main id="view-eresources" class="flex-1 hidden max-w-6xl mx-auto px-4 py-12 w-full">
-    <div class="mb-6 flex justify-end">
-      <span class="text-xs font-mono text-slate-400">Pangkalan Data Ilmiah</span>
-    </div>
-
     <div class="mb-8">
       <span class="text-brand-red text-xs font-bold uppercase tracking-widest">Portal E-resources</span>
       <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">E-resources Pangkalan Data Ilmiah</h1>
@@ -750,10 +729,6 @@
   <!-- HALAMAN KHUSUS 4: LIST PUBLIKASI DOSEN (TERPISAH DARI BERANDA)            -->
   <!-- ========================================================================= -->
   <main id="view-publikasi" class="flex-1 hidden max-w-6xl mx-auto px-4 py-12 w-full">
-    <div class="mb-6 flex justify-end">
-      <span class="text-xs font-mono text-slate-400">Publikasi Jurnal Ilmiah</span>
-    </div>
-
     <div class="space-y-8">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-6">
         <div>
@@ -799,11 +774,6 @@
   <!-- HALAMAN KHUSUS BARU: LAYANAN OPAC                                         -->
   <!-- ========================================================================= -->
   <main id="view-opac" class="flex-1 hidden max-w-6xl mx-auto px-4 py-12 w-full">
-    <!-- Header Sub-Halaman -->
-    <div class="mb-6 flex justify-end">
-      <span class="text-xs font-mono text-slate-400">Katalog Online Terintegrasi</span>
-    </div>
-
     <!-- Title & Deskripsi OPAC -->
     <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-6">
       <div>

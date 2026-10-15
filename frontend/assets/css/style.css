@@ -105,7 +105,7 @@
 }
 
 #layanan-section > .grid > div > span {
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .npp-page {
