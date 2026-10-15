@@ -1,11 +1,17 @@
-PORT=3000
-CORS_ORIGIN=http://localhost:3000
-PGHOST=127.0.0.1
-PGPORT=5432
-PGDATABASE=db_perpustakaan_poltek
-PGUSER=postgres
-PGPASSWORD="123456789"
-PGSSLMODE=disable
-ADMIN_USERNAME=Perpus
-ADMIN_PASSWORD=Perpus123
-ADMIN_SESSION_SECRET=14ac075f62b2b0c65cd40320f2f8a74894444b74783fb0d7639d5a7beca58aef
+# Menyiapkan file `.env` setelah pull
+
+File `backend/.env` berisi password dan secret lokal, jadi file tersebut tidak di-push. Buat salinan dari template yang aman di folder utama proyek:
+
+```powershell
+Copy-Item backend\.env.example backend\.env
+```
+
+Buka `backend/.env`, lalu isi `PGDATABASE`, `PGUSER`, dan `PGPASSWORD` sesuai PostgreSQL di komputer masing-masing. Pastikan database proyek sudah dibuat dan diinisialisasi; lihat panduan di [README.md](./README.md).
+
+Pilih username dan password admin sendiri, lalu buat secret sesi baru di PowerShell:
+
+```powershell
+node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
+```
+
+Salin hasilnya ke `ADMIN_SESSION_SECRET` di `backend/.env`. Jangan menaruh password atau secret asli di README, `.env.example`, atau GitHub. Setelah konfigurasi selesai, jalankan backend sesuai panduan di `README.md`.

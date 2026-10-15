@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#a30d22">
+  <meta name="theme-color" content="#c8102e">
   <title>Beranda Admin - Perpustakaan Politeknik Sinar Mas Berau Coal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,6 +13,9 @@
 <body>
   <div class="admin-shell">
     <aside class="sidebar" id="admin-sidebar">
+      <button class="sidebar-close" id="sidebar-close" type="button" aria-label="Tutup menu">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+      </button>
       <a class="sidebar-brand" href="/admin/" aria-label="Beranda admin perpustakaan">
         <span class="sidebar-logo"><img src="../assets/img/logo-poltek.png" alt=""></span>
         <span class="sidebar-brand-name">
@@ -192,12 +195,12 @@
             <details class="nav-subgroup"><summary>Pengaturan Umum</summary><div class="nav-submenu">
               <span class="nav-placeholder">Hari Libur</span><span class="nav-placeholder">Jenis Perpustakaan</span><span class="nav-placeholder">Unit Kerja</span><span class="nav-placeholder">Mail Server</span><span class="nav-placeholder">Menu</span><span class="nav-placeholder">Pengaturan User</span><span class="nav-placeholder">Role</span><span class="nav-placeholder">Nama Perpustakaan</span><span class="nav-placeholder">Lokasi Ruang</span><span class="nav-placeholder">Lokasi Perpustakaan</span><span class="nav-placeholder">Pengaturan Update</span><span class="nav-placeholder">Layanan Sabtu dan Minggu</span><span class="nav-placeholder">Jam Operasional Layanan</span><span class="nav-placeholder">Backup Data</span><span class="nav-placeholder">Salin Tajuk</span><span class="nav-placeholder">Registrasi Aplikasi</span><span class="nav-placeholder">Pengaturan Bahasa</span><span class="nav-placeholder">Record Indexing</span><span class="nav-placeholder">Modul SSKCKR</span><span class="nav-placeholder">Clean Assets</span>
             </div></details>
-            <details class="nav-subgroup"><summary>Pengaturan Audio</summary><div class="nav-submenu"><span class="nav-placeholder">Buku Tamu</span></div></details>
+            <details class="nav-subgroup"><summary>Pengaturan Audio</summary><div class="nav-submenu"><a class="nav-placeholder nav-module-link" href="#pengaturan-audio">Buku Tamu</a></div></details>
             <details class="nav-subgroup"><summary>Pengaturan Buku Tamu</summary><div class="nav-submenu">
-              <span class="nav-placeholder">Tujuan Kunjungan</span><span class="nav-placeholder">Setting Buku Tamu</span>
+              <a class="nav-placeholder nav-module-link" href="#tujuan-kunjungan">Tujuan Kunjungan</a><a class="nav-placeholder nav-module-link" href="#setting-buku-tamu">Setting Buku Tamu</a>
             </div></details>
             <details class="nav-subgroup"><summary>Pengaturan SMS Gateway</summary><div class="nav-submenu">
-              <span class="nav-placeholder">Peminjaman Akan Jatuh Tempo</span><span class="nav-placeholder">Peminjaman Setelah Jatuh Tempo</span><span class="nav-placeholder">SMS Manual</span><span class="nav-placeholder">Riwayat SMS</span>
+              <a class="nav-placeholder nav-module-link" href="#sms-belum-jatuh-tempo">Peminjaman Akan Jatuh Tempo</a><a class="nav-placeholder nav-module-link" href="#sms-jatuh-tempo">Peminjaman Setelah Jatuh Tempo</a><a class="nav-placeholder nav-module-link" href="#sms-manual">SMS Manual</a><a class="nav-placeholder nav-module-link" href="#riwayat-sms">Riwayat SMS</a>
             </div></details>
             <div class="nav-feature-link">
               <a href="#permohonan"><span>Permohonan layanan</span><span class="nav-count" id="request-nav-count">0</span></a>
@@ -222,10 +225,10 @@
 
     <main class="main-panel" id="beranda">
       <header class="topbar">
-        <button class="mobile-menu" id="mobile-menu" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="admin-sidebar">
+        <button class="mobile-menu" id="mobile-menu" type="button" aria-label="Sembunyikan menu" aria-expanded="true" aria-controls="admin-sidebar">
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
-        <div class="breadcrumb"><span>Panel Admin</span><span class="breadcrumb-separator">/</span><strong>Beranda</strong></div>
+        <div class="breadcrumb"><span>Panel Admin</span><span class="breadcrumb-separator">/</span><strong id="page-title">Beranda</strong></div>
         <div class="topbar-right">
           <span class="today-date" id="today-date"></span>
           <span class="profile-avatar" aria-hidden="true">A</span>
@@ -234,31 +237,16 @@
       </header>
 
       <div class="dashboard-content">
-        <section class="welcome-row" aria-label="Selamat datang di perpustakaan">
-          <div class="dashboard-slideshow" aria-hidden="true">
-            <img class="dashboard-slide is-active" src="../assets/img/hero-gedung-kampus.png" alt="">
-            <img class="dashboard-slide" src="../assets/img/login-survei.png" alt="">
-            <img class="dashboard-slide" src="../assets/img/login-kampus-luar.png" alt="">
-            <img class="dashboard-slide" src="../assets/img/login-mahasiswa-perpus.png" alt="">
-            <img class="dashboard-slide" src="../assets/img/login-mahasiswa-kampus.png" alt="">
-          </div>
-          <div class="dashboard-slide-shade" aria-hidden="true"></div>
-          <div class="welcome-copy">
-            <span class="section-eyebrow">RINGKASAN PERPUSTAKAAN</span>
-            <h1>Selamat datang kembali</h1>
-            <p>Pantau koleksi dan aktivitas layanan perpustakaan hari ini.</p>
+        <section class="dashboard-heading" aria-label="Ringkasan perpustakaan">
+          <div>
+            <span class="dashboard-eyebrow">PANEL KENDALI PERPUSTAKAAN</span>
+            <h1>Beranda</h1>
+            <p>Pantau koleksi dan layanan perpustakaan dalam satu tampilan.</p>
           </div>
           <a class="public-site-link" href="../index.html" target="_blank" rel="noopener noreferrer">
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18m0-18a14 14 0 0 0 0 18"></path></svg>
-            Lihat website publik
+            Website publik
           </a>
-          <div class="dashboard-slide-controls" aria-label="Pilih foto kampus">
-            <button class="dashboard-slide-dot is-active" type="button" aria-label="Tampilkan foto kampus 1" aria-pressed="true"></button>
-            <button class="dashboard-slide-dot" type="button" aria-label="Tampilkan foto kampus 2" aria-pressed="false"></button>
-            <button class="dashboard-slide-dot" type="button" aria-label="Tampilkan foto kampus 3" aria-pressed="false"></button>
-            <button class="dashboard-slide-dot" type="button" aria-label="Tampilkan foto kampus 4" aria-pressed="false"></button>
-            <button class="dashboard-slide-dot" type="button" aria-label="Tampilkan foto kampus 5" aria-pressed="false"></button>
-          </div>
         </section>
 
         <div class="dashboard-error" id="dashboard-error" role="alert" hidden></div>
@@ -295,10 +283,26 @@
         </section>
 
         <section class="content-grid">
+          <article class="panel availability-panel">
+            <div class="panel-heading">
+              <div><h2>Ketersediaan koleksi</h2><p>Ringkasan eksemplar yang siap dipinjam.</p></div>
+              <span class="panel-mark">01</span>
+            </div>
+            <div class="availability-chart">
+              <div class="availability-ring" id="availability-chart" role="img" aria-label="Menunggu data ketersediaan koleksi">
+                <div class="availability-center"><strong id="availability-percent">—</strong><span>tersedia</span></div>
+              </div>
+              <div class="availability-legend">
+                <div><span class="legend-swatch is-available"></span><span>Siap dipinjam</span><strong id="available-legend-count">—</strong></div>
+                <div><span class="legend-swatch is-unavailable"></span><span>Tidak tersedia</span><strong id="unavailable-count">—</strong></div>
+              </div>
+            </div>
+          </article>
+
           <article class="panel popular-panel">
             <div class="panel-heading">
               <div><h2>Koleksi paling diminati</h2><p>Berdasarkan jumlah peminjaman yang tercatat.</p></div>
-              <span class="panel-mark">01</span>
+              <span class="panel-mark">02</span>
             </div>
             <div class="popular-list" id="popular-books">
               <p class="loading-state">Memuat ringkasan koleksi...</p>
@@ -317,13 +321,64 @@
           </article>
         </section>
 
+        <section class="collection-activity" aria-label="Aktivitas koleksi">
+          <article class="activity-section">
+            <div class="activity-heading">
+              <div><h2>Koleksi sedang dipinjam</h2><p>Ringkasan transaksi peminjaman yang masih aktif.</p></div>
+              <span class="activity-heading-icon" aria-hidden="true">↗</span>
+            </div>
+            <div class="activity-stats">
+              <div class="activity-stat activity-red"><span>Judul</span><strong id="loan-title-count">—</strong></div>
+              <div class="activity-stat activity-gold"><span>Eksemplar</span><strong id="loan-copy-count">—</strong></div>
+              <div class="activity-stat activity-blue"><span>Anggota</span><strong id="loan-member-count">—</strong></div>
+            </div>
+            <p class="activity-unavailable" id="loan-data-status">Data transaksi peminjaman belum tersedia.</p>
+          </article>
+
+          <article class="activity-section">
+            <div class="activity-heading">
+              <div><h2>Koleksi telah dikembalikan</h2><p>Ringkasan transaksi pengembalian.</p></div>
+              <span class="activity-heading-icon" aria-hidden="true">✓</span>
+            </div>
+            <div class="activity-stats">
+              <div class="activity-stat activity-red"><span>Judul</span><strong id="returned-title-count">—</strong></div>
+              <div class="activity-stat activity-gold"><span>Eksemplar</span><strong id="returned-copy-count">—</strong></div>
+              <div class="activity-stat activity-blue"><span>Anggota</span><strong id="returned-member-count">—</strong></div>
+            </div>
+            <p class="activity-unavailable" id="returned-data-status">Data transaksi pengembalian belum tersedia.</p>
+          </article>
+
+          <article class="activity-section activity-section-wide">
+            <div class="activity-heading">
+              <div><h2>Koleksi dibaca di tempat</h2><p>Ringkasan aktivitas membaca koleksi di perpustakaan.</p></div>
+              <span class="activity-heading-icon" aria-hidden="true">⌖</span>
+            </div>
+            <div class="activity-stats">
+              <div class="activity-stat activity-red"><span>Judul</span><strong id="onsite-title-count">—</strong></div>
+              <div class="activity-stat activity-gold"><span>Eksemplar</span><strong id="onsite-copy-count">—</strong></div>
+              <div class="activity-stat activity-blue"><span>Anggota</span><strong id="onsite-member-count">—</strong></div>
+              <div class="activity-stat activity-pink"><span>Non anggota</span><strong id="onsite-visitor-count">—</strong></div>
+            </div>
+            <p class="activity-unavailable" id="onsite-data-status">Data baca di tempat belum tersedia.</p>
+          </article>
+        </section>
+
         <footer class="dashboard-footer">
           <span>Perpustakaan Politeknik Sinar Mas Berau Coal</span>
           <span>Panel administrasi <span class="footer-dot">•</span> <span id="current-year"></span></span>
         </footer>
       </div>
+
+      <section class="admin-module" id="admin-module" aria-live="polite" hidden>
+        <div class="module-content" id="module-content"></div>
+        <footer class="dashboard-footer">
+          <span>Perpustakaan Politeknik Sinar Mas Berau Coal</span>
+          <span>Panel administrasi <span class="footer-dot">•</span> <span id="module-year"></span></span>
+        </footer>
+      </section>
     </main>
   </div>
   <script src="../assets/js/admin-dashboard.js"></script>
+  <script src="../assets/js/admin-settings.js"></script>
 </body>
 </html>

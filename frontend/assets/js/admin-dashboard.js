@@ -3,13 +3,11 @@
   const dateFormat = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
   const errorBox = document.getElementById('dashboard-error');
   const sidebar = document.getElementById('admin-sidebar');
+  const closeSidebarButton = document.getElementById('sidebar-close');
+  const shell = document.querySelector('.admin-shell');
   const menuButton = document.getElementById('mobile-menu');
   const scrim = document.getElementById('sidebar-scrim');
-  const campusSlides = Array.from(document.querySelectorAll('.dashboard-slide'));
-  const campusSlideDots = Array.from(document.querySelectorAll('.dashboard-slide-dot'));
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let activeCampusSlide = 0;
-  let campusSlideTimer;
+  const mobileViewport = window.matchMedia('(max-width: 760px)');
 
   document.getElementById('today-date').textContent = new Intl.DateTimeFormat('id-ID', {
     weekday: 'long',
@@ -29,50 +27,40 @@
     })[character]);
   }
 
+  function updateMenuButton(isExpanded) {
+    menuButton.setAttribute('aria-expanded', String(isExpanded));
+    menuButton.setAttribute('aria-label', isExpanded ? 'Sembunyikan menu' : 'Tampilkan menu');
+  }
+
+  updateMenuButton(!mobileViewport.matches);
+
   function closeMenu() {
     sidebar.classList.remove('is-open');
     scrim.classList.remove('is-visible');
-    menuButton.setAttribute('aria-expanded', 'false');
+    if (mobileViewport.matches) updateMenuButton(false);
   }
 
   menuButton.addEventListener('click', () => {
-    const isOpen = sidebar.classList.toggle('is-open');
-    scrim.classList.toggle('is-visible', isOpen);
-    menuButton.setAttribute('aria-expanded', String(isOpen));
+    if (mobileViewport.matches) {
+      const isOpen = sidebar.classList.toggle('is-open');
+      scrim.classList.toggle('is-visible', isOpen);
+      updateMenuButton(isOpen);
+      return;
+    }
+
+    const isHidden = shell.classList.toggle('is-sidebar-hidden');
+    updateMenuButton(!isHidden);
   });
+  closeSidebarButton.addEventListener('click', closeMenu);
   scrim.addEventListener('click', closeMenu);
+  mobileViewport.addEventListener('change', event => {
+    closeMenu();
+    if (event.matches) shell.classList.remove('is-sidebar-hidden');
+    updateMenuButton(!event.matches);
+  });
   sidebar.querySelectorAll('.nav-link[href], .nav-feature-link a').forEach(link => {
     link.addEventListener('click', closeMenu);
   });
-
-  function showCampusSlide(index) {
-    activeCampusSlide = index;
-    campusSlides.forEach((slide, slideIndex) => {
-      const isActive = slideIndex === activeCampusSlide;
-      slide.classList.toggle('is-active', isActive);
-      slide.setAttribute('aria-hidden', String(!isActive));
-      campusSlideDots[slideIndex].classList.toggle('is-active', isActive);
-      campusSlideDots[slideIndex].setAttribute('aria-pressed', String(isActive));
-    });
-  }
-
-  function startCampusSlideshow() {
-    window.clearInterval(campusSlideTimer);
-    if (!reducedMotion.matches && campusSlides.length > 1) {
-      campusSlideTimer = window.setInterval(() => {
-        showCampusSlide((activeCampusSlide + 1) % campusSlides.length);
-      }, 6500);
-    }
-  }
-
-  campusSlideDots.forEach((dot, index) => {
-    dot.addEventListener('click', () => {
-      showCampusSlide(index);
-      startCampusSlideshow();
-    });
-  });
-  reducedMotion.addEventListener('change', startCampusSlideshow);
-  startCampusSlideshow();
 
   function showError(message) {
     errorBox.textContent = message;
@@ -160,6 +148,18 @@
     document.getElementById('publication-count').textContent = numberFormat.format(summary.publication_count);
     document.getElementById('pending-count').textContent = numberFormat.format(summary.pending_requests);
     document.getElementById('request-nav-count').textContent = numberFormat.format(summary.pending_requests);
+    const copyCount = Math.max(0, Number(summary.copy_count) || 0);
+    const availableCount = Math.min(copyCount, Math.max(0, Number(summary.available_count) || 0));
+    const unavailableCount = copyCount - availableCount;
+    const availabilityRate = copyCount ? Math.round(availableCount / copyCount * 100) : 0;
+    const availabilityChart = document.getElementById('availability-chart');
+    availabilityChart.style.setProperty('--availability-value', `${availabilityRate}%`);
+    availabilityChart.setAttribute('aria-label', copyCount
+      ? `${availabilityRate}% koleksi tersedia untuk dipinjam`
+      : 'Belum ada data ketersediaan koleksi');
+    document.getElementById('availability-percent').textContent = copyCount ? `${availabilityRate}%` : '—';
+    document.getElementById('available-legend-count').textContent = numberFormat.format(availableCount);
+    document.getElementById('unavailable-count').textContent = numberFormat.format(unavailableCount);
     renderPopularBooks(result.popularBooks);
     renderRequests(result.recentRequests);
   }
