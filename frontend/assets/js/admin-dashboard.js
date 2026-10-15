@@ -5,6 +5,11 @@
   const sidebar = document.getElementById('admin-sidebar');
   const menuButton = document.getElementById('mobile-menu');
   const scrim = document.getElementById('sidebar-scrim');
+  const campusSlides = Array.from(document.querySelectorAll('.dashboard-slide'));
+  const campusSlideDots = Array.from(document.querySelectorAll('.dashboard-slide-dot'));
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let activeCampusSlide = 0;
+  let campusSlideTimer;
 
   document.getElementById('today-date').textContent = new Intl.DateTimeFormat('id-ID', {
     weekday: 'long',
@@ -36,7 +41,38 @@
     menuButton.setAttribute('aria-expanded', String(isOpen));
   });
   scrim.addEventListener('click', closeMenu);
-  sidebar.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', closeMenu));
+  sidebar.querySelectorAll('.nav-link[href], .nav-feature-link a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  function showCampusSlide(index) {
+    activeCampusSlide = index;
+    campusSlides.forEach((slide, slideIndex) => {
+      const isActive = slideIndex === activeCampusSlide;
+      slide.classList.toggle('is-active', isActive);
+      slide.setAttribute('aria-hidden', String(!isActive));
+      campusSlideDots[slideIndex].classList.toggle('is-active', isActive);
+      campusSlideDots[slideIndex].setAttribute('aria-pressed', String(isActive));
+    });
+  }
+
+  function startCampusSlideshow() {
+    window.clearInterval(campusSlideTimer);
+    if (!reducedMotion.matches && campusSlides.length > 1) {
+      campusSlideTimer = window.setInterval(() => {
+        showCampusSlide((activeCampusSlide + 1) % campusSlides.length);
+      }, 6500);
+    }
+  }
+
+  campusSlideDots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      showCampusSlide(index);
+      startCampusSlideshow();
+    });
+  });
+  reducedMotion.addEventListener('change', startCampusSlideshow);
+  startCampusSlideshow();
 
   function showError(message) {
     errorBox.textContent = message;

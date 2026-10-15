@@ -27,19 +27,183 @@
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="8" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="14" y="11" width="7" height="10" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
           <span>Beranda</span>
         </a>
-        <a class="nav-link" href="#koleksi">
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v17H7.5A2.5 2.5 0 0 0 5 21.5v-17Z"></path><path d="M5 5v16m3-16h8"></path></svg>
-          <span>Koleksi buku</span>
-        </a>
-        <a class="nav-link" href="#publikasi">
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M6 3h9l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"></path><path d="M14 3v5h5M8 12h8M8 16h8"></path></svg>
-          <span>Publikasi</span>
-        </a>
-        <a class="nav-link" href="#permohonan">
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v12H8l-4 4V5Z"></path><path d="M8 9h8M8 13h5"></path></svg>
-          <span>Permohonan layanan</span>
-          <span class="nav-count" id="request-nav-count">0</span>
-        </a>
+        <details class="nav-group">
+          <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 7h16v13H4zM7 7V4h10v3M8 12h8m-8 4h5"></path></svg><span>Akuisisi</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
+          <div class="nav-submenu">
+            <span class="nav-placeholder">Daftar Nama Sumber Perolehan</span>
+            <span class="nav-placeholder">Entri Koleksi</span>
+            <span class="nav-placeholder">Entri Koleksi (RDA)</span>
+            <span class="nav-placeholder">Daftar Koleksi</span>
+            <span class="nav-placeholder">Jilid Koleksi</span>
+            <span class="nav-placeholder">Kardeks Terbitan Berkala</span>
+            <span class="nav-placeholder">Daftar Usulan Koleksi</span>
+            <span class="nav-placeholder">Import Data dari Excel</span>
+            <span class="nav-placeholder">Keranjang Koleksi</span>
+            <span class="nav-placeholder">Karantina Koleksi</span>
+            <span class="nav-placeholder">Pengiriman Koleksi</span>
+          </div>
+        </details>
+        <details class="nav-group">
+          <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v17H7.5A2.5 2.5 0 0 0 5 21.5v-17Z"></path><path d="M5 5v16m3-16h8"></path></svg><span>Katalog</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
+          <div class="nav-submenu">
+            <span class="nav-placeholder">Entri Katalog</span>
+            <span class="nav-placeholder">Entri Katalog (RDA)</span>
+            <span class="nav-placeholder">Salin Katalog</span>
+            <span class="nav-placeholder">Daftar Katalog</span>
+            <span class="nav-placeholder">Export Data Tag Katalog</span>
+            <span class="nav-placeholder">Daftar Konten Digital</span>
+            <span class="nav-placeholder">Keranjang Katalog</span>
+            <span class="nav-placeholder">Karantina Katalog</span>
+            <span class="nav-placeholder">Daftar Koleksi Artikel</span>
+          </div>
+        </details>
+        <details class="nav-group">
+          <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3"></circle><path d="M3 20c.5-3.2 2.5-5 6-5s5.5 1.8 6 5m2-9a3 3 0 1 0 0-6m1 10c2.3.5 3.5 2.1 4 5"></path></svg><span>Keanggotaan</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
+          <div class="nav-submenu">
+            <span class="nav-placeholder">Entri Anggota</span>
+            <span class="nav-placeholder">Daftar Anggota</span>
+            <span class="nav-placeholder">Import Data dari Excel</span>
+            <span class="nav-placeholder">Daftar Sumbangan</span>
+            <span class="nav-placeholder">Daftar Perpanjangan</span>
+            <span class="nav-placeholder">Keranjang Anggota</span>
+          </div>
+        </details>
+        <details class="nav-group">
+          <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 7h13l3 3v9H4zM7 7V4h8v3m-8 7h8m-8 3h5"></path><path d="m17 13 2 2 3-3"></path></svg><span>Sirkulasi</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
+          <div class="nav-submenu">
+            <span class="nav-placeholder">Entri Peminjaman</span>
+            <span class="nav-placeholder">Entri Peminjaman Susulan</span>
+            <span class="nav-placeholder">Daftar Koleksi Dipesan</span>
+            <span class="nav-placeholder">Daftar Peminjaman</span>
+            <span class="nav-placeholder">Entri Perpanjangan</span>
+            <span class="nav-placeholder">Daftar Perpanjangan</span>
+            <span class="nav-placeholder">Entri Pengembalian</span>
+            <span class="nav-placeholder">Entri Pengembalian Susulan</span>
+            <span class="nav-placeholder">Entri Pengembalian Gabungan</span>
+            <span class="nav-placeholder">Daftar Pengembalian</span>
+            <span class="nav-placeholder">Stock Opname</span>
+            <span class="nav-placeholder">Data Pelanggaran</span>
+            <span class="nav-placeholder">Verifikasi Koleksi Siap Layan</span>
+          </div>
+        </details>
+        <details class="nav-group">
+          <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2"></rect><path d="M12 3v18m-5-13h2m6 0h2m-10 7h2m6 0h2"></path></svg><span>Loker</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
+          <div class="nav-submenu">
+            <span class="nav-placeholder">Peminjaman</span>
+            <span class="nav-placeholder">Pengembalian</span>
+            <span class="nav-placeholder">Daftar Transaksi</span>
+          </div>
+        </details>
+        <details class="nav-group">
+          <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 19V5m0 14h16M7 15l4-4 3 2 5-6"></path><circle cx="19" cy="7" r="1"></circle></svg><span>Survey</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
+          <div class="nav-submenu"><span class="nav-placeholder">Data Survey</span></div>
+        </details>
+        <details class="nav-group">
+          <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M5 3h11l3 3v15H5zM14 3v5h5M8 12h8m-8 4h8"></path></svg><span>Buku Tamu</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
+          <div class="nav-submenu">
+            <span class="nav-placeholder">Anggota</span>
+            <span class="nav-placeholder">Non Anggota</span>
+            <span class="nav-placeholder">Rombongan</span>
+          </div>
+        </details>
+        <details class="nav-group">
+          <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18m0-18a14 14 0 0 0 0 18"></path></svg><span>OPAC</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
+          <div class="nav-submenu">
+            <span class="nav-placeholder">Riwayat Pencarian Sederhana</span>
+            <span class="nav-placeholder">Riwayat Pencarian Browse</span>
+            <span class="nav-placeholder">Riwayat Pencarian Lanjut</span>
+          </div>
+        </details>
+        <details class="nav-group">
+          <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M6 3h9l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"></path><path d="M14 3v5h5M8 12h8M8 16h8"></path></svg><span>Layanan Koleksi Digital</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
+          <div class="nav-submenu">
+            <span class="nav-placeholder">Riwayat Pencarian Sederhana</span>
+            <span class="nav-placeholder">Riwayat Pencarian Browse</span>
+            <span class="nav-placeholder">Riwayat Pencarian Lanjut</span>
+          </div>
+        </details>
+        <details class="nav-group">
+          <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z"></path><path d="M4 6v15m4-14h8"></path></svg><span>Baca Ditempat</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
+          <div class="nav-submenu">
+            <span class="nav-placeholder">Anggota</span>
+            <span class="nav-placeholder">Non Anggota</span>
+            <span class="nav-placeholder">Pengembalian Koleksi Baca Ditempat</span>
+          </div>
+        </details>
+        <details class="nav-group">
+          <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M5 3h14v18H5zM8 8h8m-8 4h8m-8 4h5"></path></svg><span>Laporan</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
+          <div class="nav-submenu">
+            <details class="nav-subgroup"><summary>Katalog</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Laporan Katalog Per Kriteria</span><span class="nav-placeholder">Laporan Kinerja User</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Koleksi</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Laporan Buku Induk</span><span class="nav-placeholder">Laporan Koleksi Per Periodik</span><span class="nav-placeholder">Laporan Accesion List</span><span class="nav-placeholder">Laporan Ucapan Terima Kasih</span><span class="nav-placeholder">Laporan Usulan Koleksi</span><span class="nav-placeholder">Laporan Kinerja User</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Anggota</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Laporan Per Pendaftaran</span><span class="nav-placeholder">Laporan Per Perpanjangan</span><span class="nav-placeholder">Laporan Sumbangan Anggota</span><span class="nav-placeholder">Laporan Bebas Pustaka</span><span class="nav-placeholder">Laporan Kinerja User</span><span class="nav-placeholder">Laporan Raport Siswa</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Sirkulasi</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Laporan Peminjaman</span><span class="nav-placeholder">Laporan Perpanjangan Peminjaman</span><span class="nav-placeholder">Laporan Sanksi Pelanggaran Peminjaman</span><span class="nav-placeholder">Laporan Koleksi Sering Dipinjam</span><span class="nav-placeholder">Laporan Anggota Sering Meminjam</span><span class="nav-placeholder">Laporan Kinerja User Peminjaman</span><span class="nav-placeholder">Laporan Kinerja User Pengembalian</span><span class="nav-placeholder">Laporan Pengembalian Terlambat</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Buku Tamu</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Laporan Kunjungan Periodik</span><span class="nav-placeholder">Laporan Kunjungan Khusus Anggota</span><span class="nav-placeholder">Laporan Anggota Sering Berkunjung</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Baca Ditempat</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Laporan Berdasarkan Koleksi</span><span class="nav-placeholder">Laporan Koleksi Sering Dibaca Ditempat</span><span class="nav-placeholder">Laporan Anggota Sering Baca Ditempat</span><span class="nav-placeholder">Laporan Non Anggota Sering Baca Ditempat</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Loker</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Laporan Periodik</span><span class="nav-placeholder">Laporan Sanksi Pelanggaran Loker</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>OPAC</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Laporan Periodik</span><span class="nav-placeholder">Laporan OPAC Download</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>SMS</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Laporan Periodik</span><span class="nav-placeholder">Laporan SMS Terkirim</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Artikel</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Laporan Artikel Download</span>
+            </div></details>
+          </div>
+        </details>
+        <details class="nav-group">
+          <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3"></circle><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.5.9L16 20.7h-3l-.4-1.8a8 8 0 0 1-1.7-.7l-1.6.8-1.8-2.1 1.2-1.4a8 8 0 0 1-.1-1.8l-1.5-1 1.2-2.5 1.7.4a8 8 0 0 1 1.4-1l.2-1.8 2.9-.3.6 1.7a8 8 0 0 1 1.7.6l1.5-.9 1.9 2-1.1 1.5a8 8 0 0 1 .2 1.8Z"></path></svg><span>Administrasi</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
+          <div class="nav-submenu">
+            <details class="nav-subgroup"><summary>Pengaturan Akuisisi</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Ruas Data Bibliografis</span><span class="nav-placeholder">Kategori Koleksi</span><span class="nav-placeholder">Jenis Sumber</span><span class="nav-placeholder">Bentuk Fisik</span><span class="nav-placeholder">Mata Uang</span><span class="nav-placeholder">Master DJKN</span><span class="nav-placeholder">Penomoran Koleksi</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Pengaturan Katalog</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Tag</span><span class="nav-placeholder">Referensi</span><span class="nav-placeholder">Klas Besar (DDC)</span><span class="nav-placeholder">Kata Sandang</span><span class="nav-placeholder">Jenis Bahan Pustaka</span><span class="nav-placeholder">Format Kartu</span><span class="nav-placeholder">Pengaturan Detail Katalog</span><span class="nav-placeholder">Penyedia Katalog</span><span class="nav-placeholder">Form Entri</span><span class="nav-placeholder">Pengaturan Lainnya</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Pengaturan Keanggotaan</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Kartu Anggota</span><span class="nav-placeholder">Redaksi Keanggotaan</span><span class="nav-placeholder">Jenis Anggota</span><span class="nav-placeholder">Jenis Identitas</span><span class="nav-placeholder">Pekerjaan</span><span class="nav-placeholder">Pendidikan</span><span class="nav-placeholder">Kelompok Umur</span><span class="nav-placeholder">Kelas</span><span class="nav-placeholder">Fakultas</span><span class="nav-placeholder">Jurusan</span><span class="nav-placeholder">Program Studi</span><span class="nav-placeholder">Jenis Kelamin</span><span class="nav-placeholder">Agama</span><span class="nav-placeholder">Data Kependudukan</span><span class="nav-placeholder">Entri Keanggotaan</span><span class="nav-placeholder">Perpanjangan Keanggotaan Mandiri</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Pengaturan Sirkulasi</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Jenis Bahan</span><span class="nav-placeholder">Kelompok Pelanggaran</span><span class="nav-placeholder">Jenis Denda</span><span class="nav-placeholder">Jenis Pelanggaran</span><span class="nav-placeholder">Jenis Akses</span><span class="nav-placeholder">Peraturan Peminjaman (Tgl)</span><span class="nav-placeholder">Peraturan Peminjaman (Hari)</span><span class="nav-placeholder">Setting Transaksi</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Pengaturan Locker</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Loker</span><span class="nav-placeholder">Jaminan Peminjaman</span><span class="nav-placeholder">Denda Pelanggaran</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Pengaturan Opac</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Koleksi Unggulan</span><span class="nav-placeholder">Koleksi Terbaru</span><span class="nav-placeholder">Koleksi Sering Di Pinjam</span><span class="nav-placeholder">Pemesanan Koleksi</span><span class="nav-placeholder">Pengaturan Faset</span><span class="nav-placeholder">Pengusulan Koleksi</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Pengaturan LKD</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Koleksi Unggulan</span><span class="nav-placeholder">Koleksi Terbaru</span><span class="nav-placeholder">Koleksi Sering Di Download</span><span class="nav-placeholder">Pengaturan Faset</span><span class="nav-placeholder">Pengusulan Koleksi</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Pengaturan Umum</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Hari Libur</span><span class="nav-placeholder">Jenis Perpustakaan</span><span class="nav-placeholder">Unit Kerja</span><span class="nav-placeholder">Mail Server</span><span class="nav-placeholder">Menu</span><span class="nav-placeholder">Pengaturan User</span><span class="nav-placeholder">Role</span><span class="nav-placeholder">Nama Perpustakaan</span><span class="nav-placeholder">Lokasi Ruang</span><span class="nav-placeholder">Lokasi Perpustakaan</span><span class="nav-placeholder">Pengaturan Update</span><span class="nav-placeholder">Layanan Sabtu dan Minggu</span><span class="nav-placeholder">Jam Operasional Layanan</span><span class="nav-placeholder">Backup Data</span><span class="nav-placeholder">Salin Tajuk</span><span class="nav-placeholder">Registrasi Aplikasi</span><span class="nav-placeholder">Pengaturan Bahasa</span><span class="nav-placeholder">Record Indexing</span><span class="nav-placeholder">Modul SSKCKR</span><span class="nav-placeholder">Clean Assets</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Pengaturan Audio</summary><div class="nav-submenu"><span class="nav-placeholder">Buku Tamu</span></div></details>
+            <details class="nav-subgroup"><summary>Pengaturan Buku Tamu</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Tujuan Kunjungan</span><span class="nav-placeholder">Setting Buku Tamu</span>
+            </div></details>
+            <details class="nav-subgroup"><summary>Pengaturan SMS Gateway</summary><div class="nav-submenu">
+              <span class="nav-placeholder">Peminjaman Akan Jatuh Tempo</span><span class="nav-placeholder">Peminjaman Setelah Jatuh Tempo</span><span class="nav-placeholder">SMS Manual</span><span class="nav-placeholder">Riwayat SMS</span>
+            </div></details>
+            <div class="nav-feature-link">
+              <a href="#permohonan"><span>Permohonan layanan</span><span class="nav-count" id="request-nav-count">0</span></a>
+            </div>
+          </div>
+        </details>
       </nav>
 
       <div class="sidebar-bottom">
@@ -70,8 +234,16 @@
       </header>
 
       <div class="dashboard-content">
-        <section class="welcome-row">
-          <div>
+        <section class="welcome-row" aria-label="Selamat datang di perpustakaan">
+          <div class="dashboard-slideshow" aria-hidden="true">
+            <img class="dashboard-slide is-active" src="../assets/img/hero-gedung-kampus.png" alt="">
+            <img class="dashboard-slide" src="../assets/img/login-survei.png" alt="">
+            <img class="dashboard-slide" src="../assets/img/login-kampus-luar.png" alt="">
+            <img class="dashboard-slide" src="../assets/img/login-mahasiswa-perpus.png" alt="">
+            <img class="dashboard-slide" src="../assets/img/login-mahasiswa-kampus.png" alt="">
+          </div>
+          <div class="dashboard-slide-shade" aria-hidden="true"></div>
+          <div class="welcome-copy">
             <span class="section-eyebrow">RINGKASAN PERPUSTAKAAN</span>
             <h1>Selamat datang kembali</h1>
             <p>Pantau koleksi dan aktivitas layanan perpustakaan hari ini.</p>
@@ -80,6 +252,13 @@
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18m0-18a14 14 0 0 0 0 18"></path></svg>
             Lihat website publik
           </a>
+          <div class="dashboard-slide-controls" aria-label="Pilih foto kampus">
+            <button class="dashboard-slide-dot is-active" type="button" aria-label="Tampilkan foto kampus 1" aria-pressed="true"></button>
+            <button class="dashboard-slide-dot" type="button" aria-label="Tampilkan foto kampus 2" aria-pressed="false"></button>
+            <button class="dashboard-slide-dot" type="button" aria-label="Tampilkan foto kampus 3" aria-pressed="false"></button>
+            <button class="dashboard-slide-dot" type="button" aria-label="Tampilkan foto kampus 4" aria-pressed="false"></button>
+            <button class="dashboard-slide-dot" type="button" aria-label="Tampilkan foto kampus 5" aria-pressed="false"></button>
+          </div>
         </section>
 
         <div class="dashboard-error" id="dashboard-error" role="alert" hidden></div>
