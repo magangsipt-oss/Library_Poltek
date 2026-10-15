@@ -75,3 +75,5 @@ npm run dev --prefix backend
 ```
 
 Buka `http://localhost:3000`. Jika password PostgreSQL masih diketahui, tidak perlu reset; buat `backend/.env` dari `.env.example`, isi kredensial lokal, lalu jalankan `psql` dan perintah backend seperti panduan di atas.
+
+
