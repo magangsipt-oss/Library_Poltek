@@ -211,6 +211,7 @@
 
   function render() {
     const routeKey = window.location.hash.slice(1);
+    if (routeKey.startsWith('acq-') || routeKey.startsWith('cat-')) return;
     const route = routes[routeKey];
     const isDashboard = !route;
     dashboard.hidden = !isDashboard;

@@ -12,6 +12,10 @@ app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
 app.use(express.json({ limit: '1mb' }));
 
 app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/admin/acquisitions', require('./middleware/adminAuth').requireAdmin,
+  require('./routes/acquisitionRoutes'));
+app.use('/api/admin/catalog', require('./middleware/adminAuth').requireAdmin,
+  require('./routes/catalogRoutes'));
 
 app.get('/api/health', async (req, res) => {
   try {

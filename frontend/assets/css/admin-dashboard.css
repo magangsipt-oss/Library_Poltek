@@ -331,6 +331,8 @@ button, a { font: inherit; }
   padding: clamp(16px, 2.5vw, 34px);
 }
 
+.dashboard-content[hidden] { display: none; }
+
 .dashboard-welcome {
   position: relative;
   display: flex;
@@ -441,6 +443,7 @@ button, a { font: inherit; }
   font-size: 10px;
   font-weight: 700;
   cursor: pointer;
+  text-decoration: none;
 }
 .module-button:hover { filter: brightness(0.95); }
 .module-button:disabled { cursor: not-allowed; opacity: 0.6; }
@@ -471,6 +474,7 @@ button, a { font: inherit; }
 .module-table th { color: #a50922; background: #fffafb; font-size: 9px; font-weight: 800; white-space: nowrap; }
 .module-table td:last-child { min-width: 122px; }
 .module-table tbody tr:nth-child(even) { background: #fcfcfd; }
+.module-table input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--brand-red); }
 .module-table-empty { padding: 22px !important; color: #858b96 !important; text-align: center; }
 .module-inline-actions { display: flex; gap: 5px; }
 .module-inline-actions .module-button { min-height: 28px; padding: 0 8px; font-size: 8px; }

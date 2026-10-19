@@ -58,6 +58,10 @@ node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
 
 Jangan masukkan nilai rahasia tersebut ke repositori atau mengganti placeholder di `.env.example` dengan kredensial asli. Login memakai cookie `HttpOnly` selama 8 jam, sedangkan dashboard hanya membaca ringkasan dari tabel koleksi, publikasi, dan permohonan layanan yang sudah tersedia. Data peminjaman pada grafik koleksi mengikuti nilai `loan_count`; tabel transaksi sirkulasi belum tersedia dalam skema proyek.
 
+Menu Akuisisi menyediakan pengelolaan sumber perolehan, entri koleksi standar/RDA, daftar koleksi, jilid, kardeks terbitan berkala, usulan koleksi, impor data, keranjang, karantina, dan pengiriman. Data disimpan di PostgreSQL dan setiap API Akuisisi memerlukan sesi admin. Setelah memperbarui kode, jalankan `npm run db:init --prefix backend` untuk membuat tabel Akuisisi; skrip inisialisasi aman dijalankan ulang. Impor memakai template CSV yang dapat dibuka di Excel, maksimal 200 baris dalam satu proses.
+
+Menu Katalog menyediakan entri katalog standar/RDA, salin katalog, daftar dan ekspor ruas MARC dalam JSON, pengelolaan konten digital, keranjang, karantina, dan daftar artikel. Rekaman katalog baru ditautkan ke koleksi buku agar dapat dipakai pada katalog publik. Berkas digital dibatasi 20 MB dan disimpan di PostgreSQL. Jalankan kembali `npm run db:init --prefix backend` setelah memperbarui skema agar tabel katalog tersedia.
+
 ## Menyiapkan database di Windows
 
 Jika PostgreSQL lokal memakai instalasi default versi 18 dan password user `postgres` tidak diketahui, buka PowerShell dengan **Run as administrator**, lalu jalankan:
@@ -75,5 +79,3 @@ npm run dev --prefix backend
 ```
 
 Buka `http://localhost:3000`. Jika password PostgreSQL masih diketahui, tidak perlu reset; buat `backend/.env` dari `.env.example`, isi kredensial lokal, lalu jalankan `psql` dan perintah backend seperti panduan di atas.
-
-
