@@ -5,7 +5,6 @@
   const pageTitle = document.getElementById('page-title');
   const sidebar = document.getElementById('admin-sidebar');
   const menuButton = document.getElementById('mobile-menu');
-  const scrim = document.getElementById('sidebar-scrim');
   const moduleYear = document.getElementById('module-year');
   const storagePrefix = 'library-admin-demo:';
   const samplePurposes = [
@@ -256,7 +255,6 @@
   function closeMobileMenu() {
     if (!window.matchMedia('(max-width: 760px)').matches) return;
     sidebar.classList.remove('is-open');
-    scrim.classList.remove('is-visible');
     menuButton.setAttribute('aria-expanded', 'false');
     menuButton.setAttribute('aria-label', 'Tampilkan menu');
   }

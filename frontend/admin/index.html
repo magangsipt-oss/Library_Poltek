@@ -12,20 +12,32 @@
 </head>
 <body>
   <div class="admin-shell">
-    <aside class="sidebar" id="admin-sidebar">
-      <button class="sidebar-close" id="sidebar-close" type="button" aria-label="Tutup menu">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18"></path></svg>
-      </button>
-      <a class="sidebar-brand" href="/admin/" aria-label="Beranda admin perpustakaan">
-        <span class="sidebar-logo"><img src="../assets/img/logo-poltek.png" alt=""></span>
-        <span class="sidebar-brand-name">
-          <strong>PERPUSTAKAAN</strong>
-          <span>POLITEKNIK SINAR MAS</span>
-        </span>
-      </a>
+    <header class="admin-contact-header" aria-label="Informasi perpustakaan">
+      <div class="admin-contact-background" aria-hidden="true"></div>
+      <div class="admin-contact-items">
+        <div class="admin-contact-item contact-hours">
+          <span class="contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span>
+          <div><strong>08.00–17.00 WITA</strong><span>Senin–Jumat</span></div>
+        </div>
+        <div class="admin-contact-item contact-social">
+          <div class="contact-line">
+            <span class="contact-icon contact-icon-small" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m4 7 8 6 8-6"></path></svg></span>
+            <div><span>Email</span><a href="mailto:perpus@polteksimasberau.ac.id">perpus@polteksimasberau.ac.id</a></div>
+          </div>
+          <div class="contact-line">
+            <span class="contact-icon contact-icon-small" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><path d="M17.5 6.5h.01"></path></svg></span>
+            <div><span>Instagram</span><a href="https://www.instagram.com/perpus.polteksimasberau/" target="_blank" rel="noopener noreferrer">@perpus.polteksimasberau</a></div>
+          </div>
+        </div>
+        <div class="admin-contact-item contact-location">
+          <span class="contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span>
+          <div><strong>Jl. Raja Alam 2, Sei Bedungun</strong><span>Tanjung Redeb, Berau, Kalimantan Timur</span><a href="https://maps.google.com/?q=Jl.+Raja+Alam+2,+Sei+Bedungun,+Tanjung+Redeb,+Berau" target="_blank" rel="noopener noreferrer">Buka Google Maps</a></div>
+        </div>
+      </div>
+    </header>
 
-      <div class="sidebar-label">MENU UTAMA</div>
-      <nav class="sidebar-nav" aria-label="Navigasi admin">
+    <aside class="sidebar" id="admin-sidebar">
+      <nav class="sidebar-nav" id="admin-navigation" aria-label="Navigasi admin">
         <a class="nav-link is-active" href="#beranda" aria-current="page">
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="8" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="14" y="11" width="7" height="10" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
           <span>Beranda</span>
@@ -208,24 +220,11 @@
           </div>
         </details>
       </nav>
-
-      <div class="sidebar-bottom">
-        <div class="sidebar-help">
-          <span class="help-mark">i</span>
-          <div><strong>Butuh bantuan?</strong><span>Hubungi pengelola sistem.</span></div>
-        </div>
-        <button class="logout-button" id="logout-button" type="button">
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M10 17l5-5-5-5m5 5H3m9-9h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7"></path></svg>
-          <span>Keluar dari admin</span>
-        </button>
-      </div>
     </aside>
-
-    <div class="sidebar-scrim" id="sidebar-scrim"></div>
 
     <main class="main-panel" id="beranda">
       <header class="topbar">
-        <button class="mobile-menu" id="mobile-menu" type="button" aria-label="Sembunyikan menu" aria-expanded="true" aria-controls="admin-sidebar">
+        <button class="mobile-menu" id="mobile-menu" type="button" aria-label="Sembunyikan menu" aria-expanded="true" aria-controls="admin-navigation">
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
         <div class="breadcrumb"><span>Panel Admin</span><span class="breadcrumb-separator">/</span><strong id="page-title">Beranda</strong></div>
@@ -233,134 +232,28 @@
           <span class="today-date" id="today-date"></span>
           <span class="profile-avatar" aria-hidden="true">A</span>
           <span class="profile-details"><strong id="admin-username">Admin</strong><span>Administrator</span></span>
+          <button class="logout-button" id="logout-button" type="button">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M10 17l5-5-5-5m5 5H3m9-9h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7"></path></svg>
+            <span>Keluar</span>
+          </button>
         </div>
       </header>
 
       <div class="dashboard-content">
-        <section class="dashboard-heading" aria-label="Ringkasan perpustakaan">
-          <div>
-            <span class="dashboard-eyebrow">PANEL KENDALI PERPUSTAKAAN</span>
-            <h1>Beranda</h1>
-            <p>Pantau koleksi dan layanan perpustakaan dalam satu tampilan.</p>
-          </div>
-          <a class="public-site-link" href="../index.html" target="_blank" rel="noopener noreferrer">
-            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18m0-18a14 14 0 0 0 0 18"></path></svg>
-            Website publik
-          </a>
-        </section>
-
         <div class="dashboard-error" id="dashboard-error" role="alert" hidden></div>
 
-        <section class="stats-grid" aria-label="Ringkasan data">
-          <article class="stat-card stat-red" id="koleksi">
-            <div class="stat-topline"><span>Total judul</span><span class="stat-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v17H7.5A2.5 2.5 0 0 0 5 21.5v-17Z"></path><path d="M5 5v16m3-16h8"></path></svg>
-            </span></div>
-            <strong class="stat-value" id="title-count">—</strong>
-            <span class="stat-footnote">judul buku terdaftar</span>
-          </article>
-          <article class="stat-card stat-gold">
-            <div class="stat-topline"><span>Total eksemplar</span><span class="stat-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z"></path><path d="M4 6v15m4-14h8"></path></svg>
-            </span></div>
-            <strong class="stat-value" id="copy-count">—</strong>
-            <span class="stat-footnote">eksemplar koleksi</span>
-          </article>
-          <article class="stat-card stat-blue">
-            <div class="stat-topline"><span>Siap dipinjam</span><span class="stat-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M4 12.5 9 17l11-11"></path><circle cx="12" cy="12" r="9"></circle></svg>
-            </span></div>
-            <strong class="stat-value" id="available-count">—</strong>
-            <span class="stat-footnote">eksemplar tersedia</span>
-          </article>
-          <article class="stat-card stat-green" id="publikasi">
-            <div class="stat-topline"><span>Publikasi</span><span class="stat-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M6 3h9l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"></path><path d="M14 3v5h5M8 12h8M8 16h8"></path></svg>
-            </span></div>
-            <strong class="stat-value" id="publication-count">—</strong>
-            <span class="stat-footnote">karya ilmiah terdaftar</span>
-          </article>
-        </section>
-
-        <section class="content-grid">
-          <article class="panel availability-panel">
-            <div class="panel-heading">
-              <div><h2>Ketersediaan koleksi</h2><p>Ringkasan eksemplar yang siap dipinjam.</p></div>
-              <span class="panel-mark">01</span>
-            </div>
-            <div class="availability-chart">
-              <div class="availability-ring" id="availability-chart" role="img" aria-label="Menunggu data ketersediaan koleksi">
-                <div class="availability-center"><strong id="availability-percent">—</strong><span>tersedia</span></div>
-              </div>
-              <div class="availability-legend">
-                <div><span class="legend-swatch is-available"></span><span>Siap dipinjam</span><strong id="available-legend-count">—</strong></div>
-                <div><span class="legend-swatch is-unavailable"></span><span>Tidak tersedia</span><strong id="unavailable-count">—</strong></div>
-              </div>
-            </div>
-          </article>
-
-          <article class="panel popular-panel">
-            <div class="panel-heading">
-              <div><h2>Koleksi paling diminati</h2><p>Berdasarkan jumlah peminjaman yang tercatat.</p></div>
-              <span class="panel-mark">02</span>
-            </div>
-            <div class="popular-list" id="popular-books">
-              <p class="loading-state">Memuat ringkasan koleksi...</p>
-            </div>
-            <div class="chart-legend"><span class="legend-dot"></span>Jumlah peminjaman tercatat</div>
-          </article>
-
-          <article class="panel requests-panel" id="permohonan">
-            <div class="panel-heading">
-              <div><h2>Permohonan terbaru</h2><p>Permintaan layanan yang masuk ke perpustakaan.</p></div>
-              <span class="pending-pill"><span></span><strong id="pending-count">—</strong> menunggu</span>
-            </div>
-            <div class="request-list" id="recent-requests">
-              <p class="loading-state">Memuat permohonan terbaru...</p>
-            </div>
-          </article>
-        </section>
-
-        <section class="collection-activity" aria-label="Aktivitas koleksi">
-          <article class="activity-section">
-            <div class="activity-heading">
-              <div><h2>Koleksi sedang dipinjam</h2><p>Ringkasan transaksi peminjaman yang masih aktif.</p></div>
-              <span class="activity-heading-icon" aria-hidden="true">↗</span>
-            </div>
-            <div class="activity-stats">
-              <div class="activity-stat activity-red"><span>Judul</span><strong id="loan-title-count">—</strong></div>
-              <div class="activity-stat activity-gold"><span>Eksemplar</span><strong id="loan-copy-count">—</strong></div>
-              <div class="activity-stat activity-blue"><span>Anggota</span><strong id="loan-member-count">—</strong></div>
-            </div>
-            <p class="activity-unavailable" id="loan-data-status">Data transaksi peminjaman belum tersedia.</p>
-          </article>
-
-          <article class="activity-section">
-            <div class="activity-heading">
-              <div><h2>Koleksi telah dikembalikan</h2><p>Ringkasan transaksi pengembalian.</p></div>
-              <span class="activity-heading-icon" aria-hidden="true">✓</span>
-            </div>
-            <div class="activity-stats">
-              <div class="activity-stat activity-red"><span>Judul</span><strong id="returned-title-count">—</strong></div>
-              <div class="activity-stat activity-gold"><span>Eksemplar</span><strong id="returned-copy-count">—</strong></div>
-              <div class="activity-stat activity-blue"><span>Anggota</span><strong id="returned-member-count">—</strong></div>
-            </div>
-            <p class="activity-unavailable" id="returned-data-status">Data transaksi pengembalian belum tersedia.</p>
-          </article>
-
-          <article class="activity-section activity-section-wide">
-            <div class="activity-heading">
-              <div><h2>Koleksi dibaca di tempat</h2><p>Ringkasan aktivitas membaca koleksi di perpustakaan.</p></div>
-              <span class="activity-heading-icon" aria-hidden="true">⌖</span>
-            </div>
-            <div class="activity-stats">
-              <div class="activity-stat activity-red"><span>Judul</span><strong id="onsite-title-count">—</strong></div>
-              <div class="activity-stat activity-gold"><span>Eksemplar</span><strong id="onsite-copy-count">—</strong></div>
-              <div class="activity-stat activity-blue"><span>Anggota</span><strong id="onsite-member-count">—</strong></div>
-              <div class="activity-stat activity-pink"><span>Non anggota</span><strong id="onsite-visitor-count">—</strong></div>
-            </div>
-            <p class="activity-unavailable" id="onsite-data-status">Data baca di tempat belum tersedia.</p>
-          </article>
+        <section class="dashboard-welcome" aria-label="Beranda administrasi">
+          <img class="welcome-background" src="../assets/img/hero-gedung-kampus.png" alt="">
+          <div class="welcome-shade" aria-hidden="true"></div>
+          <div class="dashboard-welcome-copy">
+            <span class="dashboard-welcome-label">PANEL PENGELOLAAN PERPUSTAKAAN</span>
+            <h1>Ruang Kendali Perpustakaan</h1>
+            <p>Kelola koleksi, keanggotaan, sirkulasi, dan layanan perpustakaan melalui menu yang tersedia di bagian atas.</p>
+          </div>
+          <div class="welcome-gallery" aria-label="Suasana kampus">
+            <figure><img src="../assets/img/login-kampus-luar.png" alt="Mahasiswa belajar di area kampus"><figcaption>Suasana kampus</figcaption></figure>
+            <figure><img src="../assets/img/login-mahasiswa-perpus.png" alt="Mahasiswa beraktivitas bersama"><figcaption>Aktivitas mahasiswa</figcaption></figure>
+          </div>
         </section>
 
         <footer class="dashboard-footer">
