@@ -14,6 +14,8 @@
     'member-basket': { title: 'Keranjang Anggota', description: 'Tinjau dan kelola anggota yang dipilih dari daftar anggota.' }
   };
   let editingMemberId = null;
+  let editingMemberType = null;
+  const defaultMemberTypes = ['Mahasiswa', 'Dosen', 'Tenaga Kependidikan', 'Umum'];
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -37,6 +39,13 @@
       showMessage('Data tidak dapat disimpan di browser ini. Periksa ruang penyimpanan dan izin situs.', true);
       return false;
     }
+  }
+
+  function readMemberTypes() {
+    if (localStorage.getItem(`${storagePrefix}member-types`) === null) {
+      return defaultMemberTypes.map((name, index) => ({ id: `default-${index}`, name }));
+    }
+    return readItems('member-types');
   }
 
   function showMessage(message, isError = false) {
@@ -86,13 +95,19 @@
   }
 
   function memberForm(member = {}) {
+    const memberTypes = readMemberTypes();
+    const memberTypeOptions = memberTypes.map(type =>
+      `<option value="${escapeHtml(type.name)}"${member.member_type === type.name ? ' selected' : ''}>${escapeHtml(type.name)}</option>`).join('');
     const genders = ['Laki-laki', 'Perempuan'].map(item => `<option ${member.gender === item ? 'selected' : ''}>${item}</option>`).join('');
     const statuses = ['Aktif', 'Tidak Aktif', 'Ditangguhkan'].map(item => `<option ${member.status === item ? 'selected' : ''}>${item}</option>`).join('');
-    return panel(editingMemberId ? 'Koreksi Data Anggota' : 'Tambah Anggota', `<div class="module-panel-body">
+    const typeRows = memberTypes.map((type, index) => `<tr><td>${index + 1}</td><td>${escapeHtml(type.name)}</td>
+      <td><div class="module-inline-actions"><button class="module-button is-neutral" type="button" data-action="edit-member-type" data-id="${escapeHtml(type.id)}">Ubah</button>
+      <button class="module-button is-danger" type="button" data-action="delete-member-type" data-id="${escapeHtml(type.id)}">Hapus</button></div></td></tr>`).join('');
+    return `${panel(editingMemberId ? 'Koreksi Data Anggota' : 'Tambah Anggota', `<div class="module-panel-body">
       <form class="module-form" data-form="member">
         <div class="module-form-grid">
           ${field('Member Number', 'member_number', { max: 80, value: member.member_number || '', placeholder: 'Dibuat otomatis jika dikosongkan' })}
-          ${selectField('Jenis Anggota', 'member_type', '<option>Mahasiswa</option><option>Dosen</option><option>Tenaga Kependidikan</option><option>Umum</option>', false, member.member_type || 'Mahasiswa')}
+          ${selectField('Jenis Anggota', 'member_type', `<option value="">Pilih jenis anggota</option>${memberTypeOptions}`, true, member.member_type || '')}
           ${selectField('Jenis Identitas', 'identity_type', '<option>KTP / NIK</option><option>Kartu Pelajar</option><option>Paspor</option>', true, member.identity_type || 'KTP / NIK')}
           ${field('Nomor Identitas', 'identity_number', { required: true, max: 80, value: member.identity_number || '' })}
           ${field('Nama Lengkap', 'full_name', { required: true, max: 180, value: member.full_name || '' })}
@@ -123,7 +138,13 @@
         <div class="module-form-actions"><button class="module-button is-primary" type="submit">Simpan Anggota</button>
           <button class="module-button is-neutral" type="reset" data-action="reset-member">Kosongkan</button>
           <a class="module-button is-neutral" href="#member-list">Kembali ke Daftar Anggota</a></div>
-      </form></div>`);
+      </form></div>`)}${panel(editingMemberType ? 'Ubah Jenis Anggota' : 'Kelola Jenis Anggota', `<div class="module-panel-body">
+        <form class="module-toolbar" data-form="member-type">
+          <div class="module-toolbar-group">${field('Nama Jenis Anggota', 'name', { required: true, max: 80, value: editingMemberType?.name || '' })}
+            <button class="module-button is-primary" type="submit">${editingMemberType ? 'Simpan Perubahan' : 'Tambah Jenis Anggota'}</button>
+            ${editingMemberType ? '<button class="module-button is-neutral" type="button" data-action="cancel-member-type-edit">Batal</button>' : ''}</div>
+        </form>
+        ${table(['#', 'Jenis Anggota', 'Aksi'], typeRows, 'Belum ada jenis anggota.')}</div>`)}`;
   }
 
   function renderMembers() {
@@ -244,7 +265,10 @@
         }
       }
     });
-    if (routeKey !== 'member-entry') editingMemberId = null;
+    if (routeKey !== 'member-entry') {
+      editingMemberId = null;
+      editingMemberType = null;
+    }
     try {
       let body;
       if (routeKey === 'member-entry') body = memberForm(editingMemberId
@@ -290,6 +314,24 @@
     if (submit) submit.disabled = true;
     try {
       if (form.dataset.form === 'member') saveMember(form);
+      else if (form.dataset.form === 'member-type') {
+        const submittedName = new FormData(form).get('name');
+        const name = typeof submittedName === 'string' ? submittedName.trim() : '';
+        if (!name) throw new Error('Nama jenis anggota wajib diisi.');
+        const types = readMemberTypes();
+        if (types.some(type => type.name.toLocaleLowerCase('id') === name.toLocaleLowerCase('id')
+          && type.id !== editingMemberType?.id)) {
+          throw new Error('Jenis anggota tersebut sudah tersedia.');
+        }
+        const next = editingMemberType
+          ? types.map(type => type.id === editingMemberType.id ? { ...type, name } : type)
+          : [...types, { id: `member-type-${Date.now()}`, name }];
+        if (saveItems('member-types', next)) {
+          editingMemberType = null;
+          render();
+          showMessage('Jenis anggota berhasil disimpan.');
+        }
+      }
       else if (form.dataset.form === 'donations' || form.dataset.form === 'renewals') {
         const key = form.dataset.form;
         const data = Object.fromEntries(new FormData(form).entries());
@@ -385,6 +427,26 @@
         render();
         showMessage('Daftar berhasil dimuat ulang.');
       } else if (action === 'reset-member') editingMemberId = null;
+      else if (action === 'edit-member-type') {
+        editingMemberType = readMemberTypes().find(type => type.id === id) || null;
+        if (!editingMemberType) throw new Error('Jenis anggota tidak ditemukan.');
+        render();
+      } else if (action === 'delete-member-type') {
+        const types = readMemberTypes();
+        const type = types.find(item => item.id === id);
+        if (!type) throw new Error('Jenis anggota tidak ditemukan.');
+        if (readItems('members').some(member => member.member_type === type.name)) {
+          throw new Error('Jenis anggota masih digunakan oleh data anggota. Ubah jenis pada anggota terkait terlebih dahulu.');
+        }
+        if (!window.confirm(`Hapus jenis anggota "${type.name}"?`)) return;
+        if (saveItems('member-types', types.filter(item => item.id !== id))) {
+          render();
+          showMessage('Jenis anggota berhasil dihapus.');
+        }
+      } else if (action === 'cancel-member-type-edit') {
+        editingMemberType = null;
+        render();
+      }
     } catch (error) {
       showMessage(error.message, true);
     }

@@ -84,14 +84,20 @@
         <details class="nav-group">
           <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2"></rect><path d="M12 3v18m-5-13h2m6 0h2m-10 7h2m6 0h2"></path></svg><span>Loker</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
           <div class="nav-submenu">
-            <span class="nav-placeholder">Peminjaman</span>
-            <span class="nav-placeholder">Pengembalian</span>
-            <span class="nav-placeholder">Daftar Transaksi</span>
+            <a class="nav-placeholder nav-module-link" href="#locker-loan">Peminjaman</a>
+            <a class="nav-placeholder nav-module-link" href="#locker-return">Pengembalian</a>
+            <details class="nav-subgroup">
+              <summary>Daftar Transaksi</summary>
+              <div class="nav-submenu">
+                <a class="nav-placeholder nav-module-link" href="#locker-loans">Daftar Peminjaman</a>
+                <a class="nav-placeholder nav-module-link" href="#locker-returns">Daftar Pengembalian</a>
+              </div>
+            </details>
           </div>
         </details>
         <details class="nav-group">
           <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 19V5m0 14h16M7 15l4-4 3 2 5-6"></path><circle cx="19" cy="7" r="1"></circle></svg><span>Survey</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
-          <div class="nav-submenu"><span class="nav-placeholder">Data Survey</span></div>
+          <div class="nav-submenu"><a class="nav-placeholder nav-module-link" href="#survey-data">Data Survey</a></div>
         </details>
         <details class="nav-group">
           <summary class="nav-link"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M5 3h11l3 3v15H5zM14 3v5h5M8 12h8m-8 4h8"></path></svg><span>Buku Tamu</span><svg class="nav-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m9 18 6-6-6-6"></path></svg></summary>
@@ -257,5 +263,7 @@
   <script src="../assets/js/admin-catalog.js"></script>
   <script src="../assets/js/admin-membership.js"></script>
   <script src="../assets/js/admin-circulation.js"></script>
+  <script src="../assets/js/admin-locker.js"></script>
+  <script src="../assets/js/admin-survey.js"></script>
 </body>
 </html>
