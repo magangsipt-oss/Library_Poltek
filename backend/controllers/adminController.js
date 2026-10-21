@@ -40,17 +40,17 @@ async function getOverview(req, res, next) {
   try {
     const [summaryResult, popularBooksResult, requestsResult] = await Promise.all([
       query(`SELECT
-        (SELECT COUNT(*)::int FROM books) AS title_count,
-        (SELECT COALESCE(SUM(total_copies), 0)::int FROM books) AS copy_count,
-        (SELECT COALESCE(SUM(available_copies), 0)::int FROM books) AS available_count,
-        (SELECT COUNT(*)::int FROM publications) AS publication_count,
-        (SELECT COUNT(*)::int FROM service_requests WHERE status = 'pending') AS pending_requests`),
+        (SELECT COUNT(*)::int FROM buku) AS title_count,
+        (SELECT COALESCE(SUM(total_copies), 0)::int FROM buku) AS copy_count,
+        (SELECT COALESCE(SUM(available_copies), 0)::int FROM buku) AS available_count,
+        (SELECT COUNT(*)::int FROM publikasi) AS publication_count,
+        (SELECT COUNT(*)::int FROM permohonan_layanan WHERE status = 'pending') AS pending_requests`),
       query(`SELECT id, title, loan_count
-        FROM books
+        FROM buku
         ORDER BY loan_count DESC, title ASC
         LIMIT 5`),
       query(`SELECT id, full_name, service_type, status, created_at
-        FROM service_requests
+        FROM permohonan_layanan
         ORDER BY created_at DESC, id DESC
         LIMIT 5`)
     ]);

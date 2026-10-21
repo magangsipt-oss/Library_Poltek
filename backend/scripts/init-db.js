@@ -13,10 +13,15 @@ async function initializeDatabase() {
     throw new Error(`Isi variabel ${missingVariables.join(', ')} di backend/.env terlebih dahulu.`);
   }
 
-  const schemaPath = path.resolve(__dirname, '../../database/db_perpustakaan.sql');
-  const schema = fs.readFileSync(schemaPath, 'utf8');
-  await pool.query(schema);
-  console.log('Schema PostgreSQL dan data contoh berhasil disinkronkan.');
+  const schemaPaths = [
+    path.resolve(__dirname, '../../database/db_perpustakaan.sql'),
+    path.resolve(__dirname, '../../database/admin_modules.sql')
+  ];
+  for (const schemaPath of schemaPaths) {
+    const schema = fs.readFileSync(schemaPath, 'utf8');
+    await pool.query(schema);
+  }
+  console.log('Skema PostgreSQL, migrasi nama tabel, dan data contoh berhasil disinkronkan.');
 }
 
 initializeDatabase()
