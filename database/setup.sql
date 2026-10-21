@@ -7,3 +7,4 @@ WHERE NOT EXISTS (
 
 \connect db_perpustakaan_poltek
 \ir db_perpustakaan.sql
+\ir admin_modules.sql
