@@ -222,17 +222,107 @@
       <div class="dashboard-content">
         <div class="dashboard-error" id="dashboard-error" role="alert" hidden></div>
 
+        <div class="dashboard-page-heading">
+          <div>
+            <span class="dashboard-page-eyebrow">RINGKASAN PERPUSTAKAAN</span>
+            <h1>Beranda</h1>
+            <p>Pantau koleksi dan aktivitas layanan perpustakaan.</p>
+          </div>
+          <span class="dashboard-live-status"><span></span> Ikhtisar terkini</span>
+        </div>
+
         <section class="dashboard-welcome" aria-label="Beranda administrasi">
           <img class="welcome-background" src="../assets/img/hero-gedung-kampus.png" alt="">
           <div class="welcome-shade" aria-hidden="true"></div>
           <div class="dashboard-welcome-copy">
             <span class="dashboard-welcome-label">PANEL PENGELOLAAN PERPUSTAKAAN</span>
             <h1>Ruang Kendali Perpustakaan</h1>
-            <p>Kelola koleksi, keanggotaan, sirkulasi, dan layanan perpustakaan melalui menu di sebelah kiri.</p>
+            <p>Kelola koleksi dan pantau layanan perpustakaan dari satu tempat.</p>
           </div>
-          <div class="welcome-gallery" aria-label="Suasana kampus">
-            <figure><img src="../assets/img/login-kampus-luar.png" alt="Mahasiswa belajar di area kampus"><figcaption>Suasana kampus</figcaption></figure>
-            <figure><img src="../assets/img/login-mahasiswa-perpus.png" alt="Mahasiswa beraktivitas bersama"><figcaption>Aktivitas mahasiswa</figcaption></figure>
+        </section>
+
+        <section class="dashboard-overview" aria-labelledby="overview-title">
+          <div class="dashboard-section-heading">
+            <div>
+              <h2 id="overview-title">Ikhtisar koleksi</h2>
+              <p>Ringkasan data perpustakaan</p>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card stat-collection">
+              <span class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z"></path><path d="M4 6v15m4-14h8"></path></svg></span>
+              <span class="stat-label">Judul koleksi</span>
+              <strong class="stat-value" id="title-count">—</strong>
+              <span class="stat-footnote">Judul dalam katalog</span>
+            </article>
+            <article class="stat-card stat-copies">
+              <span class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M7 7V4h13v13h-3M4 7h13v13H4z"></path><path d="M7 11h7m-7 4h7"></path></svg></span>
+              <span class="stat-label">Total eksemplar</span>
+              <strong class="stat-value" id="copy-count">—</strong>
+              <span class="stat-footnote">Seluruh koleksi tercatat</span>
+            </article>
+            <article class="stat-card stat-available">
+              <span class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.5 2.5L16 9"></path></svg></span>
+              <span class="stat-label">Koleksi tersedia</span>
+              <strong class="stat-value" id="available-count">—</strong>
+              <span class="stat-footnote">Siap untuk dilayankan</span>
+            </article>
+            <article class="stat-card stat-publications">
+              <span class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 3h11l3 3v15H5zM14 3v5h5M8 12h8m-8 4h8"></path></svg></span>
+              <span class="stat-label">Publikasi</span>
+              <strong class="stat-value" id="publication-count">—</strong>
+              <span class="stat-footnote">Karya pada repositori</span>
+            </article>
+          </div>
+
+          <div class="content-grid">
+            <section class="panel popular-panel" aria-labelledby="popular-title">
+              <div class="panel-heading">
+                <div>
+                  <h2 id="popular-title">Koleksi populer</h2>
+                  <p>Berdasarkan jumlah peminjaman</p>
+                </div>
+              </div>
+              <div class="popular-list" id="popular-books-list" aria-live="polite">
+                <p class="loading-state">Memuat data koleksi...</p>
+              </div>
+              <div class="chart-legend"><span class="legend-dot"></span> Jumlah peminjaman</div>
+            </section>
+
+            <section class="panel availability-panel" aria-labelledby="availability-title">
+              <div class="panel-heading">
+                <div>
+                  <h2 id="availability-title">Ketersediaan koleksi</h2>
+                  <p>Perbandingan koleksi siap dilayankan</p>
+                </div>
+              </div>
+              <div class="availability-chart">
+                <div class="availability-ring" id="availability-ring" role="img" aria-label="Data ketersediaan belum dimuat">
+                  <div class="availability-center">
+                    <strong id="availability-percent">—%</strong>
+                    <span>tersedia</span>
+                  </div>
+                </div>
+                <div class="availability-legend">
+                  <div><span class="legend-swatch is-available"></span><span>Tersedia</span><strong id="available-legend">—</strong></div>
+                  <div><span class="legend-swatch is-unavailable"></span><span>Tidak tersedia</span><strong id="unavailable-legend">—</strong></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel requests-panel" aria-labelledby="requests-title">
+              <div class="panel-heading">
+                <div>
+                  <h2 id="requests-title">Permohonan layanan</h2>
+                  <p>Aktivitas layanan terbaru</p>
+                </div>
+                <span class="pending-pill"><span></span><strong id="pending-request-count">—</strong> menunggu</span>
+              </div>
+              <div class="request-list" id="recent-requests-list" aria-live="polite">
+                <p class="loading-state">Memuat permohonan...</p>
+              </div>
+            </section>
           </div>
         </section>
 
