@@ -194,6 +194,45 @@ test('katalog, konten biner, ekspor MARC, artikel, serta pencarian publik tetap 
   assert(!(await Catalog.listRecords('all')).some(row => row.book_id === listed.book_id));
 });
 
+test('ringkasan membedakan judul, eksemplar, anggota, peminjaman aktif, dan pengembalian', async () => {
+  const memberType = (await database.query('SELECT id FROM jenis_anggota ORDER BY id LIMIT 1')).rows[0].id;
+  for (const [number, name] of [['DASH-001', 'Anggota Pertama'], ['DASH-002', 'Anggota Kedua']]) {
+    await database.query(`INSERT INTO anggota (nomor_anggota, id_jenis_anggota, nama_lengkap)
+      VALUES ($1, $2, $3)`, [number, memberType, name]);
+  }
+  const catalog = (await database.query(`INSERT INTO katalog (bibid, judul)
+    VALUES ('DASH-DIGITAL', 'Konten digital ringkasan') RETURNING id`)).rows[0].id;
+  await database.query(`INSERT INTO konten_digital_katalog
+    (id_katalog, nama_berkas, tipe_mime, ukuran_berkas, data_berkas)
+    VALUES ($1, 'ringkasan.txt', 'text/plain', 1, $2)`, [catalog, Buffer.from('1')]);
+  for (const [index, member, title, returned] of [
+    [1, 'DASH-001', 'Judul Aktif', null], [2, 'DASH-001', 'Judul Aktif', null],
+    [3, 'DASH-001', 'Judul Kembali', '2026-10-22'], [4, 'DASH-002', 'Judul Kembali', '2026-10-22']
+  ]) {
+    await database.query(`INSERT INTO peminjaman
+      (nomor_transaksi, nomor_anggota, nama_lengkap, kode_batang, judul,
+       tanggal_peminjaman, tanggal_jatuh_tempo, tanggal_dikembalikan)
+      VALUES ($1, $2, 'Anggota Uji', $3, $4, '2026-10-20', '2026-10-27', $5)`,
+    [`DASH-TX-${index}`, member, `DASH-BARCODE-${index}`, title, returned]);
+  }
+  const login = await fetch(baseUrl + '/api/admin/login', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: process.env.ADMIN_USERNAME, password: process.env.ADMIN_PASSWORD })
+  });
+  const cookie = login.headers.get('set-cookie').split(';')[0];
+  const response = await fetch(baseUrl + '/api/admin/overview', { headers: { Cookie: cookie } });
+  assert.equal(response.status, 200);
+  const overview = await response.json();
+  assert.equal(overview.summary.member_count, 2);
+  assert.equal(overview.summary.digital_content_count, 1);
+  assert.deepEqual(overview.circulation.borrowed, { title_count: 1, copy_count: 2, member_count: 1 });
+  assert.deepEqual(overview.circulation.returned, { title_count: 1, copy_count: 2, member_count: 2 });
+  assert.equal(overview.visits.available, false);
+  assert.equal(overview.visits.member_count, null);
+  assert.equal(overview.onsiteReading.available, false);
+  assert.equal(overview.onsiteReading.title_count, null);
+});
+
 test('API publik, publikasi, login admin, dan ringkasan menggunakan database hasil migrasi', async () => {
   await database.query(`INSERT INTO publikasi (judul, para_penulis, prodi, jurnal, tahun_terbit)
     VALUES ('Publikasi Uji', 'Penulis Uji', 'TRL', 'Jurnal Uji', 2026)`);

@@ -7,8 +7,11 @@
   -moz-osx-font-smoothing: grayscale;
   color: #202431;
   background: #fff;
-  --brand-red: #b20f27;
+  --brand-red: #c8102e;
   --brand-dark: #85071b;
+  --border: #a8a8a8;
+  --card-radius: 2px;
+  --card-backing: 0 -9px 0 -3px var(--brand-red);
   --muted: #737987;
 }
 
@@ -252,11 +255,10 @@ a {
 .form-content {
   width: min(100%, 470px);
   padding: 34px;
-  border: 1.5px solid rgba(178, 15, 39, 0.52);
-  border-radius: 20px;
+  border: 1px solid var(--brand-red);
+  border-radius: var(--card-radius);
   background: #fff;
-  box-shadow:
-    0 12px 36px rgba(108, 12, 29, 0.055);
+  box-shadow: var(--card-backing);
 }
 
 .form-heading {
@@ -300,7 +302,7 @@ a {
   align-items: center;
   gap: 12px;
   padding: 0 15px;
-  border: 1px solid #e2e4e9;
+  border: 1px solid var(--border);
   border-radius: 11px;
   background: #fff;
   transition: border-color 160ms ease, box-shadow 160ms ease;
@@ -546,7 +548,7 @@ a {
 
   .form-content {
     padding: 25px 21px;
-    border-radius: 16px;
+    border-radius: var(--card-radius);
   }
 
   .form-heading {

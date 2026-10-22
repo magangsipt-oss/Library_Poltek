@@ -5,6 +5,9 @@
   const shell = document.querySelector('.admin-shell');
   const menuButton = document.getElementById('mobile-menu');
   const refreshButton = document.getElementById('refresh-dashboard');
+  const profileMenu = document.getElementById('profile-menu');
+  const profileTrigger = document.getElementById('profile-trigger');
+  const profileError = document.getElementById('profile-menu-error');
   const mobileViewport = window.matchMedia('(max-width: 900px)');
   const numberFormat = new Intl.NumberFormat('id-ID');
   const requestDateFormat = new Intl.DateTimeFormat('id-ID', {
@@ -12,9 +15,14 @@
   });
   let loading = false;
 
-  document.getElementById('today-date').textContent = new Intl.DateTimeFormat('id-ID', {
-    weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Makassar'
-  }).format(new Date());
+  const currentDate = new Date();
+  const dateElement = document.getElementById('today-date');
+  dateElement.textContent = new Intl.DateTimeFormat('id-ID', {
+    weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Makassar'
+  }).format(currentDate);
+  dateElement.title = new Intl.DateTimeFormat('id-ID', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Makassar'
+  }).format(currentDate);
   document.getElementById('current-year').textContent = new Date().getFullYear();
 
   function updateMenuButton(isExpanded) {
@@ -34,6 +42,19 @@
   function closeMenu(returnFocus = false) {
     if (mobileViewport.matches) setMobileMenu(false, returnFocus);
   }
+
+  function closeProfileMenu(returnFocus = false) {
+    if (!profileMenu.open) return;
+    profileMenu.open = false;
+    if (returnFocus) profileTrigger.focus();
+  }
+
+  document.addEventListener('pointerdown', event => {
+    if (!profileMenu.contains(event.target)) closeProfileMenu();
+  });
+  document.addEventListener('focusin', event => {
+    if (!profileMenu.contains(event.target)) closeProfileMenu();
+  });
 
   sidebar.inert = mobileViewport.matches;
   updateMenuButton(!mobileViewport.matches);
@@ -57,6 +78,11 @@
     if (event.target.closest('a[href]')) closeMenu();
   });
   document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && profileMenu.open) {
+      event.preventDefault();
+      closeProfileMenu(true);
+      return;
+    }
     if (!mobileViewport.matches || !sidebar.classList.contains('is-open')) return;
     if (event.key === 'Escape') {
       event.preventDefault();
@@ -79,6 +105,7 @@
   function updateNavigation() {
     const route = window.location.hash || '#beranda';
     const isHome = ['#beranda', '#permohonan'].includes(route);
+    document.getElementById('permohonan').hidden = route !== '#permohonan';
     const homeLink = sidebar.querySelector('.nav-link[href="#beranda"]');
     homeLink.classList.toggle('is-active', isHome);
     if (isHome) homeLink.setAttribute('aria-current', 'page');
@@ -130,41 +157,6 @@
     container.replaceChildren(state);
   }
 
-  function renderPopularBooks(books) {
-    const container = document.getElementById('popular-books-list');
-    if (!books.length) {
-      emptyState(container, 'Koleksi belum tersedia', 'Tambahkan koleksi untuk mulai melihat ringkasan peminjaman.', true);
-      return;
-    }
-    const maximum = Math.max(...books.map(book => count(book.loan_count)));
-    const items = books.slice(0, 5).map((book, index) => {
-      const item = document.createElement('li');
-      item.className = 'popular-item';
-      const rank = document.createElement('span');
-      rank.className = 'popular-rank';
-      rank.textContent = String(index + 1).padStart(2, '0');
-      const title = document.createElement('span');
-      title.className = 'popular-title';
-      title.textContent = book.title;
-      title.title = book.title;
-      const loans = count(book.loan_count);
-      const total = document.createElement('span');
-      total.className = 'popular-count';
-      total.textContent = numberFormat.format(loans);
-      total.setAttribute('aria-label', `${numberFormat.format(loans)} peminjaman`);
-      const track = document.createElement('div');
-      track.className = 'popular-track';
-      track.setAttribute('aria-hidden', 'true');
-      const bar = document.createElement('div');
-      bar.className = 'popular-bar';
-      bar.style.width = `${maximum ? loans / maximum * 100 : 0}%`;
-      track.append(bar);
-      item.append(rank, title, total, track);
-      return item;
-    });
-    container.replaceChildren(...items);
-  }
-
   function renderRequests(requests) {
     const container = document.getElementById('recent-requests-list');
     if (!requests.length) {
@@ -208,33 +200,65 @@
     container.replaceChildren(...items);
   }
 
+  function metricValue(id, value) {
+    document.getElementById(id).textContent = value === null || value === undefined
+      ? '—' : numberFormat.format(count(value));
+  }
+
+  function renderVisits(visits) {
+    const available = Boolean(visits?.available);
+    const members = available ? count(visits.member_count) : null;
+    const guests = available ? count(visits.non_member_count) : null;
+    const total = available ? members + guests : null;
+    metricValue('visits-total', total);
+    metricValue('visits-member-count', members);
+    metricValue('visits-non-member-count', guests);
+    const ring = document.getElementById('visits-ring');
+    document.querySelector('.visits-panel').classList.toggle('is-unavailable', !available);
+    ring.classList.toggle('has-data', available && total > 0);
+    ring.style.setProperty('--member-share', `${total ? members / total * 100 : 0}%`);
+    ring.setAttribute('aria-label', available
+      ? `${numberFormat.format(members)} kunjungan anggota dan ${numberFormat.format(guests)} kunjungan nonanggota`
+      : 'Data kunjungan belum tersedia');
+    document.getElementById('visits-note').textContent = available
+      ? (total ? `${numberFormat.format(total)} kunjungan tercatat di perpustakaan.` : 'Belum ada kunjungan yang tercatat.')
+      : 'Pencatatan kunjungan belum tersedia.';
+  }
+
+  function renderOnsite(reading) {
+    const available = Boolean(reading?.available);
+    const fields = {
+      'reading-title-count': 'title_count', 'reading-copy-count': 'copy_count',
+      'reading-member-count': 'member_count', 'reading-non-member-count': 'non_member_count'
+    };
+    Object.entries(fields).forEach(([id, key]) => metricValue(id, available ? reading[key] : null));
+    document.querySelector('.onsite-panel').classList.toggle('is-unavailable', !available);
+    document.getElementById('reading-status').textContent = available ? 'Seluruh pencatatan' : 'Belum ada pencatatan';
+    document.getElementById('reading-note').textContent = available
+      ? 'Seluruh pencatatan penggunaan koleksi di ruang perpustakaan.' : 'Pencatatan baca di tempat belum tersedia.';
+  }
+
   function renderOverview(result) {
     const { summary } = result;
     const fields = {
-      'title-count': 'title_count', 'copy-count': 'copy_count', 'available-count': 'available_count',
-      'publication-count': 'publication_count', 'pending-request-count': 'pending_requests',
-      'request-nav-count': 'pending_requests'
+      'title-count': 'title_count', 'digital-content-count': 'digital_content_count',
+      'copy-count': 'copy_count', 'member-count': 'member_count',
+      'pending-request-count': 'pending_requests', 'request-nav-count': 'pending_requests'
     };
-    Object.entries(fields).forEach(([id, key]) => {
-      document.getElementById(id).textContent = numberFormat.format(count(summary[key]));
-    });
-    const copies = count(summary.copy_count);
-    const available = count(summary.available_count);
-    const unavailable = Math.max(0, copies - available);
-    const percentage = copies ? Math.min(100, Math.round(available / copies * 100)) : 0;
-    const ring = document.getElementById('availability-ring');
-    ring.style.setProperty('--availability-value', `${percentage}%`);
-    ring.setAttribute('aria-label', `${numberFormat.format(available)} dari ${numberFormat.format(copies)} eksemplar tersedia, ${percentage} persen`);
-    document.getElementById('availability-percent').textContent = `${percentage}%`;
-    document.getElementById('available-legend').textContent = numberFormat.format(available);
-    document.getElementById('unavailable-legend').textContent = numberFormat.format(unavailable);
+    Object.entries(fields).forEach(([id, key]) => metricValue(id, summary[key]));
+    for (const type of ['borrowed', 'returned']) {
+      for (const field of ['title', 'copy', 'member']) {
+        metricValue(`${type}-${field}-count`, result.circulation?.[type]?.[`${field}_count`]);
+      }
+    }
+    renderVisits(result.visits);
+    renderOnsite(result.onsiteReading);
     document.querySelector('.pending-pill').classList.toggle('is-clear', !count(summary.pending_requests));
-    renderPopularBooks(result.popularBooks || []);
     renderRequests(result.recentRequests || []);
     const time = new Intl.DateTimeFormat('id-ID', {
       hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Makassar'
     }).format(new Date());
-    document.getElementById('overview-updated').textContent = `Terakhir diperbarui pukul ${time} WITA`;
+    document.getElementById('overview-updated').textContent = `Total data tercatat · Diperbarui ${time} WITA`;
     setDataStatus('ready', 'Data terkini');
   }
 
@@ -258,7 +282,6 @@
       if (!sessionResponse.ok) throw new Error('Sesi admin tidak dapat diperiksa. Silakan coba lagi.');
       const session = await sessionResponse.json();
       document.getElementById('admin-username').textContent = session.user.username;
-      document.getElementById('welcome-admin').textContent = session.user.username;
       document.querySelector('.profile-avatar').textContent = session.user.username.slice(0, 1).toUpperCase();
       const response = await fetch('/api/admin/overview', { credentials: 'same-origin' });
       if (response.status === 401) {
@@ -282,19 +305,28 @@
 
   refreshButton.addEventListener('click', loadDashboard);
   window.addEventListener('hashchange', () => {
+    closeProfileMenu();
     updateNavigation();
-    if (['', '#beranda'].includes(window.location.hash)) loadDashboard();
+    if (['', '#beranda', '#permohonan'].includes(window.location.hash)) loadDashboard();
+    if (window.location.hash === '#permohonan') {
+      requestAnimationFrame(() => document.getElementById('permohonan').scrollIntoView({ block: 'start' }));
+    }
   });
   document.getElementById('logout-button').addEventListener('click', async event => {
     const button = event.currentTarget;
     button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    profileError.hidden = true;
     try {
       const response = await fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' });
       if (!response.ok) throw new Error('Tidak dapat keluar dari akun. Silakan coba lagi.');
       window.location.replace('/admin/login.html');
     } catch (error) {
-      showError(error instanceof TypeError ? 'Tidak dapat terhubung ke server untuk keluar. Silakan coba lagi.' : error.message);
+      profileError.textContent = error instanceof TypeError ? 'Tidak dapat terhubung ke server untuk keluar. Silakan coba lagi.' : error.message;
+      profileError.hidden = false;
+      profileMenu.open = true;
       button.disabled = false;
+      button.setAttribute('aria-busy', 'false');
     }
   });
   updateNavigation();
