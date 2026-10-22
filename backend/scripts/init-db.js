@@ -14,6 +14,7 @@ async function initializeDatabase() {
   }
 
   const schemaPaths = [
+    path.resolve(__dirname, '../../database/migrasi_bahasa_indonesia.sql'),
     path.resolve(__dirname, '../../database/db_perpustakaan.sql'),
     path.resolve(__dirname, '../../database/admin_modules.sql')
   ];
@@ -21,7 +22,7 @@ async function initializeDatabase() {
     const schema = fs.readFileSync(schemaPath, 'utf8');
     await pool.query(schema);
   }
-  console.log('Skema PostgreSQL, migrasi nama tabel, dan data contoh berhasil disinkronkan.');
+  console.log('Skema PostgreSQL, migrasi nama tabel dan kolom, dan data contoh berhasil disinkronkan.');
 }
 
 initializeDatabase()

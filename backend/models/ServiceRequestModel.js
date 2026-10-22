@@ -1,14 +1,15 @@
+const toApiRow = require('./mapDatabaseRow');
 const { query } = require('../config/db');
 
 async function createServiceRequest({ full_name, email, phone, service_type, message }) {
   const result = await query(
-    `INSERT INTO permohonan_layanan (full_name, email, phone, service_type, message)
+    `INSERT INTO permohonan_layanan (nama_lengkap, email, telepon, jenis_layanan, pesan)
      VALUES ($1, $2, $3, $4, $5)
-     RETURNING id, full_name, email, phone, service_type, message, status, created_at`,
+     RETURNING id, nama_lengkap, email, telepon, jenis_layanan, pesan, status, waktu_dibuat`,
     [full_name, email, phone || null, service_type, message]
   );
 
-  return result.rows[0];
+  return toApiRow(result.rows[0]);
 }
 
 module.exports = { createServiceRequest };

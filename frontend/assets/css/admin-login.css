@@ -115,15 +115,16 @@ a {
 }
 
 .brand-logo {
+  position: relative;
   display: grid;
   width: 62px;
   height: 62px;
   flex: 0 0 62px;
   place-items: center;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.66);
-  border-radius: 14px;
-  background: #fff;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
   box-shadow: 0 8px 24px rgba(30, 0, 6, 0.22);
 }
 
@@ -132,6 +133,16 @@ a {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+/* Tampilkan lambang utuh dengan menyesuaikan margin transparan logo asli. */
+.brand-logo img {
+  position: absolute;
+  top: -12.57%;
+  left: -20.86%;
+  width: 142.86%;
+  height: 142.86%;
+  max-width: none;
 }
 
 .brand-name {
@@ -496,7 +507,7 @@ a {
     width: 45px;
     height: 45px;
     flex-basis: 45px;
-    border-radius: 11px;
+    border-radius: 50%;
   }
 
   .brand-name {

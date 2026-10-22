@@ -7,7 +7,12 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "db:init": "node scripts/init-db.js"
+    "db:init": "node scripts/init-db.js",
+    "db:start": "bash ../database/postgres-local.sh start",
+    "db:stop": "bash ../database/postgres-local.sh stop",
+    "db:status": "bash ../database/postgres-local.sh status",
+    "db:migrate": "node scripts/migrate-db.js",
+    "test:database": "node --test tests/database-migration.test.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

@@ -1,8 +1,8 @@
 PORT=3000
 CORS_ORIGIN=http://localhost:3000
 PGHOST=127.0.0.1
-PGPORT=5432
-PGDATABASE=db_perpustakaan_poltek
+PGPORT=5433
+PGDATABASE=db_perpustakaan
 PGUSER=postgres
 PGPASSWORD="123456789"
 PGSSLMODE=disable

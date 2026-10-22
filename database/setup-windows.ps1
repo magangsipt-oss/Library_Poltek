@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
 $serviceName = 'postgresql-x64-18'
 $psqlPath = 'C:\Program Files\PostgreSQL\18\bin\psql.exe'
 $hbaPath = 'C:\Program Files\PostgreSQL\18\data\pg_hba.conf'
-$databaseName = 'db_perpustakaan_poltek'
+$databaseName = 'db_perpustakaan'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $backendEnvPath = Join-Path $projectRoot 'backend\.env'
 

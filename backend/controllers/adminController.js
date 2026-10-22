@@ -1,3 +1,4 @@
+const toApiRow = require('../models/mapDatabaseRow');
 const { query } = require('../config/db');
 const {
   clearSessionCookie,
@@ -41,24 +42,24 @@ async function getOverview(req, res, next) {
     const [summaryResult, popularBooksResult, requestsResult] = await Promise.all([
       query(`SELECT
         (SELECT COUNT(*)::int FROM buku) AS title_count,
-        (SELECT COALESCE(SUM(total_copies), 0)::int FROM buku) AS copy_count,
-        (SELECT COALESCE(SUM(available_copies), 0)::int FROM buku) AS available_count,
+        (SELECT COALESCE(SUM(total_eksemplar), 0)::int FROM buku) AS copy_count,
+        (SELECT COALESCE(SUM(eksemplar_tersedia), 0)::int FROM buku) AS available_count,
         (SELECT COUNT(*)::int FROM publikasi) AS publication_count,
         (SELECT COUNT(*)::int FROM permohonan_layanan WHERE status = 'pending') AS pending_requests`),
-      query(`SELECT id, title, loan_count
+      query(`SELECT id, judul, jumlah_peminjaman
         FROM buku
-        ORDER BY loan_count DESC, title ASC
+        ORDER BY jumlah_peminjaman DESC, judul ASC
         LIMIT 5`),
-      query(`SELECT id, full_name, service_type, status, created_at
+      query(`SELECT id, nama_lengkap, jenis_layanan, status, waktu_dibuat
         FROM permohonan_layanan
-        ORDER BY created_at DESC, id DESC
+        ORDER BY waktu_dibuat DESC, id DESC
         LIMIT 5`)
     ]);
 
     return res.json({
       summary: summaryResult.rows[0],
-      popularBooks: popularBooksResult.rows,
-      recentRequests: requestsResult.rows
+      popularBooks: popularBooksResult.rows.map(toApiRow),
+      recentRequests: requestsResult.rows.map(toApiRow)
     });
   } catch (error) {
     return next(error);

@@ -1,34 +1,35 @@
+const toApiRow = require('./mapDatabaseRow');
 const { pool, query } = require('../config/db');
 
 async function listRecords(status = 'all', keyword = '') {
   const result = await query(`WITH entries AS (
-      SELECT c.id, c.book_id, c.bibid, c.record_type, c.material_type, c.title, c.subtitle,
-        c.responsibility, c.creator, c.edition, c.publication_statement, c.physical_description,
-        c.subject, c.call_number, c.isbn, c.digital_content_url, c.marc_data, c.rda_data,
-        c.lifecycle_status, c.created_at, c.updated_at, d.id AS digital_content_id,
-        d.file_name AS digital_file_name, d.mime_type AS digital_mime_type,
-        d.file_size AS digital_file_size, FALSE AS is_legacy
+      SELECT c.id, c.id_buku, c.bibid, c.jenis_rekaman, c.jenis_bahan, c.judul, c.anak_judul,
+        c.pernyataan_tanggung_jawab, c.pencipta, c.edisi, c.pernyataan_penerbitan, c.deskripsi_fisik,
+        c.subjek, c.nomor_panggil, c.isbn, c.url_konten_digital, c.data_marc, c.data_rda,
+        c.status_koleksi, c.waktu_dibuat, c.waktu_diperbarui, d.id AS digital_content_id,
+        d.nama_berkas AS digital_file_name, d.tipe_mime AS digital_mime_type,
+        d.ukuran_berkas AS digital_file_size, FALSE AS is_legacy
       FROM katalog c
       LEFT JOIN LATERAL (
-        SELECT id, file_name, mime_type, file_size FROM konten_digital_katalog
-        WHERE catalog_record_id = c.id ORDER BY uploaded_at DESC, id DESC LIMIT 1
+        SELECT id, nama_berkas, tipe_mime, ukuran_berkas FROM konten_digital_katalog
+        WHERE id_katalog = c.id ORDER BY waktu_diunggah DESC, id DESC LIMIT 1
       ) d ON TRUE
       UNION ALL
-      SELECT NULL::bigint, b.id, 'BOOK-' || b.id::text, 'standard', b.material_type,
-        b.title, '', '', b.author, '', COALESCE(b.publisher, '') || COALESCE(', ' || b.publication_year, ''),
-        '', COALESCE(b.subject, ''), COALESCE(b.call_number, ''), COALESCE(b.isbn, ''),
-        COALESCE(b.cover_url, ''), '[]'::jsonb, '{}'::jsonb, 'active',
-        b.created_at, b.updated_at, NULL::bigint, NULL::varchar, NULL::varchar, NULL::bigint, TRUE
+      SELECT NULL::bigint, b.id, 'BOOK-' || b.id::text, 'standard', b.jenis_bahan,
+        b.judul, '', '', b.pengarang, '', COALESCE(b.penerbit, '') || COALESCE(', ' || b.tahun_terbit, ''),
+        '', COALESCE(b.subjek, ''), COALESCE(b.nomor_panggil, ''), COALESCE(b.isbn, ''),
+        COALESCE(b.url_sampul, ''), '[]'::jsonb, '{}'::jsonb, 'active',
+        b.waktu_dibuat, b.waktu_diperbarui, NULL::bigint, NULL::varchar, NULL::varchar, NULL::bigint, TRUE
       FROM buku b
-      WHERE NOT EXISTS (SELECT 1 FROM katalog c WHERE c.book_id = b.id)
-        AND NOT EXISTS (SELECT 1 FROM buku_tidak_tampil_di_katalog h WHERE h.book_id = b.id)
+      WHERE NOT EXISTS (SELECT 1 FROM katalog c WHERE c.id_buku = b.id)
+        AND NOT EXISTS (SELECT 1 FROM buku_tidak_tampil_di_katalog h WHERE h.id_buku = b.id)
     )
     SELECT * FROM entries
-    WHERE ($1 = 'all' OR lifecycle_status = $1)
-      AND ($2 = '' OR title ILIKE '%' || $2 || '%' OR creator ILIKE '%' || $2 || '%'
+    WHERE ($1 = 'all' OR status_koleksi = $1)
+      AND ($2 = '' OR judul ILIKE '%' || $2 || '%' OR pencipta ILIKE '%' || $2 || '%'
         OR bibid ILIKE '%' || $2 || '%')
-    ORDER BY created_at DESC, id DESC NULLS LAST LIMIT 500`, [status, keyword]);
-  return result.rows;
+    ORDER BY waktu_dibuat DESC, id DESC NULLS LAST LIMIT 500`, [status, keyword]);
+  return result.rows.map(toApiRow);
 }
 
 async function createRecord(item) {
@@ -40,16 +41,16 @@ async function createRecord(item) {
       const bookMaterial = item.material_type === 'Monograf' ? 'buku'
         : item.material_type === 'Serial' ? 'jurnal' : item.material_type.toLowerCase();
       const book = await client.query(`INSERT INTO buku
-          (isbn, title, author, publisher, publication_year, material_type, subject, call_number)
+          (isbn, judul, pengarang, penerbit, tahun_terbit, jenis_bahan, subjek, nomor_panggil)
         VALUES (NULLIF($1, ''), $2, $3, NULLIF($4, ''), $5, $6, NULLIF($7, ''), NULLIF($8, ''))
         ON CONFLICT (isbn) DO UPDATE SET
-          title = EXCLUDED.title, author = EXCLUDED.author,
-          publisher = COALESCE(EXCLUDED.publisher, buku.publisher),
-          publication_year = COALESCE(EXCLUDED.publication_year, buku.publication_year),
-          material_type = EXCLUDED.material_type,
-          subject = COALESCE(EXCLUDED.subject, buku.subject),
-          call_number = COALESCE(EXCLUDED.call_number, buku.call_number),
-          updated_at = NOW()
+          judul = EXCLUDED.judul, pengarang = EXCLUDED.pengarang,
+          penerbit = COALESCE(EXCLUDED.penerbit, buku.penerbit),
+          tahun_terbit = COALESCE(EXCLUDED.tahun_terbit, buku.tahun_terbit),
+          jenis_bahan = EXCLUDED.jenis_bahan,
+          subjek = COALESCE(EXCLUDED.subjek, buku.subjek),
+          nomor_panggil = COALESCE(EXCLUDED.nomor_panggil, buku.nomor_panggil),
+          waktu_diperbarui = NOW()
         RETURNING id`, [
         item.isbn, item.title, item.creator, item.publisher, item.publication_year,
           bookMaterial, item.subject, item.call_number
@@ -57,9 +58,9 @@ async function createRecord(item) {
       bookId = book.rows[0].id;
     }
     const result = await client.query(`INSERT INTO katalog
-        (book_id, bibid, record_type, material_type, title, subtitle, responsibility,
-         creator, edition, publication_statement, physical_description, subject, call_number,
-         isbn, digital_content_url, marc_data, rda_data)
+        (id_buku, bibid, jenis_rekaman, jenis_bahan, judul, anak_judul, pernyataan_tanggung_jawab,
+         pencipta, edisi, pernyataan_penerbitan, deskripsi_fisik, subjek, nomor_panggil,
+         isbn, url_konten_digital, data_marc, data_rda)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16::jsonb, $17::jsonb)
       RETURNING id, bibid`, [
       bookId, item.bibid, item.record_type, item.material_type, item.title, item.subtitle,
@@ -68,7 +69,7 @@ async function createRecord(item) {
       item.digital_content_url, JSON.stringify(item.marc_data), JSON.stringify(item.rda_data)
     ]);
     await client.query('COMMIT');
-    return result.rows[0];
+    return toApiRow(result.rows[0]);
   } catch (error) {
     await client.query('ROLLBACK');
     throw error;
@@ -79,41 +80,41 @@ async function createRecord(item) {
 
 async function copyRecord(id) {
   const result = await query(`INSERT INTO katalog
-      (bibid, record_type, material_type, title, subtitle, responsibility, creator, edition,
-       publication_statement, physical_description, subject, call_number, isbn,
-       digital_content_url, marc_data, rda_data)
+      (bibid, jenis_rekaman, jenis_bahan, judul, anak_judul, pernyataan_tanggung_jawab, pencipta, edisi,
+       pernyataan_penerbitan, deskripsi_fisik, subjek, nomor_panggil, isbn,
+       url_konten_digital, data_marc, data_rda)
     SELECT 'COPY-' || id || '-' || md5(random()::text || clock_timestamp()::text),
-       record_type, material_type, title, subtitle, responsibility, creator, edition,
-       publication_statement, physical_description, subject, call_number, isbn,
-       digital_content_url, marc_data, rda_data
+       jenis_rekaman, jenis_bahan, judul, anak_judul, pernyataan_tanggung_jawab, pencipta, edisi,
+       pernyataan_penerbitan, deskripsi_fisik, subjek, nomor_panggil, isbn,
+       url_konten_digital, data_marc, data_rda
     FROM katalog WHERE id = $1
-    RETURNING id, bibid, title`, [id]);
-  return result.rows[0] || null;
+    RETURNING id, bibid, judul`, [id]);
+  return toApiRow(result.rows[0]) || null;
 }
 
 async function catalogizeBook(id, bibid) {
   const result = await query(`INSERT INTO katalog
-      (book_id, bibid, material_type, title, creator, publication_statement, subject, call_number, isbn)
-    SELECT b.id, $2, b.material_type, b.title, b.author,
-      COALESCE(b.publisher, '') || COALESCE(', ' || b.publication_year, ''),
-      COALESCE(b.subject, ''), COALESCE(b.call_number, ''), COALESCE(b.isbn, '')
+      (id_buku, bibid, jenis_bahan, judul, pencipta, pernyataan_penerbitan, subjek, nomor_panggil, isbn)
+    SELECT b.id, $2, b.jenis_bahan, b.judul, b.pengarang,
+      COALESCE(b.penerbit, '') || COALESCE(', ' || b.tahun_terbit, ''),
+      COALESCE(b.subjek, ''), COALESCE(b.nomor_panggil, ''), COALESCE(b.isbn, '')
     FROM buku b WHERE b.id = $1
     RETURNING id, bibid`, [id, bibid]);
-  return result.rows[0] || null;
+  return toApiRow(result.rows[0]) || null;
 }
 
 async function deleteRecord(id) {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
-    const record = await client.query('SELECT book_id FROM katalog WHERE id = $1 FOR UPDATE', [id]);
+    const record = await client.query('SELECT id_buku FROM katalog WHERE id = $1 FOR UPDATE', [id]);
     if (!record.rowCount) {
       await client.query('ROLLBACK');
       return false;
     }
-    if (record.rows[0].book_id) {
-      await client.query(`INSERT INTO buku_tidak_tampil_di_katalog (book_id) VALUES ($1)
-        ON CONFLICT (book_id) DO NOTHING`, [record.rows[0].book_id]);
+    if (record.rows[0].id_buku) {
+      await client.query(`INSERT INTO buku_tidak_tampil_di_katalog (id_buku) VALUES ($1)
+        ON CONFLICT (id_buku) DO NOTHING`, [record.rows[0].id_buku]);
     }
     await client.query('DELETE FROM katalog WHERE id = $1', [id]);
     await client.query('COMMIT');
@@ -127,34 +128,34 @@ async function deleteRecord(id) {
 }
 
 async function updateLifecycle(id, status) {
-  const result = await query(`UPDATE katalog SET lifecycle_status = $2, updated_at = NOW()
+  const result = await query(`UPDATE katalog SET status_koleksi = $2, waktu_diperbarui = NOW()
     WHERE id = $1 RETURNING id`, [id, status]);
   return Boolean(result.rowCount);
 }
 
 async function listDigitalContent() {
-  const result = await query(`SELECT d.id, d.catalog_record_id, d.file_name, d.mime_type,
-      d.file_size, d.uploaded_at, c.bibid, c.title
+  const result = await query(`SELECT d.id, d.id_katalog, d.nama_berkas, d.tipe_mime,
+      d.ukuran_berkas, d.waktu_diunggah, c.bibid, c.judul
     FROM konten_digital_katalog d
-    JOIN katalog c ON c.id = d.catalog_record_id
-    ORDER BY d.uploaded_at DESC, d.id DESC`);
-  return result.rows;
+    JOIN katalog c ON c.id = d.id_katalog
+    ORDER BY d.waktu_diunggah DESC, d.id DESC`);
+  return result.rows.map(toApiRow);
 }
 
 async function addDigitalContent(recordId, { fileName, mimeType, fileData }) {
   const record = await query('SELECT id FROM katalog WHERE id = $1', [recordId]);
   if (!record.rowCount) return null;
   const result = await query(`INSERT INTO konten_digital_katalog
-      (catalog_record_id, file_name, mime_type, file_size, file_data)
-    VALUES ($1, $2, $3, $4, $5) RETURNING id, catalog_record_id, file_name, mime_type, file_size, uploaded_at`,
+      (id_katalog, nama_berkas, tipe_mime, ukuran_berkas, data_berkas)
+    VALUES ($1, $2, $3, $4, $5) RETURNING id, id_katalog, nama_berkas, tipe_mime, ukuran_berkas, waktu_diunggah`,
   [recordId, fileName, mimeType, fileData.length, fileData]);
-  return result.rows[0] || null;
+  return toApiRow(result.rows[0]) || null;
 }
 
 async function getDigitalContent(id) {
-  const result = await query(`SELECT file_name, mime_type, file_data
+  const result = await query(`SELECT nama_berkas, tipe_mime, data_berkas
     FROM konten_digital_katalog WHERE id = $1`, [id]);
-  return result.rows[0] || null;
+  return toApiRow(result.rows[0]) || null;
 }
 
 async function deleteDigitalContent(id) {
@@ -163,29 +164,29 @@ async function deleteDigitalContent(id) {
 }
 
 async function listArticles(keyword = '') {
-  const result = await query(`SELECT id, title, creator, subject, serial_edition, catalog_title,
-      digital_content_url, created_at
+  const result = await query(`SELECT id, judul, pencipta, subjek, edisi_terbitan_berkala, judul_katalog,
+      url_konten_digital, waktu_dibuat
     FROM artikel_katalog
-    WHERE ($1 = '' OR title ILIKE '%' || $1 || '%' OR creator ILIKE '%' || $1 || '%')
-    ORDER BY created_at DESC, id DESC LIMIT 500`, [keyword]);
-  return result.rows;
+    WHERE ($1 = '' OR judul ILIKE '%' || $1 || '%' OR pencipta ILIKE '%' || $1 || '%')
+    ORDER BY waktu_dibuat DESC, id DESC LIMIT 500`, [keyword]);
+  return result.rows.map(toApiRow);
 }
 
 async function saveArticle(item) {
   const result = item.id
-    ? await query(`UPDATE artikel_katalog SET title = $2, creator = $3, subject = $4,
-        serial_edition = $5, catalog_title = $6, digital_content_url = $7, updated_at = NOW()
-      WHERE id = $1 RETURNING id, title`, [
+    ? await query(`UPDATE artikel_katalog SET judul = $2, pencipta = $3, subjek = $4,
+        edisi_terbitan_berkala = $5, judul_katalog = $6, url_konten_digital = $7, waktu_diperbarui = NOW()
+      WHERE id = $1 RETURNING id, judul`, [
       item.id, item.title, item.creator, item.subject, item.serial_edition,
       item.catalog_title, item.digital_content_url
     ])
     : await query(`INSERT INTO artikel_katalog
-        (title, creator, subject, serial_edition, catalog_title, digital_content_url)
-      VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, title`, [
+        (judul, pencipta, subjek, edisi_terbitan_berkala, judul_katalog, url_konten_digital)
+      VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, judul`, [
       item.title, item.creator, item.subject, item.serial_edition,
       item.catalog_title, item.digital_content_url
     ]);
-  return result.rows[0] || null;
+  return toApiRow(result.rows[0]) || null;
 }
 
 async function deleteArticle(id) {
@@ -194,13 +195,13 @@ async function deleteArticle(id) {
 }
 
 async function exportRecords(ids) {
-  const result = await query(`SELECT bibid, record_type, material_type, title, subtitle,
-      responsibility, creator, edition, publication_statement, physical_description,
-      subject, call_number, isbn, marc_data, rda_data
+  const result = await query(`SELECT bibid, jenis_rekaman, jenis_bahan, judul, anak_judul,
+      pernyataan_tanggung_jawab, pencipta, edisi, pernyataan_penerbitan, deskripsi_fisik,
+      subjek, nomor_panggil, isbn, data_marc, data_rda
     FROM katalog
     WHERE ($1::bigint[] IS NULL OR id = ANY($1::bigint[]))
     ORDER BY id`, [ids.length ? ids : null]);
-  return result.rows;
+  return result.rows.map(toApiRow);
 }
 
 module.exports = {
