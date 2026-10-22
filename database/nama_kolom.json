@@ -11,6 +11,7 @@
   "location": "lokasi",
   "lifecycle_status": "status_koleksi",
   "rda_metadata": "metadata_rda",
+  "acquisition_metadata": "metadata_pengadaan",
   "created_at": "waktu_dibuat",
   "updated_at": "waktu_diperbarui",
   "title": "judul",

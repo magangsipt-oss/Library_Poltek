@@ -23,6 +23,38 @@
     quarantine: 'Karantina',
     shipped: 'Dikirim'
   };
+  const acquisitionChoices = {
+    material_type: [
+      { value: 'monograf(Buku, Jurnal, Laporan, dll)', label: 'Monograf(Buku, Jurnal, Laporan, dll)' },
+      { value: 'terbitan berkala(surat kabar, majalah, dll)', label: 'Terbitan Berkala(Surat Kabar, Majalah, dll)' },
+      { value: 'skripsi(karya akademik mahasiswa S1)', label: 'Skripsi(Karya Akademik Mahasiswa S1)' },
+      { value: 'tesis(karya akademik mahasiswa S2)', label: 'Tesis(Karya Akademik Mahasiswa S2)' },
+      { value: 'bahan grafis(foto, lukisan, dll)', label: 'Bahan Grafis(Foto, Lukisan, dll)' },
+      { value: 'rekaman video', label: 'Rekaman Video' },
+      { value: 'musik', label: 'Musik' },
+      { value: 'bahan kartografis(peta, dll)', label: 'Bahan Kartografis(Peta, dll)' },
+      { value: 'sumber elektronik(cd-rom, floppy disk, vcd, dll)', label: 'Sumber Elektronik(CD-ROM, Floppy Disk, VCD, dll)' },
+      { value: 'rekaman suara', label: 'Rekaman Suara' },
+      { value: 'film(film, dll)', label: 'Film(Film, dll)' },
+      { value: 'bentuk mikro', label: 'Bentuk Mikro' },
+      { value: 'manuskrip', label: 'Manuskrip' },
+      { value: 'bahan ephemeral', label: 'Bahan Ephemeral' }
+    ],
+    source_type: ['Pembelian', 'Hadiah/Hibah', 'Penggantian', 'Penggandaan', 'Tukar Menukar', 'Terbitan Sendiri', 'Deposit (UU No4/1990)'],
+    physical_form: ['*** Tidak Diketahui ***', 'Buku', 'CD-ROM', 'VCD', 'DVD', 'Permainan', 'Alat Musik', 'Surat Kabar', 'Atlas', 'Blue Ray', 'Buletin', 'CD', 'Foto', 'Gambar', 'Globe', 'Kaset', 'Lukisan', 'Majalah', 'Mikrofilm', 'Mikrofis', 'Mikrolegap', 'Mikropak', 'Naskah', 'Partitur Musik', 'Peta', 'Piringan Hitam', 'Realia (Patung)', 'Spanduk', 'Tabloid'],
+    category: ['*** Tidak Diketahui ***', 'Koleksi Umum', 'Koleksi Referensi'],
+    access_type: [
+      { value: 'Dapat dipinjam', label: 'Dapat dipinjam' },
+      { value: 'Baca di tempat', label: 'Baca di tempat' },
+      { value: 'Tandon', label: 'Tandon' },
+      { value: 'Deposit', label: 'Deposit' }
+    ],
+    library_location: ['Perpustakaan Pusat', 'Perpustakaan Keliling 01'],
+    room_location: ['Ruang Baca Umum', 'Ruang Koleksi Referensi', 'Lobby Utama'],
+    availability: ['Tersedia', 'Tidak diketahui', 'Rusak', 'Dalam Perbaikan', 'Dipinjam', 'Dalam Penggandaan', 'Diolah', 'Hilang', 'Tandon', 'Dihibahkan', 'Dibaca'],
+    currency: [{ value: 'IDR', label: 'Rupiah' }, { value: 'USD', label: 'Dollar AS' }],
+    price_unit: ['Per eksemplar', 'Per jilid']
+  };
   let renderVersion = 0;
 
   function escapeHtml(value) {
@@ -77,6 +109,40 @@
       <select id="acq-${name}" name="${name}" ${required ? 'required' : ''}>${options}</select></div>`;
   }
 
+  function searchableChoiceField(label, name, choices, required = false) {
+    const id = `acq-${name}`;
+    return `<div class="module-field"><label for="${id}">${escapeHtml(label)}</label>
+      <div class="acq-material-picker acq-searchable-picker" data-choice-picker="${name}">
+        <input id="${id}" name="${name}" type="text" role="combobox" aria-autocomplete="list"
+          aria-expanded="false" aria-controls="${id}-options" maxlength="80"
+          placeholder="Ketik atau pilih ${escapeHtml(label.toLocaleLowerCase('id'))}" ${required ? 'required' : ''}>
+        <button class="acq-material-toggle" type="button" data-action="toggle-choice-options"
+          aria-label="Tampilkan pilihan ${escapeHtml(label.toLocaleLowerCase('id'))}" aria-expanded="false"></button>
+        <div class="acq-material-options acq-searchable-options" id="${id}-options" role="listbox" hidden>
+          <input class="acq-choice-search" type="search" aria-label="Cari ${escapeHtml(label.toLocaleLowerCase('id'))}"
+            placeholder="Ketik untuk mencari...">
+          <div class="acq-choice-results">
+            ${choices.map((choice, index) => {
+              const text = typeof choice === 'string' ? choice : choice.label;
+              return `<button class="acq-material-option" type="button" role="option" aria-selected="false"
+                data-action="select-choice-option" data-index="${index}">${escapeHtml(text)}</button>`;
+            }).join('')}
+          </div>
+        </div>
+      </div></div>`;
+  }
+
+  function choiceOptions(name, placeholder = '') {
+    const choices = acquisitionChoices[name];
+    if (!choices) throw new Error(`Pilihan ${name} tidak ditemukan.`);
+    const options = choices.map(choice => {
+      const value = typeof choice === 'string' ? choice : choice.value;
+      const label = typeof choice === 'string' ? choice : choice.label;
+      return `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`;
+    }).join('');
+    return `${placeholder ? `<option value="">${escapeHtml(placeholder)}</option>` : ''}${options}`;
+  }
+
   function table(headers, rows, emptyMessage) {
     return `<div class="module-table-wrap"><table class="module-table"><thead><tr>${headers.map(header => `<th>${escapeHtml(header)}</th>`).join('')}</tr></thead>
       <tbody>${rows || `<tr><td class="module-table-empty" colspan="${headers.length}">${escapeHtml(emptyMessage)}</td></tr>`}</tbody></table></div>`;
@@ -104,6 +170,17 @@
     return (await api(path)).items;
   }
 
+  async function getCatalogTitles() {
+    const response = await fetch('/api/admin/catalog/records?status=all', { credentials: 'same-origin' });
+    if (response.status === 401) {
+      window.location.replace('/admin/login.html');
+      throw new Error('Sesi admin berakhir. Silakan masuk kembali.');
+    }
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || 'Daftar judul katalog gagal dimuat.');
+    return result.items;
+  }
+
   async function renderSources() {
     const items = await getItems('/sources');
     const rows = items.map(item => `<tr><td>${escapeHtml(item.name)}</td><td>${escapeHtml(item.address || '—')}</td>
@@ -123,7 +200,7 @@
 
   async function acquisitionForm(isRda) {
     const sources = await getItems('/sources');
-    const sourceOptions = `<option value="">Pilih sumber perolehan</option>${sources.map(item =>
+    const sourceOptions = `<option value="">---Belum ditentukan---</option>${sources.map(item =>
       `<option value="${item.id}">${escapeHtml(item.name)}</option>`).join('')}`;
     const rdaFields = isRda ? `<div class="module-form-grid">
       ${field('Pernyataan tanggung jawab', 'responsibility_statement', { max: 500 })}
@@ -131,28 +208,87 @@
       ${field('Deskripsi fisik', 'physical_description', { max: 255 })}
       ${field('Seri', 'series_statement', { max: 255 })}${field('Identifier lain', 'other_identifier', { max: 120 })}
       </div>` : '';
-    return panel('Data Pengadaan', `<div class="module-panel-body">
-      <form class="module-form" data-form="acquisition" data-record-type="${isRda ? 'rda' : 'standard'}">
-        <div class="module-form-grid">
-          ${field('Judul', 'title', { required: true, max: 255 })}${field('Pengarang', 'author', { max: 255 })}
-          ${field('Penerbit', 'publisher', { max: 255 })}${field('Tahun terbit', 'publication_year', { type: 'number', min: 1000, maxValue: 9999 })}
-          ${field('ISBN', 'isbn', { max: 32 })}${selectField('Jenis bahan', 'material_type',
-            '<option value="buku">Buku</option><option value="ta">Tugas Akhir</option><option value="jurnal">Jurnal</option><option value="modul">Modul</option><option value="lainnya">Lainnya</option>', true)}
-          ${field('Kategori', 'category', { max: 120 })}${field('Subjek', 'subject', { max: 5000 })}
-          ${field('Nomor panggil', 'call_number', { max: 80 })}
-          ${selectField('Jenis sumber', 'source_id', sourceOptions)}
-          ${field('Jumlah eksemplar', 'quantity', { type: 'number', min: 1, maxValue: 100000, value: 1, required: true })}
-          ${field('Nomor induk', 'accession_no', { max: 80 })}${field('No Barcode', 'barcode', { max: 80 })}
-          ${field('No RFID', 'rfid', { max: 80 })}
-          ${field('Tanggal pengadaan', 'acquisition_date', { type: 'date', value: new Date().toISOString().slice(0, 10), required: true })}
-          ${field('Bentuk fisik', 'physical_form', { value: 'Buku', max: 80, required: true })}
-          ${selectField('Akses', 'access_type', '<option>Dapat dipinjam</option><option>Hanya dibaca di tempat</option>', true)}
-          ${field('Lokasi perpustakaan', 'location', { max: 160 })}
+    const sourceControl = `<div class="module-field"><label for="acq-source-id">Nama Sumber</label>
+    <div class="acq-source-control"><select id="acq-source-id" name="source_id">${sourceOptions}</select>
+      <a class="module-button is-danger" href="#acq-sources">Tambah</a>
+      <a class="module-button is-danger" href="#acq-sources">Koreksi</a></div></div>`;
+    const priceControl = `<div class="module-field acq-price-field"><label for="acq-price">Harga</label>
+    <div class="acq-price-control"><input id="acq-price" name="price" type="number" min="0" max="999999999999" step="0.01" value="0.00">
+      <div class="module-field"><label for="acq-price_unit">Satuan harga</label>
+        <select id="acq-price_unit" name="price_unit">${choiceOptions('price_unit')}</select></div></div></div>`;
+    return `<form id="acquisition-form" class="module-form acquisition-entry-form" data-form="acquisition" data-record-type="${isRda ? 'rda' : 'standard'}">
+      <input type="hidden" name="book_id">
+      <input type="hidden" name="title">
+      <input type="hidden" name="author">
+      <input type="hidden" name="publisher">
+      <input type="hidden" name="publication_year">
+      <input type="hidden" name="isbn">
+      <input type="hidden" name="subject">
+      <div class="module-form-actions acquisition-entry-toolbar">
+        <button class="module-button is-success" type="submit" form="acquisition-form">Simpan</button>
+        <button class="module-button is-info" type="button" data-action="choose-title">Pilih Judul</button>
+        <button class="module-button is-info" type="button" data-action="copy-catalog-title">Salin Katalog dari</button>
+        <a class="module-button is-complete" href="#acq-list">Selesai</a>
+      </div>
+      <div class="acquisition-entry-content">
+        <p class="acq-selected-title" id="acq-selected-title" hidden></p>
+        <div class="module-field acquisition-material-type"><label for="acq-material_type">Jenis Bahan</label>
+          <div class="acq-material-picker">
+            <input id="acq-material_type" name="material_type" type="text" role="combobox"
+              aria-autocomplete="list" aria-expanded="false" aria-controls="acq-material-type-options"
+              maxlength="30" placeholder="Ketik atau pilih jenis bahan" required>
+            <button class="acq-material-toggle" type="button" data-action="toggle-material-options"
+              aria-label="Tampilkan pilihan jenis bahan" aria-expanded="false"></button>
+            <div class="acq-material-options" id="acq-material-type-options" role="listbox" hidden>
+              ${acquisitionChoices.material_type.map((choice, index) =>
+                `<button class="acq-material-option" type="button" role="option" aria-selected="false"
+                  data-action="select-material-option" data-index="${index}">${escapeHtml(choice.label)}</button>`).join('')}
+            </div>
+          </div>
         </div>
+        <section class="module-panel acquisition-entry-panel">
+          <div class="module-panel-heading"><h2>Data Pengadaan</h2></div>
+          <div class="module-panel-body">
+            <div class="acq-form-row acq-quantity-row">${field('Jumlah Eksemplar', 'quantity', { type: 'number', min: 1, maxValue: 100000, value: 1, required: true })}</div>
+            <div class="acq-identity-row">
+              <span aria-hidden="true"></span>
+              <div class="acq-identity-grid">
+                ${field('No Induk', 'accession_no', { max: 80 })}
+                ${field('No Barcode', 'barcode', { max: 80 })}
+                ${field('No RFID', 'rfid', { max: 80 })}
+              </div>
+            </div>
+            <div class="acq-form-row">${field('Tanggal Pengadaan', 'acquisition_date', { type: 'date', value: new Date().toISOString().slice(0, 10), required: true })}</div>
+            <div class="acq-form-row">${selectField('Jenis Sumber', 'source_type', choiceOptions('source_type', 'Pilih Jenis Sumber'), true)}</div>
+            <div class="acq-form-row">${sourceControl}</div>
+            <div class="acq-form-row">${searchableChoiceField('Bentuk Fisik', 'physical_form', acquisitionChoices.physical_form, true)}</div>
+            <div class="acq-form-row">${selectField('Kategori', 'category', choiceOptions('category'))}</div>
+            <div class="acq-form-row">${selectField('Akses', 'access_type', choiceOptions('access_type'), true)}</div>
+            <div class="acq-form-row">${selectField('Lokasi Perpustakaan', 'location', choiceOptions('library_location'))}</div>
+            <div class="acq-form-row">${selectField('Lokasi Ruang', 'room_location', choiceOptions('room_location'))}</div>
+            <div class="acq-form-row">${searchableChoiceField('Ketersediaan', 'availability', acquisitionChoices.availability)}</div>
+            <div class="acq-form-row">${selectField('Mata Uang', 'currency', choiceOptions('currency'))}</div>
+            <div class="acq-form-row">${priceControl}</div>
+            <div class="acq-form-row">${field('Nomor Panggil', 'call_number', { max: 80 })}</div>
+          </div>
+        </section>
+        <label class="acq-opac-toggle"><input type="hidden" name="show_in_opac" value="false">
+          <input type="checkbox" name="show_in_opac" value="true" checked><span>Tampil di OPAC</span></label>
         ${rdaFields}
-        <div class="module-form-actions"><button class="module-button is-primary" type="submit">Simpan</button>
-          <a class="module-button is-neutral" href="#acq-list">Selesai</a></div>
-      </form></div>`);
+        <div class="module-form-actions acquisition-entry-toolbar">
+          <button class="module-button is-success" type="submit">Simpan</button>
+          <button class="module-button is-info" type="button" data-action="choose-title">Pilih Judul</button>
+          <button class="module-button is-info" type="button" data-action="copy-catalog-title">Salin Katalog dari</button>
+          <a class="module-button is-complete" href="#acq-list">Selesai</a>
+        </div>
+      </div>
+      <dialog class="acq-title-dialog" aria-labelledby="acq-title-dialog-heading">
+        <div class="acq-title-dialog-heading"><h2 id="acq-title-dialog-heading">Pilih Judul Katalog</h2>
+          <button class="module-button is-neutral" type="button" data-action="close-title-dialog">Tutup</button></div>
+        <input class="module-filter acq-title-search" type="search" placeholder="Cari judul, pengarang, atau BIBID" aria-label="Cari judul katalog">
+        <div class="acq-title-options" aria-live="polite"></div>
+      </dialog>
+    </form>`;
   }
 
   async function collectionTable(status) {
@@ -437,7 +573,77 @@
     const button = event.target.closest('[data-action]');
     if (!button) return;
     try {
-      if (button.dataset.action === 'edit-source') {
+      if (button.dataset.action === 'toggle-material-options') {
+        const input = content.querySelector('#acq-material_type');
+        const options = content.querySelector('#acq-material-type-options');
+        const shouldOpen = options.hidden;
+        filterMaterialOptions(input.value);
+        setMaterialOptionsOpen(shouldOpen);
+        if (shouldOpen) input.focus();
+      } else if (button.dataset.action === 'toggle-choice-options') {
+        const picker = button.closest('.acq-searchable-picker');
+        const shouldOpen = picker.querySelector('.acq-material-options').hidden;
+        setChoicePickerOpen(picker, shouldOpen);
+        if (shouldOpen) picker.querySelector('.acq-choice-search').focus();
+      } else if (button.dataset.action === 'select-material-option') {
+        const choice = acquisitionChoices.material_type[Number(button.dataset.index)];
+        if (!choice) throw new Error('Pilihan jenis bahan tidak ditemukan.');
+        content.querySelector('#acq-material_type').value = choice.label;
+        setMaterialOptionsOpen(false);
+      } else if (button.dataset.action === 'select-choice-option') {
+        const picker = button.closest('.acq-searchable-picker');
+        const choices = acquisitionChoices[picker.dataset.choicePicker];
+        const choice = choices && choices[Number(button.dataset.index)];
+        if (!choice) throw new Error('Pilihan tidak ditemukan.');
+        picker.querySelector('input[name]').value = typeof choice === 'string' ? choice : choice.label;
+        setChoicePickerOpen(picker, false);
+      } else if (button.dataset.action === 'choose-title' || button.dataset.action === 'copy-catalog-title') {
+        const dialog = content.querySelector('.acq-title-dialog');
+        const options = dialog.querySelector('.acq-title-options');
+        const titles = await getCatalogTitles();
+        options.innerHTML = titles.length ? titles.map((item, index) => `<button class="acq-title-option" type="button"
+          data-action="select-catalog-title" data-index="${index}">
+          <strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.creator || item.author || 'Pengarang tidak diketahui')}
+          · ${escapeHtml(item.bibid || '')}</span></button>`).join('')
+          : '<p class="module-table-empty">Belum ada judul di katalog.</p>';
+        dialog.dataset.titles = JSON.stringify(titles);
+        dialog.querySelector('.acq-title-search').value = '';
+        dialog.showModal();
+      } else if (button.dataset.action === 'close-title-dialog') {
+        button.closest('dialog').close();
+      } else if (button.dataset.action === 'select-catalog-title') {
+        const dialog = button.closest('dialog');
+        const titles = JSON.parse(dialog.dataset.titles || '[]');
+        const title = titles[Number(button.dataset.index)];
+        if (!title) throw new Error('Judul katalog tidak ditemukan.');
+        const form = document.getElementById('acquisition-form');
+        const values = {
+          book_id: title.book_id || '',
+          title: title.title || '',
+          author: title.creator || title.author || '',
+          publisher: title.publisher || title.publication_statement || '',
+          publication_year: title.publication_year || '',
+          isbn: title.isbn || '',
+          category: title.category || '*** Tidak Diketahui ***',
+          subject: title.subject || '',
+          call_number: title.call_number || '',
+          material_type: ({
+            Monograf: 'buku',
+            Serial: 'jurnal',
+            'Bahan khusus': 'lainnya'
+          })[title.material_type] || (['buku', 'ta', 'jurnal', 'modul', 'lainnya'].includes(title.material_type)
+            ? title.material_type : 'lainnya')
+        };
+        for (const [name, value] of Object.entries(values)) {
+          const control = form.elements.namedItem(name);
+          if (control) control.value = value;
+        }
+        const selectedTitle = form.querySelector('#acq-selected-title');
+        selectedTitle.textContent = `Judul terpilih: ${title.title}`;
+        selectedTitle.hidden = false;
+        dialog.close();
+        showMessage(`Judul "${title.title}" berhasil dimasukkan ke formulir.`);
+      } else if (button.dataset.action === 'edit-source') {
         const sources = await getItems('/sources');
         const source = sources.find(item => String(item.id) === button.dataset.id);
         if (!source) throw new Error('Sumber perolehan tidak ditemukan.');
@@ -480,6 +686,124 @@
       showMessage(error.message, true);
     }
   });
+
+  content.addEventListener('input', event => {
+    if (event.target.matches('#acquisition-form #acq-material_type')) {
+      filterMaterialOptions(event.target.value);
+      setMaterialOptionsOpen(true);
+      return;
+    }
+    const picker = event.target.closest('.acq-searchable-picker');
+    if (picker && (event.target.matches('input[name]') || event.target.matches('.acq-choice-search'))) {
+      filterChoicePicker(picker, event.target.value);
+      setChoicePickerOpen(picker, true);
+      return;
+    }
+    const search = event.target.closest('.acq-title-search');
+    if (search) {
+      const keyword = search.value.trim().toLocaleLowerCase('id');
+      content.querySelectorAll('.acq-title-option').forEach(option => {
+        option.hidden = keyword !== '' && !option.textContent.toLocaleLowerCase('id').includes(keyword);
+      });
+      return;
+    }
+    if (event.target.matches('#acquisition-form [name="title"]')) {
+      const bookId = document.querySelector('#acquisition-form [name="book_id"]');
+      if (bookId) bookId.value = '';
+    }
+  });
+
+  content.addEventListener('focusin', event => {
+    if (event.target.matches('#acquisition-form #acq-material_type')) {
+      filterMaterialOptions(event.target.value);
+      setMaterialOptionsOpen(true);
+    } else if (event.target.matches('.acq-searchable-picker input[name]')) {
+      const picker = event.target.closest('.acq-searchable-picker');
+      filterChoicePicker(picker, event.target.value);
+      setChoicePickerOpen(picker, true);
+    }
+  });
+
+  content.addEventListener('keydown', event => {
+    const choicePicker = event.target.closest('.acq-searchable-picker');
+    const isMaterialPicker = event.target.matches('#acquisition-form #acq-material_type');
+    if (!choicePicker && !isMaterialPicker) return;
+    if (choicePicker && !event.target.matches('input')) return;
+    const options = [...(choicePicker
+      ? choicePicker.querySelectorAll('.acq-material-option:not([hidden])')
+      : content.querySelectorAll('#acq-material-type-options .acq-material-option:not([hidden])'))];
+    const selectedIndex = options.findIndex(option => option.getAttribute('aria-selected') === 'true');
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      setMaterialOptionActive(options, selectedIndex + (event.key === 'ArrowDown' ? 1 : -1));
+    } else if (event.key === 'Enter' && selectedIndex >= 0) {
+      event.preventDefault();
+      options[selectedIndex].click();
+    } else if (event.key === 'Escape') {
+      if (choicePicker) setChoicePickerOpen(choicePicker, false);
+      else setMaterialOptionsOpen(false);
+    }
+  });
+
+  document.addEventListener('pointerdown', event => {
+    if (!event.target.closest('.acq-material-picker')) {
+      setMaterialOptionsOpen(false);
+      content.querySelectorAll('.acq-searchable-picker').forEach(picker => setChoicePickerOpen(picker, false));
+    }
+  });
+
+  function filterMaterialOptions(value) {
+    const keyword = value.trim().toLocaleLowerCase('id');
+    content.querySelectorAll('.acq-material-option').forEach(option => {
+      option.hidden = keyword !== '' && !option.textContent.trim().toLocaleLowerCase('id').includes(keyword);
+      option.setAttribute('aria-selected', 'false');
+    });
+  }
+
+  function setMaterialOptionsOpen(open) {
+    const input = content.querySelector('#acq-material_type');
+    const options = content.querySelector('#acq-material-type-options');
+    const toggle = content.querySelector('.acq-material-toggle');
+    if (!input || !options || !toggle) return;
+    options.hidden = !open;
+    input.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+
+  function filterChoicePicker(picker, value) {
+    const keyword = value.trim().toLocaleLowerCase('id');
+    picker.querySelectorAll('.acq-material-option').forEach(option => {
+      option.hidden = keyword !== '' && !option.textContent.trim().toLocaleLowerCase('id').includes(keyword);
+      option.setAttribute('aria-selected', 'false');
+    });
+  }
+
+  function setChoicePickerOpen(picker, open) {
+    const input = picker.querySelector('input[name]');
+    const options = picker.querySelector('.acq-material-options');
+    const search = picker.querySelector('.acq-choice-search');
+    const toggle = picker.querySelector('.acq-material-toggle');
+    if (!input || !options || !search || !toggle) return;
+    if (open && options.hidden) {
+      const currentValue = input.value.trim().toLocaleLowerCase('id');
+      const isKnownChoice = [...picker.querySelectorAll('.acq-material-option')]
+        .some(option => option.textContent.trim().toLocaleLowerCase('id') === currentValue);
+      search.value = isKnownChoice ? '' : input.value;
+      filterChoicePicker(picker, search.value);
+    }
+    options.hidden = !open;
+    input.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+
+  function setMaterialOptionActive(options, index) {
+    if (!options.length) return;
+    const activeIndex = ((index % options.length) + options.length) % options.length;
+    options.forEach((option, optionIndex) => {
+      option.setAttribute('aria-selected', String(optionIndex === activeIndex));
+    });
+    options[activeIndex].scrollIntoView({ block: 'nearest' });
+  }
 
   window.addEventListener('hashchange', render);
   render();

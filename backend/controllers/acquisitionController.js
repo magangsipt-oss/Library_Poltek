@@ -2,7 +2,14 @@ const AcquisitionModel = require('../models/AcquisitionModel');
 
 const lifecycleStatuses = new Set(['in_stock', 'basket', 'quarantine', 'shipped']);
 const proposalStatuses = new Set(['pending', 'approved', 'rejected', 'acquired']);
-const materialTypes = new Set(['buku', 'ta', 'jurnal', 'modul', 'lainnya']);
+const materialTypeAliases = new Map([
+  ['buku', 'buku'],
+  ['tugas akhir', 'ta'],
+  ['ta', 'ta'],
+  ['jurnal', 'jurnal'],
+  ['modul', 'modul'],
+  ['lainnya', 'lainnya']
+]);
 
 function validationError(message) {
   const error = new Error(message);
@@ -64,9 +71,14 @@ function acquisitionInput(body, recordType = 'standard') {
   const type = recordType === 'rda' ? 'rda' : 'standard';
   const metadata = body.rda_metadata && typeof body.rda_metadata === 'object'
     && !Array.isArray(body.rda_metadata) ? body.rda_metadata : {};
-  const materialType = body.material_type || 'buku';
-  if (!materialTypes.has(materialType)) throw validationError('Jenis bahan tidak valid.');
+  const price = text(body.price, 16, 'Harga');
+  if (price && !/^\d{1,12}(?:\.\d{1,2})?$/.test(price)) {
+    throw validationError('Harga harus berupa angka positif dengan maksimal dua angka desimal.');
+  }
+  const rawMaterialType = text(body.material_type || 'buku', 30, 'Jenis bahan', true);
+  const materialType = materialTypeAliases.get(rawMaterialType.toLocaleLowerCase('id-ID')) || rawMaterialType;
   return {
+    book_id: body.book_id ? idValue(body.book_id, 'Judul') : null,
     record_type: type,
     title: text(body.title, 255, 'Judul', true),
     author: text(body.author, 255, 'Pengarang'),
@@ -86,6 +98,15 @@ function acquisitionInput(body, recordType = 'standard') {
     physical_form: text(body.physical_form || 'Buku', 80, 'Bentuk fisik', true),
     access_type: text(body.access_type || 'Dapat dipinjam', 80, 'Akses', true),
     location: text(body.location, 160, 'Lokasi'),
+    acquisition_metadata: {
+      source_type: text(body.source_type, 40, 'Jenis sumber'),
+      room_location: text(body.room_location, 160, 'Lokasi ruang'),
+      availability: text(body.availability || 'Tersedia', 40, 'Ketersediaan', true),
+      currency: text(body.currency || 'IDR', 3, 'Mata uang', true),
+      price: price || '0',
+      price_unit: text(body.price_unit || 'Per eksemplar', 40, 'Satuan harga', true),
+      show_in_opac: body.show_in_opac !== 'false' && body.show_in_opac !== false
+    },
     rda_metadata: metadata
   };
 }

@@ -29,7 +29,7 @@ async function listCollections(status, keyword = '') {
       a.kode_batang, a.rfid, COALESCE(a.tanggal_perolehan, b.waktu_dibuat::date) AS tanggal_perolehan,
       COALESCE(a.jumlah, b.total_eksemplar) AS jumlah, COALESCE(a.bentuk_fisik, 'Buku') AS bentuk_fisik,
       COALESCE(a.jenis_akses, 'Dapat dipinjam') AS jenis_akses, COALESCE(a.lokasi, b.lokasi_rak, '') AS lokasi,
-      COALESCE(a.status_koleksi, 'in_stock') AS status_koleksi, a.metadata_rda,
+      COALESCE(a.status_koleksi, 'in_stock') AS status_koleksi, a.metadata_rda, a.metadata_pengadaan,
       (a.id IS NULL) AS is_legacy, b.judul, b.pengarang, b.penerbit, b.tahun_terbit,
       b.isbn, b.jenis_bahan, b.kategori, s.nama AS source_name
     FROM buku b
@@ -44,7 +44,22 @@ async function listCollections(status, keyword = '') {
 }
 
 async function insertAcquisition(client, item) {
-  const bookResult = await client.query(`INSERT INTO buku
+  let bookId;
+  if (item.book_id) {
+    const bookResult = await client.query(`UPDATE buku
+      SET total_eksemplar = total_eksemplar + $2,
+          eksemplar_tersedia = eksemplar_tersedia + $2,
+          waktu_diperbarui = NOW()
+      WHERE id = $1
+      RETURNING id`, [item.book_id, item.quantity]);
+    if (!bookResult.rowCount) {
+      const error = new Error('Judul yang dipilih tidak ditemukan.');
+      error.code = '23503';
+      throw error;
+    }
+    bookId = bookResult.rows[0].id;
+  } else {
+    const bookResult = await client.query(`INSERT INTO buku
       (isbn, judul, pengarang, penerbit, tahun_terbit, jenis_bahan, kategori, subjek,
        nomor_panggil, lokasi_rak, total_eksemplar, eksemplar_tersedia)
     VALUES (NULLIF($1, ''), $2, $3, NULLIF($4, ''), $5, $6, NULLIF($7, ''), NULLIF($8, ''),
@@ -65,16 +80,19 @@ async function insertAcquisition(client, item) {
     item.isbn, item.title, item.author, item.publisher, item.publication_year,
     item.material_type, item.category, item.subject, item.call_number,
     item.location, item.quantity
-  ]);
+    ]);
+    bookId = bookResult.rows[0].id;
+  }
 
   const result = await client.query(`INSERT INTO akuisisi
-      (id_buku, id_sumber_perolehan, jenis_rekaman, nomor_induk, kode_batang, rfid, tanggal_perolehan,
-       jumlah, bentuk_fisik, jenis_akses, lokasi, status_koleksi, metadata_rda)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'in_stock', $12::jsonb)
+    (id_buku, id_sumber_perolehan, jenis_rekaman, nomor_induk, kode_batang, rfid, tanggal_perolehan,
+     jumlah, bentuk_fisik, jenis_akses, lokasi, status_koleksi, metadata_rda, metadata_pengadaan)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'in_stock', $12::jsonb, $13::jsonb)
     RETURNING id`, [
-    bookResult.rows[0].id, item.source_id, item.record_type, item.accession_no,
+    bookId, item.source_id, item.record_type, item.accession_no,
     item.barcode, item.rfid, item.acquisition_date, item.quantity,
-    item.physical_form, item.access_type, item.location, JSON.stringify(item.rda_metadata)
+    item.physical_form, item.access_type, item.location, JSON.stringify(item.rda_metadata),
+    JSON.stringify(item.acquisition_metadata)
   ]);
   return toApiRow(result.rows[0]);
 }

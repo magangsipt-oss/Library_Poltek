@@ -15,7 +15,10 @@ async function listBooks({ keyword = '', field = 'judul', material = 'all', orde
     : 'waktu_dibuat DESC, id DESC';
   const params = [keyword.trim(), material, limit];
   const whereClause = `($1 = '' OR ${searchExpression} ILIKE '%' || $1 || '%')
-    AND ($2 = 'all' OR jenis_bahan = $2)`;
+    AND ($2 = 'all' OR jenis_bahan = $2)
+    AND (NOT EXISTS (SELECT 1 FROM akuisisi a WHERE a.id_buku = buku.id)
+      OR EXISTS (SELECT 1 FROM akuisisi a
+        WHERE a.id_buku = buku.id AND a.metadata_pengadaan->>'show_in_opac' IS DISTINCT FROM 'false'))`;
   const [countResult, booksResult] = await Promise.all([
     query(`SELECT COUNT(*)::int AS total FROM buku WHERE ${whereClause}`, params.slice(0, 2)),
     query(`SELECT id, isbn, judul, pengarang, penerbit, tahun_terbit, jenis_bahan,

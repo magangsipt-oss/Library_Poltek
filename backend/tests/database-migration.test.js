@@ -47,6 +47,7 @@ before(async () => {
     server.once('listening', resolve);
     server.once('error', reject);
   });
+
   baseUrl = `http://127.0.0.1:${server.address().port}`;
 });
 
@@ -65,9 +66,51 @@ function acquisitionInput(overrides = {}) {
     isbn: '', source_id: null, record_type: 'standard', accession_no: randomUUID(),
     barcode: randomUUID(), rfid: '', acquisition_date: '2026-10-22', quantity: 2,
     physical_form: 'Buku', access_type: 'Dapat dipinjam', location: 'Rak Uji',
-    rda_metadata: { content_type: 'teks' }, ...overrides
+    rda_metadata: { content_type: 'teks' },
+    acquisition_metadata: {
+      source_type: 'Pembelian', room_location: 'Ruang Baca Umum', availability: 'Tersedia',
+      currency: 'IDR', price: '0', price_unit: 'Per eksemplar', show_in_opac: true
+    }, ...overrides
   };
 }
+
+test('entri pengadaan yang disalin dari katalog menambah eksemplar pada judul yang dipilih', async () => {
+  const source = await Acquisition.saveSource({ name: 'Sumber Pilih Judul', address: '', phone: '', exemplar_count: 0 });
+  const original = await Acquisition.createAcquisition(acquisitionInput({
+    title: 'Judul dipilih', isbn: '', quantity: 1, barcode: randomUUID(), accession_no: randomUUID()
+  }));
+  const book = (await Acquisition.listCollections('all', 'Judul dipilih'))[0];
+  const copied = await Acquisition.createAcquisition(acquisitionInput({
+    book_id: book.book_id, title: 'Judul dipilih', source_id: source.id, quantity: 3,
+    barcode: randomUUID(), accession_no: randomUUID()
+  }));
+  const rows = await Acquisition.listCollections('all', 'Judul dipilih');
+  assert.equal(rows.length, 2);
+  assert.equal((await database.query('SELECT total_eksemplar FROM buku WHERE id=$1', [book.book_id])).rows[0].total_eksemplar, 4);
+  const { items } = await Book.listBooks({ keyword: 'Judul dipilih' });
+  assert.equal(items.length, 1);
+  assert.equal(await Acquisition.deleteAcquisition(original.id), true);
+  assert.equal(await Acquisition.deleteAcquisition(copied.id), true);
+  await database.query('DELETE FROM buku WHERE id=$1', [book.book_id]);
+  assert.equal(await Acquisition.deleteSource(source.id), true);
+});
+
+test('ketersediaan OPAC mengikuti pengaturan metadata pengadaan', async () => {
+  const title = `Koleksi privat ${randomUUID()}`;
+  const item = await Acquisition.createAcquisition(acquisitionInput({
+    title,
+    isbn: '',
+    barcode: randomUUID(),
+    accession_no: randomUUID(),
+    acquisition_metadata: { show_in_opac: false }
+  }));
+  const row = (await Acquisition.listCollections('all', title))[0];
+  const { items } = await Book.listBooks({ keyword: title });
+  assert.equal(row.acquisition_metadata.show_in_opac, false);
+  assert.equal(items.length, 0);
+  await Acquisition.deleteAcquisition(item.id);
+  await database.query('DELETE FROM buku WHERE id=$1', [row.book_id]);
+});
 
 test('instalasi baru membuat 31 tabel dengan kolom Indonesia tanpa menggandakan seed', async () => {
   const { rows } = await database.query(`SELECT table_name, column_name
@@ -77,7 +120,7 @@ test('instalasi baru membuat 31 tabel dengan kolom Indonesia tanpa menggandakan 
   assert.equal((await database.query('SELECT count(*)::int AS total FROM buku')).rows[0].total, 8);
   assert.equal((await database.query('SELECT count(*)::int AS total FROM jenis_anggota')).rows[0].total, 4);
   const columns = rows.filter(row => row.table_name === 'akuisisi').map(row => row.column_name);
-  for (const name of ['id_buku', 'id_sumber_perolehan', 'jumlah', 'tanggal_perolehan', 'waktu_dibuat']) {
+  for (const name of ['id_buku', 'id_sumber_perolehan', 'jumlah', 'tanggal_perolehan', 'waktu_dibuat', 'metadata_pengadaan']) {
     assert(columns.includes(name), name);
   }
 });
@@ -130,6 +173,7 @@ test('entri, upsert, impor, status, pengiriman, dan penghapusan koleksi tetap be
   assert.equal(rows[0].source_name, 'Sumber Diperbarui');
   assert.equal(rows[0].quantity, 2);
   assert.deepEqual(rows[0].rda_metadata, { content_type: 'teks' });
+  assert.equal(rows[0].acquisition_metadata.source_type, 'Pembelian');
   const bookId = rows[0].book_id;
   assert.equal((await database.query('SELECT total_eksemplar FROM buku WHERE id=$1', [bookId])).rows[0].total_eksemplar, 4);
   await Acquisition.updateLifecycle(first.id, 'basket');
