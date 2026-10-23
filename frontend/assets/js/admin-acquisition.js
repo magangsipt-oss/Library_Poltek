@@ -25,17 +25,17 @@
   };
   const acquisitionChoices = {
     material_type: [
-      { value: 'monograf(Buku, Jurnal, Laporan, dll)', label: 'Monograf(Buku, Jurnal, Laporan, dll)' },
-      { value: 'terbitan berkala(surat kabar, majalah, dll)', label: 'Terbitan Berkala(Surat Kabar, Majalah, dll)' },
-      { value: 'skripsi(karya akademik mahasiswa S1)', label: 'Skripsi(Karya Akademik Mahasiswa S1)' },
-      { value: 'tesis(karya akademik mahasiswa S2)', label: 'Tesis(Karya Akademik Mahasiswa S2)' },
-      { value: 'bahan grafis(foto, lukisan, dll)', label: 'Bahan Grafis(Foto, Lukisan, dll)' },
+      { value: 'buku', label: 'Monograf(Buku, Jurnal, Laporan, dll)' },
+      { value: 'jurnal', label: 'Terbitan Berkala(Surat Kabar, Majalah, dll)' },
+      { value: 'ta', label: 'Skripsi(Karya Akademik Mahasiswa S1)' },
+      { value: 'ta', label: 'Tesis(Karya Akademik Mahasiswa S2)' },
+      { value: 'bahan grafis', label: 'Bahan Grafis(Foto, Lukisan, dll)' },
       { value: 'rekaman video', label: 'Rekaman Video' },
       { value: 'musik', label: 'Musik' },
-      { value: 'bahan kartografis(peta, dll)', label: 'Bahan Kartografis(Peta, dll)' },
-      { value: 'sumber elektronik(cd-rom, floppy disk, vcd, dll)', label: 'Sumber Elektronik(CD-ROM, Floppy Disk, VCD, dll)' },
+      { value: 'peta', label: 'Bahan Kartografis(Peta, dll)' },
+      { value: 'sumber elektronik', label: 'Sumber Elektronik(CD-ROM, Floppy Disk, VCD, dll)' },
       { value: 'rekaman suara', label: 'Rekaman Suara' },
-      { value: 'film(film, dll)', label: 'Film(Film, dll)' },
+      { value: 'film', label: 'Film(Film, dll)' },
       { value: 'bentuk mikro', label: 'Bentuk Mikro' },
       { value: 'manuskrip', label: 'Manuskrip' },
       { value: 'bahan ephemeral', label: 'Bahan Ephemeral' }
@@ -55,7 +55,90 @@
     currency: [{ value: 'IDR', label: 'Rupiah' }, { value: 'USD', label: 'Dollar AS' }],
     price_unit: ['Per eksemplar', 'Per jilid']
   };
+  const creatorTypes = {
+    person: { label: 'Nama Orang', mainTag: '100', additionalTag: '700' },
+    corporate: { label: 'Nama Badan', mainTag: '110', additionalTag: '710' },
+    meeting: { label: 'Nama Pertemuan', mainTag: '111', additionalTag: '711' }
+  };
+  const authorEditorIcon = '<svg aria-hidden="true" viewBox="0 0 16 16"><path d="M2 3h2v2H2zm4 0h8v2H6zM2 7h2v2H2zm4 0h8v2H6zm-4 4h2v2H2zm4 0h8v2H6z"></path></svg>';
+  const creatorFields = {
+    person: {
+      main: [
+        ['a', 'Nama Orang'], ['b', 'Penomoran'], ['c', 'Tambahan pada nama (mis.Gelar Kebangsawanan)'],
+        ['d', 'Tahun yang berhubungan dengan nama orang'], ['e', 'Istilah penghubung'],
+        ['g', 'Keterangan lainnya'], ['j', 'Keterangan penjelas'], ['k', 'Subtajuk bentuk'],
+        ['l', 'Bahasa'], ['n', 'Nomor bagian/seksi pertemuan'], ['p', 'Nama bagian karya'],
+        ['q', 'Nama dalam bentuk lengkap'], ['t', 'Judul karya']
+      ],
+      additional: [
+        ['a', 'Nama orang'], ['b', 'Penomoran'], ['c', 'Gelar dan kata lainnya yang berhubungan dengan nama'],
+        ['d', 'Tahun yang berhubungan dengan nama'], ['f', 'Tahun penerbitan karya'],
+        ['g', 'Keterangan lainnya'], ['h', 'Medium'], ['j', 'Keterangan penjelas'],
+        ['k', 'Subtajuk bentuk'], ['l', 'Bahasa'], ['m', 'Media pertunjukan musik'],
+        ['n', 'Nomor bagian/seksi dari karya'], ['o', 'Pernyataan aransemen musik'],
+        ['p', 'Nama bagian/seksi dari karya'], ['q', 'Nama dalam bentuk lengkap'],
+        ['r', 'Kunci/nada dasar musik'], ['s', 'Versi'], ['t', 'Judul karya']
+      ]
+    },
+    corporate: {
+      main: [
+        ['a', 'Nama badan atau yurisdiksi'], ['b', 'Unit bawahan'], ['c', 'Tempat pertemuan'],
+        ['d', 'Tanggal pertemuan atau penandatanganan perjanjian'], ['e', 'Istilah penghubung'],
+        ['f', 'Tahun penerbitan karya'], ['g', 'Keterangan lainnya'], ['k', 'Subtajuk bentuk'],
+        ['l', 'Bahasa'], ['n', 'Nomor bagian/seksi pertemuan'], ['p', 'Nama bagian karya'],
+        ['t', 'Judul karya'], ['u', 'Afiliasi'], ['0', 'Nomor kendali otoritas'],
+        ['1', 'URI sumber daya terkait'], ['4', 'Kode relasi']
+      ],
+      additional: [
+        ['a', 'Nama badan atau yurisdiksi'], ['b', 'Unit bawahan'], ['c', 'Tempat pertemuan'],
+        ['d', 'Tanggal pertemuan atau penandatanganan perjanjian'], ['e', 'Istilah penghubung'],
+        ['f', 'Tahun penerbitan karya'], ['g', 'Keterangan lainnya'], ['k', 'Subtajuk bentuk'],
+        ['l', 'Bahasa'], ['n', 'Nomor bagian/seksi pertemuan'], ['p', 'Nama bagian karya'],
+        ['t', 'Judul karya'], ['u', 'Afiliasi'], ['0', 'Nomor kendali otoritas'],
+        ['1', 'URI sumber daya terkait'], ['4', 'Kode relasi']
+      ]
+    },
+    meeting: {
+      main: [
+        ['a', 'Nama pertemuan atau yurisdiksi'], ['c', 'Tempat pertemuan'],
+        ['d', 'Tanggal pertemuan'], ['e', 'Unit bawahan'], ['f', 'Tahun penerbitan karya'],
+        ['g', 'Keterangan lainnya'], ['j', 'Istilah penghubung'], ['k', 'Subtajuk bentuk'],
+        ['l', 'Bahasa'], ['n', 'Nomor pertemuan/seksi'], ['p', 'Nama bagian karya'],
+        ['q', 'Nama pertemuan setelah nama yurisdiksi'], ['t', 'Judul karya'],
+        ['0', 'Nomor kendali otoritas'], ['1', 'URI sumber daya terkait'], ['4', 'Kode relasi']
+      ],
+      additional: [
+        ['a', 'Nama pertemuan atau yurisdiksi'], ['c', 'Tempat pertemuan'],
+        ['d', 'Tanggal pertemuan'], ['e', 'Unit bawahan'], ['f', 'Tahun penerbitan karya'],
+        ['g', 'Keterangan lainnya'], ['j', 'Istilah penghubung'], ['k', 'Subtajuk bentuk'],
+        ['l', 'Bahasa'], ['n', 'Nomor pertemuan/seksi'], ['p', 'Nama bagian karya'],
+        ['q', 'Nama pertemuan setelah nama yurisdiksi'], ['t', 'Judul karya'],
+        ['0', 'Nomor kendali otoritas'], ['1', 'URI sumber daya terkait'], ['4', 'Kode relasi']
+      ]
+    }
+  };
+  const physicalDescriptionFields = [
+    ['a', 'Jumlah halaman / deskripsi fisik'], ['b', 'Ket. ilustrasi'], ['c', 'Dimensi'],
+    ['e', 'Bahan sertaan'], ['f', 'Jenis unit'], ['g', 'Ukuran unit'], ['3', 'Bahan yang ditentukan'],
+    ['6', 'Tautan data'], ['8', 'Nomor urut dan lembaga']
+  ];
+  const subjectFields = [
+    ['3', 'Spesifikasi bahan'], ['a', 'Nama orang'], ['b', 'Penomoran'],
+    ['c', 'Tambahan pada nama selain tahun'], ['d', 'Tahun'], ['f', 'Tahun penerbitan karya'],
+    ['g', 'Keterangan lainnya'], ['h', 'Medium'], ['j', 'Keterangan penjelas'],
+    ['k', 'Subtajuk bentuk'], ['l', 'Bahasa'], ['m', 'Media pertunjukan musik'],
+    ['n', 'Nomor bagian dari karya'], ['o', 'Pernyataan aransemen musik'],
+    ['p', 'Nama bagian/seksi dari karya'], ['q', 'Nama dalam bentuk lengkap'],
+    ['r', 'Kunci/nada dasar musik'], ['s', 'Versi'], ['t', 'Judul karya'],
+    ['v', 'Subdivisi bentuk'], ['x', 'Subdivisi umum'], ['y', 'Subdivisi kronologis'],
+    ['z', 'Subdivisi wilayah']
+  ];
+  const noteTypes = ['Abstrak / Anotasi', 'Catatan Disertasi', 'Catatan Bibliografi', 'Rincian Isi', 'Catatan Umum'];
+  const removeEntryIcon = '<svg aria-hidden="true" viewBox="0 0 16 16"><path d="M5 1h6l1 2h3v2H1V3h3zm-2 5h10l-.7 9H3.7zm2 2v5h1V8zm3 0v5h1V8z"></path></svg>';
   let renderVersion = 0;
+  let additionalAuthorIndex = 1;
+  let activeAuthorRow = null;
+  let activeMetadataDialog = null;
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -203,9 +286,7 @@
     const sourceOptions = `<option value="">---Belum ditentukan---</option>${sources.map(item =>
       `<option value="${item.id}">${escapeHtml(item.name)}</option>`).join('')}`;
     const rdaFields = isRda ? `<div class="module-form-grid">
-      ${field('Pernyataan tanggung jawab', 'responsibility_statement', { max: 500 })}
-      ${field('Edisi', 'edition', { max: 120 })}${field('Penerbitan', 'publication_statement', { max: 255 })}
-      ${field('Deskripsi fisik', 'physical_description', { max: 255 })}
+      ${field('Pernyataan penerbitan', 'publication_statement', { max: 255 })}
       ${field('Seri', 'series_statement', { max: 255 })}${field('Identifier lain', 'other_identifier', { max: 120 })}
       </div>` : '';
     const sourceControl = `<div class="module-field"><label for="acq-source-id">Nama Sumber</label>
@@ -218,12 +299,7 @@
         <select id="acq-price_unit" name="price_unit">${choiceOptions('price_unit')}</select></div></div></div>`;
     return `<form id="acquisition-form" class="module-form acquisition-entry-form" data-form="acquisition" data-record-type="${isRda ? 'rda' : 'standard'}">
       <input type="hidden" name="book_id">
-      <input type="hidden" name="title">
-      <input type="hidden" name="author">
-      <input type="hidden" name="publisher">
-      <input type="hidden" name="publication_year">
-      <input type="hidden" name="isbn">
-      <input type="hidden" name="subject">
+      <input type="hidden" name="material_type">
       <div class="module-form-actions acquisition-entry-toolbar">
         <button class="module-button is-success" type="submit" form="acquisition-form">Simpan</button>
         <button class="module-button is-info" type="button" data-action="choose-title">Pilih Judul</button>
@@ -234,9 +310,9 @@
         <p class="acq-selected-title" id="acq-selected-title" hidden></p>
         <div class="module-field acquisition-material-type"><label for="acq-material_type">Jenis Bahan</label>
           <div class="acq-material-picker">
-            <input id="acq-material_type" name="material_type" type="text" role="combobox"
+            <input id="acq-material_type" name="material_type_label" type="text" role="combobox"
               aria-autocomplete="list" aria-expanded="false" aria-controls="acq-material-type-options"
-              maxlength="30" placeholder="Ketik atau pilih jenis bahan" required>
+              maxlength="80" placeholder="Ketik atau pilih jenis bahan" required>
             <button class="acq-material-toggle" type="button" data-action="toggle-material-options"
               aria-label="Tampilkan pilihan jenis bahan" aria-expanded="false"></button>
             <div class="acq-material-options" id="acq-material-type-options" role="listbox" hidden>
@@ -245,6 +321,177 @@
                   data-action="select-material-option" data-index="${index}">${escapeHtml(choice.label)}</button>`).join('')}
             </div>
           </div>
+        </div>
+        <div class="acquisition-entry-details" hidden>
+          <fieldset class="acq-bibliographic-fields" disabled>
+            <section class="module-panel acquisition-entry-panel">
+              <div class="module-panel-heading">
+                <h2>Data Bibliografis</h2>
+                <button class="module-button is-primary" type="button" data-action="toggle-acq-marc">Tampilkan Form MARC</button>
+              </div>
+              <div class="module-panel-body acq-bibliographic-body">
+                <section class="acq-bibliographic-group">
+                  <h3>Judul</h3>
+                  <div class="acq-bibliographic-fields-grid">
+                    ${field('Judul Utama', 'title', { required: true, max: 255, placeholder: 'Masukan Judul Utama...' })}
+                    ${field('Anak Judul', 'subtitle', { max: 500, placeholder: 'Masukan Anak Judul...' })}
+                    ${field('Penanggung Jawab', 'responsibility', { max: 500, placeholder: 'Masukan Penanggung Jawab...' })}
+                  </div>
+                </section>
+                <section class="acq-bibliographic-group">
+                  <h3>Tajuk Pengarang</h3>
+                  <div class="acq-bibliographic-fields-grid">
+                    <div class="acq-bibliographic-row">
+                      <label for="acq-creator-type">Tajuk Pengarang Utama</label>
+                      <div class="acq-author-control" data-author-entry="main">
+                        <select id="acq-creator-type" name="creator_type" data-author-type>
+                          ${Object.entries(creatorTypes).map(([key, type]) => `<option value="${key}">${type.label}</option>`).join('')}
+                        </select>
+                        <div class="acq-author-input-control">
+                          <input id="acq-author" name="author" type="text" maxlength="255"
+                            placeholder="Masukan Tajuk Pengarang Utama..." data-author-value>
+                          <button class="module-button is-warning acq-author-editor-button" type="button"
+                            data-action="open-author-fields" data-author-kind="main" aria-label="Buka subruas tajuk pengarang utama">${authorEditorIcon}</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="acq-bibliographic-row">
+                      <span class="module-label">Urutan Nama</span>
+                      <div class="acq-name-order">
+                        <label><input type="radio" name="creator_name_order" value="Nama Depan" checked> Nama Depan</label>
+                        <label><input type="radio" name="creator_name_order" value="Nama Belakang"> Nama Belakang</label>
+                        <label><input type="radio" name="creator_name_order" value="Nama Keluarga"> Nama Keluarga</label>
+                      </div>
+                    </div>
+                    <div class="acq-bibliographic-row">
+                      <label>Tajuk Pengarang Tambahan</label>
+                      <div class="acq-additional-authors">
+                        <div class="acq-author-control acq-additional-author" data-author-entry="additional">
+                          <select name="additional_author_type" data-author-type aria-label="Jenis tajuk pengarang tambahan">
+                            ${Object.entries(creatorTypes).map(([key, type]) => `<option value="${key}">${key === 'corporate' ? 'Badan Korporasi' : type.label}</option>`).join('')}
+                          </select>
+                          <div class="acq-author-input-control">
+                            <input name="additional_author" type="text" maxlength="500"
+                              placeholder="Masukan Tajuk Pengarang Tambahan..." data-author-value>
+                            <button class="module-button is-warning acq-author-editor-button" type="button"
+                              data-action="open-author-fields" data-author-kind="additional" aria-label="Buka subruas tajuk pengarang tambahan">${authorEditorIcon}</button>
+                            <button class="module-button is-success acq-additional-author-add" type="button"
+                              data-action="add-additional-author" aria-label="Tambah tajuk pengarang tambahan">+</button>
+                          </div>
+                          <div class="acq-name-order">
+                            <label><input type="radio" name="additional_creator_name_order_1" value="Nama Depan" checked> Nama Depan</label>
+                            <label><input type="radio" name="additional_creator_name_order_1" value="Nama Belakang"> Nama Belakang</label>
+                            <label><input type="radio" name="additional_creator_name_order_1" value="Nama Keluarga"> Nama Keluarga</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="acq-bibliographic-group">
+                  <h3>Penerbitan</h3>
+                  <div class="acq-bibliographic-fields-grid">
+                    ${field('Tempat Terbit', 'publication_place', { max: 180, placeholder: 'Masukan Tempat terbit...' })}
+                    ${field('Penerbit', 'publisher', { max: 255, placeholder: 'Masukan Penerbit...' })}
+                    ${field('Tahun Terbit', 'publication_year', { type: 'number', min: 1000, maxValue: 9999, placeholder: 'Masukan Tahun terbit...' })}
+                  </div>
+                </section>
+                <section class="acq-bibliographic-group">
+                  <h3>Deskripsi Fisik</h3>
+                  <div class="acq-bibliographic-fields-grid">
+                    ${field('Jumlah Halaman', 'physical_pages', { max: 120, placeholder: 'Masukan Jumlah Halaman...' })}
+                    ${field('Ket. Ilustrasi', 'physical_illustrations', { max: 255, placeholder: 'Masukan Ket. Ilustrasi...' })}
+                    ${field('Dimensi', 'physical_dimensions', { max: 120, placeholder: 'Masukan Dimensi...' })}
+                    ${field('Bahan Sertaan', 'physical_accompanying_material', { max: 255, placeholder: 'Masukan Bahan Sertaan...' })}
+                    ${field('Edisi', 'edition', { max: 120, placeholder: 'Masukan Edisi...' })}
+                    <div class="acq-bibliographic-row">
+                      <label for="acq-physical-description">Deskripsi Fisik</label>
+                      <div class="acq-author-input-control" data-metadata-entry="physical">
+                        <input id="acq-physical-description" name="physical_description" type="text" maxlength="255"
+                          placeholder="Masukan Deskripsi Fisik..." data-metadata-value>
+                        <button class="module-button is-warning acq-author-editor-button" type="button"
+                          data-action="open-metadata-fields" data-metadata-kind="physical" aria-label="Buka rincian objek deskripsi fisik">${authorEditorIcon}</button>
+                      </div>
+                    </div>
+                    <div class="acq-bibliographic-row">
+                      <label>Subjek</label>
+                      <div class="acq-subject-entries">
+                      <div class="acq-author-control acq-subject-entry" data-metadata-entry="subject">
+                        <select id="acq-subject-type" name="subject_type" data-subject-type>
+                          <option value="person">Nama Orang</option><option value="corporate">Nama Badan</option>
+                          <option value="meeting">Nama Pertemuan</option>
+                        </select>
+                        <div class="acq-author-input-control">
+                          <input id="acq-subject" name="subject" type="text" maxlength="5000"
+                            placeholder="Masukan Subjek..." data-metadata-value>
+                          <button class="module-button is-warning acq-author-editor-button" type="button"
+                            data-action="open-metadata-fields" data-metadata-kind="subject" aria-label="Buka subruas subjek">${authorEditorIcon}</button>
+                          <button class="module-button is-success acq-additional-author-add" type="button"
+                            data-action="add-metadata-entry" data-metadata-kind="subject" aria-label="Tambah subjek">+</button>
+                        </div>
+                        <div class="acq-name-order">
+                          <label><input type="radio" name="subject_name_order_1" value="Tidak Ada Info Tambahan" checked> Tdk Ada Info Tambahan</label>
+                          <label><input type="radio" name="subject_name_order_1" value="Nama Depan"> Nama Depan</label>
+                          <label><input type="radio" name="subject_name_order_1" value="Nama Belakang"> Nama Belakang</label>
+                          <label><input type="radio" name="subject_name_order_1" value="Nama Keluarga"> Nama Keluarga</label>
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+                    ${field('No. Klas DDC', 'ddc_class', { max: 120, placeholder: 'Masukan No. Klas DDC...' })}
+                    <div class="acq-bibliographic-repeat-row">
+                      ${field('No. Panggil', 'call_number', { max: 80, placeholder: 'Masukan No. Panggil...' })}
+                      <button class="module-button is-success" type="button" data-action="add-bibliographic-input"
+                        data-input-name="call_number" aria-label="Tambah nomor panggil">+</button>
+                    </div>
+                    <div class="acq-bibliographic-repeat-row">
+                      ${field('ISBN', 'isbn', { max: 32, placeholder: 'Masukan ISBN...' })}
+                      <button class="module-button is-success" type="button" data-action="add-bibliographic-input"
+                        data-input-name="isbn" aria-label="Tambah ISBN">+</button>
+                    </div>
+                  </div>
+                </section>
+                <section class="acq-bibliographic-group">
+                  <h3>Catatan</h3>
+                  <div class="acq-bibliographic-fields-grid acq-notes-list">
+                    <div class="acq-note-entry" data-note-entry>
+                      <label for="acq-note-1">Catatan</label>
+                      <div class="acq-note-control">
+                        <div class="acq-note-input-row">
+                          <textarea id="acq-note-1" name="note_text" maxlength="5000"
+                            placeholder="Masukan Catatan..." data-note-text></textarea>
+                          <button class="module-button is-success" type="button" data-action="add-note"
+                            aria-label="Tambah catatan">+</button>
+                        </div>
+                        <div class="acq-name-order">
+                          ${noteTypes.map((type, index) => `<label><input type="radio" name="note_type_1" value="${escapeHtml(type)}" ${index === 0 ? 'checked' : ''}> ${escapeHtml(type)}</label>`).join('')}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="acq-bibliographic-group">
+                  <h3>Lokasi Koleksi Daring</h3>
+                  <div class="acq-bibliographic-fields-grid acq-online-locations">
+                    <div class="acq-bibliographic-repeat-row" data-online-location>
+                      ${field('Lokasi Koleksi Daring', 'online_location', { max: 2000, placeholder: 'Masukan Lokasi Koleksi Daring...' })}
+                      <button class="module-button is-success" type="button" data-action="add-online-location"
+                        aria-label="Tambah lokasi koleksi daring">+</button>
+                    </div>
+                  </div>
+                </section>
+                  <div class="acq-marc-fields" hidden>
+                    <div class="module-field">
+                      <label for="acq-marc-data">Ruas Data MARC (JSON)</label>
+                      <textarea id="acq-marc-data" name="marc_data" placeholder='[{"tag":"245","indicator1":"1","indicator2":"0","value":"Judul"}]'>[]</textarea>
+                    </div>
+                  </div>
+              </div>
+            </section>
+          </fieldset>
+        <label class="acq-opac-toggle"><input type="hidden" name="show_in_opac" value="false">
+          <input type="checkbox" name="show_in_opac" value="true" checked><span>Tampil di OPAC</span></label>
+        ${rdaFields}
         </div>
         <section class="module-panel acquisition-entry-panel">
           <div class="module-panel-heading"><h2>Data Pengadaan</h2></div>
@@ -269,12 +516,8 @@
             <div class="acq-form-row">${searchableChoiceField('Ketersediaan', 'availability', acquisitionChoices.availability)}</div>
             <div class="acq-form-row">${selectField('Mata Uang', 'currency', choiceOptions('currency'))}</div>
             <div class="acq-form-row">${priceControl}</div>
-            <div class="acq-form-row">${field('Nomor Panggil', 'call_number', { max: 80 })}</div>
           </div>
         </section>
-        <label class="acq-opac-toggle"><input type="hidden" name="show_in_opac" value="false">
-          <input type="checkbox" name="show_in_opac" value="true" checked><span>Tampil di OPAC</span></label>
-        ${rdaFields}
         <div class="module-form-actions acquisition-entry-toolbar">
           <button class="module-button is-success" type="submit">Simpan</button>
           <button class="module-button is-info" type="button" data-action="choose-title">Pilih Judul</button>
@@ -287,6 +530,24 @@
           <button class="module-button is-neutral" type="button" data-action="close-title-dialog">Tutup</button></div>
         <input class="module-filter acq-title-search" type="search" placeholder="Cari judul, pengarang, atau BIBID" aria-label="Cari judul katalog">
         <div class="acq-title-options" aria-live="polite"></div>
+      </dialog>
+      <dialog class="acq-author-dialog" aria-labelledby="acq-author-dialog-heading">
+        <button class="acq-author-dialog-close" type="button" data-action="close-author-dialog" aria-label="Tutup">×</button>
+        <h2 id="acq-author-dialog-heading"></h2>
+        <div class="acq-author-dialog-table-wrap"></div>
+        <div class="acq-author-dialog-actions">
+          <button class="module-button is-success" type="button" data-action="save-author-fields">OK</button>
+          <button class="module-button is-warning" type="button" data-action="close-author-dialog">Batal</button>
+        </div>
+      </dialog>
+      <dialog class="acq-author-dialog acq-metadata-dialog" aria-labelledby="acq-metadata-dialog-heading">
+        <button class="acq-author-dialog-close" type="button" data-action="close-metadata-dialog" aria-label="Tutup">×</button>
+        <h2 id="acq-metadata-dialog-heading"></h2>
+        <div class="acq-author-dialog-table-wrap"></div>
+        <div class="acq-author-dialog-actions">
+          <button class="module-button is-success" type="button" data-action="save-metadata-fields">OK</button>
+          <button class="module-button is-warning" type="button" data-action="close-metadata-dialog">Batal</button>
+        </div>
       </dialog>
     </form>`;
   }
@@ -481,6 +742,225 @@
     return Object.fromEntries(new FormData(form).entries());
   }
 
+  function readCreatorEntry(row) {
+    const input = row.querySelector('[data-author-value]');
+    const type = row.querySelector('[data-author-type]').value;
+    const saved = row.dataset.marcEntry ? JSON.parse(row.dataset.marcEntry) : {};
+    const nameOrder = row.querySelector('input[type="radio"]:checked')?.value || '';
+    return {
+      type,
+      tag: saved.tag || creatorTypes[type][row.dataset.authorEntry === 'main' ? 'mainTag' : 'additionalTag'],
+      name: input.value.trim(),
+      name_order: nameOrder,
+      indicators: saved.indicators || ['1', ' '],
+      subfields: saved.type === type ? saved.subfields || {} : {}
+    };
+  }
+
+  function openAuthorFields(button) {
+    const row = button.closest('[data-author-entry]');
+    const isMain = button.dataset.authorKind === 'main';
+    const type = row.querySelector('[data-author-type]').value;
+    const creatorType = creatorTypes[type];
+    const fields = creatorFields[type][isMain ? 'main' : 'additional'];
+    const tag = creatorType[isMain ? 'mainTag' : 'additionalTag'];
+    const saved = row.dataset.marcEntry ? JSON.parse(row.dataset.marcEntry) : {};
+    const values = saved.type === type ? saved.subfields || {}
+      : (row.querySelector('[data-author-value]').value.trim()
+        ? { a: row.querySelector('[data-author-value]').value.trim() } : {});
+    const dialog = content.querySelector('.acq-author-dialog');
+    activeAuthorRow = row;
+    dialog.dataset.authorKind = isMain ? 'main' : 'additional';
+    dialog.querySelector('#acq-author-dialog-heading').textContent =
+      `Tag ${tag} - Entri ${isMain ? 'Utama' : 'Tambahan'} -- ${creatorType.label}`;
+    dialog.querySelector('.acq-author-dialog-table-wrap').innerHTML = `<table class="acq-author-fields-table">
+      <thead><tr><th>Kode</th><th>Nama</th><th>Isi</th></tr></thead><tbody>
+      ${fields.map(([code, label]) => `<tr><td>${escapeHtml(code)}</td><td>${escapeHtml(label)}</td>
+        <td><input type="text" data-subfield-code="${escapeHtml(code)}" aria-label="${escapeHtml(`${code} ${label}`)}"
+          value="${escapeHtml(values[code] || '')}"></td></tr>`).join('')}
+      </tbody></table>`;
+    dialog.showModal();
+    dialog.querySelector('[data-subfield-code="a"]')?.focus();
+  }
+
+  function saveAuthorFields(dialog) {
+    if (!activeAuthorRow || !activeAuthorRow.isConnected) {
+      throw new Error('Baris tajuk pengarang sudah tidak tersedia.');
+    }
+    const isMain = dialog.dataset.authorKind === 'main';
+    const type = activeAuthorRow.querySelector('[data-author-type]').value;
+    const creatorType = creatorTypes[type];
+    const subfields = Object.fromEntries([...dialog.querySelectorAll('[data-subfield-code]')]
+      .map(input => [input.dataset.subfieldCode, input.value.trim()]).filter(([, value]) => value));
+    const tag = creatorType[isMain ? 'mainTag' : 'additionalTag'];
+    const name = Object.values(subfields).join(', ');
+    activeAuthorRow.dataset.marcEntry = JSON.stringify({
+      type, tag, indicators: ['1', ' '], subfields
+    });
+    const authorInput = activeAuthorRow.querySelector('[data-author-value]');
+    authorInput.value = name.slice(0, authorInput.maxLength);
+    dialog.close();
+    activeAuthorRow = null;
+  }
+
+  function addAdditionalAuthorRow(container) {
+    const index = ++additionalAuthorIndex;
+    const row = document.createElement('div');
+    row.className = 'acq-author-control acq-additional-author';
+    row.dataset.authorEntry = 'additional';
+    row.innerHTML = `<select name="additional_author_type" data-author-type aria-label="Jenis tajuk pengarang tambahan">
+      ${Object.entries(creatorTypes).map(([key, type]) => `<option value="${key}">${key === 'corporate' ? 'Badan Korporasi' : type.label}</option>`).join('')}
+      </select><div class="acq-author-input-control">
+        <input name="additional_author" type="text" maxlength="500"
+          placeholder="Masukan Tajuk Pengarang Tambahan..." data-author-value>
+        <button class="module-button is-warning acq-author-editor-button" type="button"
+          data-action="open-author-fields" data-author-kind="additional" aria-label="Buka subruas tajuk pengarang tambahan">${authorEditorIcon}</button>
+        <button class="module-button is-success acq-additional-author-add" type="button"
+          data-action="add-additional-author" aria-label="Tambah tajuk pengarang tambahan">+</button>
+      </div><div class="acq-name-order">
+        <label><input type="radio" name="additional_creator_name_order_${index}" value="Nama Depan" checked> Nama Depan</label>
+        <label><input type="radio" name="additional_creator_name_order_${index}" value="Nama Belakang"> Nama Belakang</label>
+        <label><input type="radio" name="additional_creator_name_order_${index}" value="Nama Keluarga"> Nama Keluarga</label>
+      </div>`;
+    markRepeatEntry(row);
+    container.append(row);
+  }
+
+  function markRepeatEntry(row) {
+    row.dataset.repeatEntry = 'true';
+    const addButton = row.querySelector('[data-action^="add-"]');
+    if (!addButton) return;
+    const removeButton = document.createElement('button');
+    removeButton.type = 'button';
+    removeButton.className = 'module-button is-danger acq-remove-entry';
+    removeButton.dataset.action = 'remove-repeat-entry';
+    removeButton.setAttribute('aria-label', 'Hapus baris tambahan');
+    removeButton.innerHTML = removeEntryIcon;
+    addButton.replaceWith(removeButton);
+  }
+
+  function readMetadataEntry(row) {
+    const saved = row.dataset.marcEntry ? JSON.parse(row.dataset.marcEntry) : {};
+    return {
+      type: row.dataset.metadataEntry,
+      tag: saved.tag || '',
+      value: row.querySelector('[data-metadata-value]')?.value.trim() || '',
+      name_order: row.querySelector('input[type="radio"]:checked')?.value || '',
+      indicators: saved.indicators || [' ', ' '],
+      subfields: saved.subfields || {}
+    };
+  }
+
+  function openMetadataFields(button) {
+    const row = button.closest('[data-metadata-entry]');
+    const kind = button.dataset.metadataKind;
+    const subjectType = row.querySelector('[data-subject-type]')?.value || 'person';
+    const saved = row.dataset.marcEntry ? JSON.parse(row.dataset.marcEntry) : {};
+    const fields = kind === 'physical' ? physicalDescriptionFields : subjectFields;
+    const tag = kind === 'physical'
+      ? '300'
+      : ({ person: '600', corporate: '610', meeting: '611' })[subjectType];
+    const heading = kind === 'physical' ? 'Deskripsi Fisik' : `Subjek - ${creatorTypes[subjectType].label}`;
+    const initialValues = saved.type === kind && saved.subject_type === subjectType
+      ? saved.subfields || {}
+      : (row.querySelector('[data-metadata-value]').value.trim() ? { a: row.querySelector('[data-metadata-value]').value.trim() } : {});
+    const dialog = content.querySelector('.acq-metadata-dialog');
+    activeMetadataDialog = { row, kind, subjectType, tag };
+    dialog.querySelector('#acq-metadata-dialog-heading').textContent = `Tag ${tag} - ${heading}`;
+    dialog.querySelector('.acq-author-dialog-table-wrap').innerHTML = `<table class="acq-author-fields-table">
+      <thead><tr><th>Kode</th><th>Nama</th><th>Isi</th></tr></thead><tbody>
+      ${fields.map(([code, label]) => `<tr><td>${escapeHtml(code)}</td><td>${escapeHtml(label)}</td>
+        <td><input type="text" data-subfield-code="${escapeHtml(code)}" aria-label="${escapeHtml(`${code} ${label}`)}"
+          value="${escapeHtml(initialValues[code] || '')}"></td></tr>`).join('')}
+      </tbody></table>`;
+    dialog.showModal();
+    dialog.querySelector('[data-subfield-code="a"]')?.focus();
+  }
+
+  function saveMetadataFields(dialog) {
+    if (!activeMetadataDialog || !activeMetadataDialog.row.isConnected) {
+      throw new Error('Bagian bibliografis sudah tidak tersedia.');
+    }
+    const { row, kind, subjectType, tag } = activeMetadataDialog;
+    const subfields = Object.fromEntries([...dialog.querySelectorAll('[data-subfield-code]')]
+      .map(input => [input.dataset.subfieldCode, input.value.trim()]).filter(([, value]) => value));
+    const value = Object.values(subfields).join(', ');
+    row.dataset.marcEntry = JSON.stringify({
+      type: kind, subject_type: subjectType, tag,
+      indicators: kind === 'subject' ? ['1', '0'] : [' ', ' '],
+      subfields
+    });
+    const input = row.querySelector('[data-metadata-value]');
+    input.value = value.slice(0, input.maxLength);
+    dialog.close();
+    activeMetadataDialog = null;
+  }
+
+  function addMetadataEntry(kind, container) {
+    const index = container.querySelectorAll('[data-metadata-entry="subject"]').length + 1;
+    if (kind === 'subject') {
+      const row = document.createElement('div');
+      row.className = 'acq-author-control acq-subject-entry';
+      row.dataset.metadataEntry = 'subject';
+      row.innerHTML = `<select name="subject_type" data-subject-type aria-label="Jenis subjek">
+        <option value="person">Nama Orang</option><option value="corporate">Nama Badan</option>
+        <option value="meeting">Nama Pertemuan</option></select>
+        <div class="acq-author-input-control">
+          <input name="subject" type="text" maxlength="5000" placeholder="Masukan Subjek..." data-metadata-value>
+          <button class="module-button is-warning acq-author-editor-button" type="button"
+            data-action="open-metadata-fields" data-metadata-kind="subject" aria-label="Buka subruas subjek">${authorEditorIcon}</button>
+          <button class="module-button is-success acq-additional-author-add" type="button"
+            data-action="add-metadata-entry" data-metadata-kind="subject" aria-label="Tambah subjek">+</button>
+        </div><div class="acq-name-order">
+          <label><input type="radio" name="subject_name_order_${index}" value="Tidak Ada Info Tambahan" checked> Tdk Ada Info Tambahan</label>
+          <label><input type="radio" name="subject_name_order_${index}" value="Nama Depan"> Nama Depan</label>
+          <label><input type="radio" name="subject_name_order_${index}" value="Nama Belakang"> Nama Belakang</label>
+          <label><input type="radio" name="subject_name_order_${index}" value="Nama Keluarga"> Nama Keluarga</label>
+        </div>`;
+      markRepeatEntry(row);
+      container.append(row);
+      return;
+    }
+    if (kind === 'online') {
+      const source = container.querySelector('[data-online-location]');
+      const row = source.cloneNode(true);
+      const input = row.querySelector('input');
+      input.value = '';
+      input.removeAttribute('id');
+      row.querySelector('label')?.removeAttribute('for');
+      markRepeatEntry(row);
+      container.append(row);
+    }
+  }
+
+  function addNote(container) {
+    const source = container.querySelector('[data-note-entry]');
+    const row = source.cloneNode(true);
+    const index = container.querySelectorAll('[data-note-entry]').length + 1;
+    row.querySelector('textarea').value = '';
+    row.querySelector('textarea').id = `acq-note-${index}`;
+    row.querySelector('textarea').name = 'note_text';
+    row.querySelector('label').htmlFor = `acq-note-${index}`;
+    row.querySelectorAll('input[type="radio"]').forEach((radio, radioIndex) => {
+      radio.name = `note_type_${index}`;
+      radio.checked = radioIndex === 0;
+    });
+    markRepeatEntry(row);
+    container.append(row);
+  }
+
+  function addBibliographicInput(button) {
+    const sourceRow = button.closest('.acq-bibliographic-repeat-row');
+    const row = sourceRow.cloneNode(true);
+    const input = row.querySelector('input');
+    input.value = '';
+    input.removeAttribute('id');
+    input.removeAttribute('required');
+    row.querySelector('label')?.removeAttribute('for');
+    markRepeatEntry(row);
+    sourceRow.after(row);
+  }
+
   async function submitForm(form) {
     const data = formValues(form);
     if (form.dataset.form === 'source') {
@@ -493,15 +973,84 @@
       await render();
       showMessage('Sumber perolehan berhasil disimpan.');
     } else if (form.dataset.form === 'acquisition') {
+      if (!data.material_type) throw new Error('Pilih salah satu jenis bahan dari daftar.');
       data.record_type = form.dataset.recordType;
-      data.rda_metadata = form.dataset.recordType === 'rda' ? {
-        responsibility_statement: data.responsibility_statement || '',
+      let marcData;
+      try {
+        marcData = JSON.parse(data.marc_data || '[]');
+      } catch {
+        throw new Error('Ruas Data MARC harus berupa JSON yang valid.');
+      }
+      const bibliographicMetadata = {
+        subtitle: data.subtitle || '',
+        responsibility: data.responsibility || '',
+        creator_type: data.creator_type || '',
+        creator_name_order: data.creator_name_order || '',
+        main_creator: readCreatorEntry(form.querySelector('[data-author-entry="main"]')),
+        additional_authors: [...form.querySelectorAll('[data-author-entry="additional"]')]
+          .map(readCreatorEntry).filter(entry => entry.name),
+        publication_place: data.publication_place || '',
         edition: data.edition || '',
-        publication_statement: data.publication_statement || '',
-        physical_description: data.physical_description || '',
-        series_statement: data.series_statement || '',
-        other_identifier: data.other_identifier || ''
-      } : {};
+        physical_description: readMetadataEntry(form.querySelector('[data-metadata-entry="physical"]')),
+        physical_details: {
+          pages: data.physical_pages || '',
+          illustrations: data.physical_illustrations || '',
+          dimensions: data.physical_dimensions || '',
+          accompanying_material: data.physical_accompanying_material || ''
+        },
+        subjects: [...form.querySelectorAll('[data-metadata-entry="subject"]')]
+          .map(readMetadataEntry).filter(entry => entry.value),
+        ddc_class: data.ddc_class || '',
+        call_numbers: [...form.querySelectorAll('[name="call_number"]')].map(input => input.value.trim()).filter(Boolean),
+        isbns: [...form.querySelectorAll('[name="isbn"]')].map(input => input.value.trim()).filter(Boolean),
+        notes: [...form.querySelectorAll('[data-note-entry]')].map(row => ({
+          type: row.querySelector('input[type="radio"]:checked')?.value || noteTypes[0],
+          text: row.querySelector('[data-note-text]').value.trim()
+        })).filter(note => note.text),
+        online_locations: [...form.querySelectorAll('[name="online_location"]')]
+          .map(input => input.value.trim()).filter(Boolean),
+        marc_data: marcData
+      };
+      data.subject = bibliographicMetadata.subjects.map(entry => entry.value).join('; ').slice(0, 5000);
+      data.call_number = bibliographicMetadata.call_numbers[0] || '';
+      data.physical_description = [
+        data.physical_pages, data.physical_illustrations, data.physical_dimensions,
+        data.physical_accompanying_material, data.physical_description
+      ].filter(Boolean).join(' : ').slice(0, 255);
+      data.rda_metadata = {
+        ...(form.dataset.recordType === 'rda' ? {
+          responsibility_statement: data.responsibility || '',
+          edition: data.edition || '',
+          publication_statement: data.publication_statement || '',
+          physical_description: data.physical_description || '',
+          series_statement: data.series_statement || '',
+          other_identifier: data.other_identifier || ''
+        } : {}),
+        bibliographic_metadata: bibliographicMetadata
+      };
+      delete data.material_type_label;
+      delete data.subtitle;
+      delete data.responsibility;
+      delete data.creator_type;
+      delete data.creator_name_order;
+      delete data.additional_author_type;
+      delete data.additional_author;
+      Object.keys(data).filter(key => key.startsWith('additional_creator_name_order_'))
+        .forEach(key => delete data[key]);
+      delete data.publication_place;
+      delete data.edition;
+      delete data.physical_description;
+      delete data.physical_pages;
+      delete data.physical_illustrations;
+      delete data.physical_dimensions;
+      delete data.physical_accompanying_material;
+      delete data.ddc_class;
+      delete data.subject_type;
+      delete data.note_text;
+      delete data.online_location;
+      Object.keys(data).filter(key => key.startsWith('subject_name_order_'))
+        .forEach(key => delete data[key]);
+      delete data.marc_data;
       await api('/collections', { method: 'POST', body: JSON.stringify(data) });
       window.location.hash = '#acq-list';
     } else if (form.dataset.form === 'collection-search') {
@@ -588,8 +1137,40 @@
       } else if (button.dataset.action === 'select-material-option') {
         const choice = acquisitionChoices.material_type[Number(button.dataset.index)];
         if (!choice) throw new Error('Pilihan jenis bahan tidak ditemukan.');
-        content.querySelector('#acq-material_type').value = choice.label;
-        setMaterialOptionsOpen(false);
+        selectMaterial(choice);
+      } else if (button.dataset.action === 'toggle-acq-marc') {
+        const marcFields = content.querySelector('.acq-marc-fields');
+        marcFields.hidden = !marcFields.hidden;
+        button.textContent = marcFields.hidden ? 'Tampilkan Form MARC' : 'Sembunyikan Form MARC';
+      } else if (button.dataset.action === 'open-author-fields') {
+        openAuthorFields(button);
+      } else if (button.dataset.action === 'save-author-fields') {
+        saveAuthorFields(button.closest('dialog'));
+      } else if (button.dataset.action === 'close-author-dialog') {
+        button.closest('dialog').close();
+        activeAuthorRow = null;
+      } else if (button.dataset.action === 'add-additional-author') {
+        addAdditionalAuthorRow(button.closest('.acq-additional-authors'));
+      } else if (button.dataset.action === 'open-metadata-fields') {
+        openMetadataFields(button);
+      } else if (button.dataset.action === 'save-metadata-fields') {
+        saveMetadataFields(button.closest('.acq-metadata-dialog'));
+      } else if (button.dataset.action === 'close-metadata-dialog') {
+        button.closest('.acq-metadata-dialog').close();
+        activeMetadataDialog = null;
+      } else if (button.dataset.action === 'add-metadata-entry') {
+        const container = button.closest('.acq-subject-entries');
+        addMetadataEntry(button.dataset.metadataKind, container);
+      } else if (button.dataset.action === 'add-note') {
+        addNote(button.closest('.acq-notes-list'));
+      } else if (button.dataset.action === 'add-online-location') {
+        addMetadataEntry('online', button.closest('.acq-online-locations'));
+      } else if (button.dataset.action === 'add-bibliographic-input') {
+        addBibliographicInput(button);
+      } else if (button.dataset.action === 'remove-repeat-entry') {
+        const row = button.closest('[data-repeat-entry="true"]');
+        if (!row) throw new Error('Baris tambahan tidak ditemukan.');
+        row.remove();
       } else if (button.dataset.action === 'select-choice-option') {
         const picker = button.closest('.acq-searchable-picker');
         const choices = acquisitionChoices[picker.dataset.choicePicker];
@@ -626,18 +1207,25 @@
           isbn: title.isbn || '',
           category: title.category || '*** Tidak Diketahui ***',
           subject: title.subject || '',
-          call_number: title.call_number || '',
-          material_type: ({
-            Monograf: 'buku',
-            Serial: 'jurnal',
-            'Bahan khusus': 'lainnya'
-          })[title.material_type] || (['buku', 'ta', 'jurnal', 'modul', 'lainnya'].includes(title.material_type)
-            ? title.material_type : 'lainnya')
+          call_number: title.call_number || ''
         };
         for (const [name, value] of Object.entries(values)) {
           const control = form.elements.namedItem(name);
           if (control) control.value = value;
         }
+        const titleMaterialType = ({
+          Monograf: 'buku',
+          Serial: 'jurnal',
+          Peta: 'peta',
+          Musik: 'musik',
+          Video: 'rekaman video',
+          'Bahan khusus': 'bahan ephemeral',
+          Lainnya: 'bahan ephemeral',
+          lainnya: 'bahan ephemeral'
+        })[title.material_type] || title.material_type;
+        const materialChoice = acquisitionChoices.material_type.find(choice => choice.value === titleMaterialType)
+          || acquisitionChoices.material_type[0];
+        selectMaterial(materialChoice);
         const selectedTitle = form.querySelector('#acq-selected-title');
         selectedTitle.textContent = `Judul terpilih: ${title.title}`;
         selectedTitle.hidden = false;
@@ -675,6 +1263,20 @@
   });
 
   content.addEventListener('change', async event => {
+    const authorType = event.target.closest('[data-author-type]');
+    if (authorType) {
+      const row = authorType.closest('[data-author-entry]');
+      row.dataset.marcEntry = '';
+      row.querySelector('[data-author-value]').value = '';
+      return;
+    }
+    const subjectType = event.target.closest('[data-subject-type]');
+    if (subjectType) {
+      const row = subjectType.closest('[data-metadata-entry]');
+      row.dataset.marcEntry = '';
+      row.querySelector('[data-metadata-value]').value = '';
+      return;
+    }
     const select = event.target.closest('[data-action="proposal-status"]');
     if (!select) return;
     try {
@@ -688,9 +1290,23 @@
   });
 
   content.addEventListener('input', event => {
+    if (event.target.matches('[data-author-value]')) {
+      event.target.closest('[data-author-entry]').dataset.marcEntry = '';
+    }
+    if (event.target.matches('[data-metadata-value]')) {
+      event.target.closest('[data-metadata-entry]').dataset.marcEntry = '';
+    }
     if (event.target.matches('#acquisition-form #acq-material_type')) {
       filterMaterialOptions(event.target.value);
       setMaterialOptionsOpen(true);
+      const selectedChoice = acquisitionChoices.material_type.find(choice =>
+        choice.label.toLocaleLowerCase('id') === event.target.value.trim().toLocaleLowerCase('id'));
+      const materialType = content.querySelector('#acquisition-form [name="material_type"]');
+      const details = content.querySelector('.acquisition-entry-details');
+      const bibliographicFields = content.querySelector('.acq-bibliographic-fields');
+      materialType.value = selectedChoice ? selectedChoice.value : '';
+      details.hidden = !selectedChoice;
+      bibliographicFields.disabled = !selectedChoice;
       return;
     }
     const picker = event.target.closest('.acq-searchable-picker');
@@ -753,7 +1369,10 @@
   });
 
   function filterMaterialOptions(value) {
-    const keyword = value.trim().toLocaleLowerCase('id');
+    const normalized = value.trim().toLocaleLowerCase('id');
+    const isSelectedChoice = acquisitionChoices.material_type.some(choice =>
+      choice.label.toLocaleLowerCase('id') === normalized);
+    const keyword = isSelectedChoice ? '' : normalized;
     content.querySelectorAll('.acq-material-option').forEach(option => {
       option.hidden = keyword !== '' && !option.textContent.trim().toLocaleLowerCase('id').includes(keyword);
       option.setAttribute('aria-selected', 'false');
@@ -768,6 +1387,22 @@
     options.hidden = !open;
     input.setAttribute('aria-expanded', String(open));
     toggle.setAttribute('aria-expanded', String(open));
+  }
+
+  function selectMaterial(choice) {
+    const input = content.querySelector('#acq-material_type');
+    const materialType = content.querySelector('#acquisition-form [name="material_type"]');
+    const details = content.querySelector('.acquisition-entry-details');
+    const bibliographicFields = content.querySelector('.acq-bibliographic-fields');
+    if (!input || !materialType || !details || !bibliographicFields) return;
+    input.value = choice.label;
+    materialType.value = choice.value;
+    details.hidden = false;
+    bibliographicFields.disabled = false;
+    setMaterialOptionsOpen(false);
+    const title = content.querySelector('#acq-title');
+    title.focus();
+    title.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   function filterChoicePicker(picker, value) {
