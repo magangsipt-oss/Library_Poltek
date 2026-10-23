@@ -9,8 +9,11 @@ router.put('/sources/:id', controller.saveSource);
 router.delete('/sources/:id', controller.deleteSource);
 
 router.get('/collections', controller.listCollections);
+router.get('/collections/:id', controller.getCollection);
 router.post('/collections', controller.createAcquisition);
+router.put('/collections/:id', controller.updateAcquisition);
 router.post('/collections/import', controller.importAcquisitions);
+router.patch('/collections/:id/opac', controller.updateCollectionOpacVisibility);
 router.patch('/collections/:id/status', controller.updateLifecycle);
 router.delete('/collections/:id', controller.deleteAcquisition);
 

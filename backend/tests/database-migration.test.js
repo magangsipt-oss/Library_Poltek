@@ -95,6 +95,35 @@ test('entri pengadaan yang disalin dari katalog menambah eksemplar pada judul ya
   assert.equal(await Acquisition.deleteSource(source.id), true);
 });
 
+test('koreksi koleksi memuat detail, memperbarui bibliografi, jumlah eksemplar, dan visibilitas OPAC', async () => {
+  const initial = acquisitionInput({
+    title: 'Koleksi sebelum koreksi', isbn: '', barcode: randomUUID(), accession_no: randomUUID()
+  });
+  const item = await Acquisition.createAcquisition(initial);
+  const before = await Acquisition.getCollection(item.id);
+  assert.equal(before.title, 'Koleksi sebelum koreksi');
+  assert.equal(before.barcode, initial.barcode);
+
+  const update = acquisitionInput({
+    book_id: before.book_id, title: 'Koleksi setelah koreksi', author: 'Pengarang Koreksi',
+    isbn: '', quantity: 3, barcode: before.barcode, accession_no: before.accession_no
+  });
+  assert.equal(await Acquisition.updateAcquisition(item.id, update), true);
+  assert.equal(await Acquisition.setCollectionOpacVisibility(item.id, false), true);
+
+  const corrected = await Acquisition.getCollection(item.id);
+  assert.equal(corrected.title, 'Koleksi setelah koreksi');
+  assert.equal(corrected.author, 'Pengarang Koreksi');
+  assert.equal(corrected.quantity, 3);
+  assert.equal(corrected.acquisition_metadata.show_in_opac, false);
+  const counts = (await database.query('SELECT total_eksemplar, eksemplar_tersedia FROM buku WHERE id = $1', [before.book_id])).rows[0];
+  assert.equal(counts.total_eksemplar, 3);
+  assert.equal(counts.eksemplar_tersedia, 3);
+
+  await Acquisition.deleteAcquisition(item.id);
+  await database.query('DELETE FROM buku WHERE id = $1', [before.book_id]);
+});
+
 test('ketersediaan OPAC mengikuti pengaturan metadata pengadaan', async () => {
   const title = `Koleksi privat ${randomUUID()}`;
   const item = await Acquisition.createAcquisition(acquisitionInput({
@@ -300,4 +329,44 @@ test('API publik, publikasi, login admin, dan ringkasan menggunakan database has
       assert.equal(overview.recentRequests[0].full_name, 'Pemohon Uji');
     }
   }
+});
+
+test('API admin membuka, mengoreksi, dan mengubah visibilitas koleksi berdasarkan barcode', async () => {
+  const login = await fetch(baseUrl + '/api/admin/login', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: process.env.ADMIN_USERNAME, password: process.env.ADMIN_PASSWORD })
+  });
+  assert.equal(login.status, 200);
+  const cookie = login.headers.get('set-cookie').split(';')[0];
+  const headers = { Cookie: cookie, 'Content-Type': 'application/json' };
+  const initial = acquisitionInput({
+    title: 'Koleksi untuk API koreksi', isbn: '', barcode: randomUUID(), accession_no: randomUUID()
+  });
+  const created = await fetch(baseUrl + '/api/admin/acquisitions/collections', {
+    method: 'POST', headers, body: JSON.stringify(initial)
+  });
+  assert.equal(created.status, 201);
+  const id = (await created.json()).item.id;
+
+  const detailResponse = await fetch(`${baseUrl}/api/admin/acquisitions/collections/${id}`, { headers });
+  assert.equal(detailResponse.status, 200);
+  const detail = (await detailResponse.json()).item;
+  assert.equal(detail.barcode, initial.barcode);
+
+  const updated = await fetch(`${baseUrl}/api/admin/acquisitions/collections/${id}`, {
+    method: 'PUT', headers,
+    body: JSON.stringify({ ...initial, book_id: detail.book_id, title: 'Koleksi terkoreksi', quantity: 2 })
+  });
+  assert.equal(updated.status, 200);
+  const visibility = await fetch(`${baseUrl}/api/admin/acquisitions/collections/${id}/opac`, {
+    method: 'PATCH', headers, body: JSON.stringify({ visible: false })
+  });
+  assert.equal(visibility.status, 200);
+  const corrected = (await (await fetch(`${baseUrl}/api/admin/acquisitions/collections/${id}`, { headers })).json()).item;
+  assert.equal(corrected.title, 'Koleksi terkoreksi');
+  assert.equal(corrected.acquisition_metadata.show_in_opac, false);
+
+  const deleted = await fetch(`${baseUrl}/api/admin/acquisitions/collections/${id}`, { method: 'DELETE', headers });
+  assert.equal(deleted.status, 204);
+  await database.query('DELETE FROM buku WHERE id = $1', [detail.book_id]);
 });

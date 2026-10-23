@@ -31,7 +31,7 @@ async function listCollections(status, keyword = '') {
       COALESCE(a.jenis_akses, 'Dapat dipinjam') AS jenis_akses, COALESCE(a.lokasi, b.lokasi_rak, '') AS lokasi,
       COALESCE(a.status_koleksi, 'in_stock') AS status_koleksi, a.metadata_rda, a.metadata_pengadaan,
       (a.id IS NULL) AS is_legacy, b.judul, b.pengarang, b.penerbit, b.tahun_terbit,
-      b.isbn, b.jenis_bahan, b.kategori, s.nama AS source_name
+      b.isbn, b.jenis_bahan, b.kategori, b.subjek, b.nomor_panggil, s.nama AS source_name
     FROM buku b
     LEFT JOIN akuisisi a ON a.id_buku = b.id
     LEFT JOIN sumber_perolehan s ON s.id = a.id_sumber_perolehan
@@ -41,6 +41,92 @@ async function listCollections(status, keyword = '') {
     ORDER BY COALESCE(a.tanggal_perolehan, b.waktu_dibuat::date) DESC, COALESCE(a.id, b.id) DESC
     LIMIT 500`, [status, keyword]);
   return result.rows.map(toApiRow);
+}
+
+async function getCollection(id) {
+  const result = await query(`SELECT a.id, b.id AS id_buku, a.id_sumber_perolehan, a.jenis_rekaman, a.nomor_induk,
+      a.kode_batang, a.rfid, a.tanggal_perolehan, a.jumlah, a.bentuk_fisik, a.jenis_akses, a.lokasi,
+      a.status_koleksi, a.metadata_rda, a.metadata_pengadaan, b.judul, b.pengarang, b.penerbit,
+      b.tahun_terbit, b.isbn, b.jenis_bahan, b.kategori, b.subjek, b.nomor_panggil, s.nama AS source_name
+    FROM akuisisi a
+    JOIN buku b ON b.id = a.id_buku
+    LEFT JOIN sumber_perolehan s ON s.id = a.id_sumber_perolehan
+    WHERE a.id = $1`, [id]);
+  return toApiRow(result.rows[0]) || null;
+}
+
+async function updateAcquisition(id, item) {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const currentResult = await client.query(`SELECT id_buku, jumlah, status_koleksi
+      FROM akuisisi WHERE id = $1 FOR UPDATE`, [id]);
+    if (!currentResult.rowCount) {
+      await client.query('ROLLBACK');
+      return false;
+    }
+    const current = toApiRow(currentResult.rows[0]);
+    const currentBookId = Number(current.book_id);
+    const nextBookId = item.book_id ? Number(item.book_id) : currentBookId;
+    if (nextBookId !== currentBookId) {
+      const nextBook = await client.query('SELECT id FROM buku WHERE id = $1 FOR UPDATE', [nextBookId]);
+      if (!nextBook.rowCount) {
+        const error = new Error('Judul yang dipilih tidak ditemukan.');
+        error.code = '23503';
+        throw error;
+      }
+      await client.query(`UPDATE buku SET total_eksemplar = GREATEST(0, total_eksemplar - $2),
+        eksemplar_tersedia = GREATEST(0, eksemplar_tersedia - $3), waktu_diperbarui = NOW()
+        WHERE id = $1`, [
+        currentBookId, current.quantity, current.lifecycle_status === 'in_stock' ? current.quantity : 0
+      ]);
+      await client.query(`UPDATE buku SET total_eksemplar = total_eksemplar + $2,
+        eksemplar_tersedia = eksemplar_tersedia + $3, waktu_diperbarui = NOW()
+        WHERE id = $1`, [
+        nextBookId, item.quantity, current.lifecycle_status === 'in_stock' ? item.quantity : 0
+      ]);
+    } else {
+      const quantityDifference = item.quantity - current.quantity;
+      await client.query(`UPDATE buku SET total_eksemplar = GREATEST(0, total_eksemplar + $2),
+        eksemplar_tersedia = GREATEST(0, eksemplar_tersedia + $3), waktu_diperbarui = NOW()
+        WHERE id = $1`, [
+        currentBookId, quantityDifference,
+        current.lifecycle_status === 'in_stock' ? quantityDifference : 0
+      ]);
+    }
+
+    await client.query(`UPDATE buku SET isbn = NULLIF($2, ''), judul = $3, pengarang = $4,
+      penerbit = NULLIF($5, ''), tahun_terbit = $6, jenis_bahan = $7, kategori = NULLIF($8, ''),
+      subjek = NULLIF($9, ''), nomor_panggil = NULLIF($10, ''), lokasi_rak = NULLIF($11, ''),
+      waktu_diperbarui = NOW() WHERE id = $1`, [
+      nextBookId, item.isbn, item.title, item.author, item.publisher, item.publication_year,
+      item.material_type, item.category, item.subject, item.call_number, item.location
+    ]);
+    await client.query(`UPDATE akuisisi SET id_buku = $2, id_sumber_perolehan = $3,
+      jenis_rekaman = $4, nomor_induk = $5, kode_batang = $6, rfid = $7, tanggal_perolehan = $8,
+      jumlah = $9, bentuk_fisik = $10, jenis_akses = $11, lokasi = $12,
+      metadata_rda = $13::jsonb, metadata_pengadaan = $14::jsonb, waktu_diperbarui = NOW()
+      WHERE id = $1`, [
+      id, nextBookId, item.source_id, item.record_type, item.accession_no, item.barcode, item.rfid,
+      item.acquisition_date, item.quantity, item.physical_form, item.access_type, item.location,
+      JSON.stringify(item.rda_metadata), JSON.stringify(item.acquisition_metadata)
+    ]);
+    await client.query('COMMIT');
+    return true;
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+async function setCollectionOpacVisibility(id, visible) {
+  const result = await query(`UPDATE akuisisi SET metadata_pengadaan =
+      jsonb_set(metadata_pengadaan, '{show_in_opac}', to_jsonb($2::boolean), true),
+      waktu_diperbarui = NOW()
+    WHERE id = $1 RETURNING id`, [id, visible]);
+  return Boolean(result.rowCount);
 }
 
 async function insertAcquisition(client, item) {
@@ -311,6 +397,7 @@ module.exports = {
   createShipment,
   deleteAcquisition,
   deleteSource,
+  getCollection,
   importAcquisitions,
   listBindings,
   listCollections,
@@ -320,6 +407,8 @@ module.exports = {
   listSources,
   savePeriodical,
   saveSource,
+  setCollectionOpacVisibility,
+  updateAcquisition,
   updateLifecycle,
   updateProposalStatus
 };

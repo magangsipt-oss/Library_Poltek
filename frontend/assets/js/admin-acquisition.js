@@ -9,6 +9,7 @@
     'acq-entry': { title: 'Entri Koleksi', description: 'Catat bibliografi dan data pengadaan koleksi baru.' },
     'acq-entry-rda': { title: 'Entri Koleksi (RDA)', description: 'Entri koleksi dengan tambahan elemen deskripsi RDA.' },
     'acq-list': { title: 'Daftar Koleksi', description: 'Cari koleksi dan kelola status inventaris.' },
+    'acq-correction': { title: 'Koreksi Koleksi', description: 'Tinjau dan perbarui informasi bibliografis serta data pengadaan koleksi.' },
     'acq-binding': { title: 'Jilid Koleksi', description: 'Catat jilid dan eksemplar koleksi.' },
     'acq-cardex': { title: 'Kardeks Terbitan Berkala', description: 'Kelola judul terbitan berkala dan penerimaan edisi.' },
     'acq-proposals': { title: 'Daftar Usulan Koleksi', description: 'Tinjau dan perbarui status usulan koleksi.' },
@@ -59,6 +60,11 @@
     person: { label: 'Nama Orang', mainTag: '100', additionalTag: '700' },
     corporate: { label: 'Nama Badan', mainTag: '110', additionalTag: '710' },
     meeting: { label: 'Nama Pertemuan', mainTag: '111', additionalTag: '711' }
+  };
+  const subjectTypes = {
+    person: { label: 'Nama Orang', tag: '600' },
+    topical: { label: 'Topikal', tag: '650' },
+    geographic: { label: 'Nama Geografis', tag: '651' }
   };
   const authorEditorIcon = '<svg aria-hidden="true" viewBox="0 0 16 16"><path d="M2 3h2v2H2zm4 0h8v2H6zM2 7h2v2H2zm4 0h8v2H6zm-4 4h2v2H2zm4 0h8v2H6z"></path></svg>';
   const creatorFields = {
@@ -117,28 +123,37 @@
       ]
     }
   };
-  const physicalDescriptionFields = [
-    ['a', 'Jumlah halaman / deskripsi fisik'], ['b', 'Ket. ilustrasi'], ['c', 'Dimensi'],
-    ['e', 'Bahan sertaan'], ['f', 'Jenis unit'], ['g', 'Ukuran unit'], ['3', 'Bahan yang ditentukan'],
-    ['6', 'Tautan data'], ['8', 'Nomor urut dan lembaga']
-  ];
-  const subjectFields = [
-    ['3', 'Spesifikasi bahan'], ['a', 'Nama orang'], ['b', 'Penomoran'],
-    ['c', 'Tambahan pada nama selain tahun'], ['d', 'Tahun'], ['f', 'Tahun penerbitan karya'],
-    ['g', 'Keterangan lainnya'], ['h', 'Medium'], ['j', 'Keterangan penjelas'],
-    ['k', 'Subtajuk bentuk'], ['l', 'Bahasa'], ['m', 'Media pertunjukan musik'],
-    ['n', 'Nomor bagian dari karya'], ['o', 'Pernyataan aransemen musik'],
-    ['p', 'Nama bagian/seksi dari karya'], ['q', 'Nama dalam bentuk lengkap'],
-    ['r', 'Kunci/nada dasar musik'], ['s', 'Versi'], ['t', 'Judul karya'],
-    ['v', 'Subdivisi bentuk'], ['x', 'Subdivisi umum'], ['y', 'Subdivisi kronologis'],
-    ['z', 'Subdivisi wilayah']
-  ];
+  const subjectFields = {
+    person: [
+      ['3', 'Spesifikasi bahan'], ['a', 'Nama orang'], ['b', 'Penomoran'],
+      ['c', 'Tambahan pada nama selain tahun'], ['d', 'Tahun'], ['e', 'Istilah penghubung'],
+      ['f', 'Tahun penerbitan karya'], ['g', 'Keterangan lainnya'], ['h', 'Medium'],
+      ['j', 'Keterangan penjelas'], ['k', 'Subtajuk bentuk'], ['l', 'Bahasa'],
+      ['m', 'Media pertunjukan musik'], ['n', 'Nomor bagian dari karya'],
+      ['o', 'Pernyataan aransemen musik'], ['p', 'Nama bagian/seksi dari karya'],
+      ['q', 'Nama dalam bentuk lengkap'], ['r', 'Kunci/nada dasar musik'],
+      ['s', 'Versi'], ['t', 'Judul karya'], ['v', 'Subdivisi bentuk'],
+      ['x', 'Subdivisi umum'], ['y', 'Subdivisi kronologis'], ['z', 'Subdivisi wilayah']
+    ],
+    topical: [
+      ['3', 'Spesifikasi bahan'], ['a', 'Istilah topikal'], ['b', 'Istilah topikal setelah subdivisi geografis'],
+      ['v', 'Subdivisi bentuk'], ['x', 'Subdivisi umum'],
+      ['y', 'Subdivisi kronologis'], ['z', 'Subdivisi wilayah']
+    ],
+    geographic: [
+      ['3', 'Spesifikasi bahan'], ['a', 'Nama geografis'],
+      ['v', 'Subdivisi bentuk'], ['x', 'Subdivisi umum'],
+      ['y', 'Subdivisi kronologis'], ['z', 'Subdivisi wilayah']
+    ]
+  };
   const noteTypes = ['Abstrak / Anotasi', 'Catatan Disertasi', 'Catatan Bibliografi', 'Rincian Isi', 'Catatan Umum'];
   const removeEntryIcon = '<svg aria-hidden="true" viewBox="0 0 16 16"><path d="M5 1h6l1 2h3v2H1V3h3zm-2 5h10l-.7 9H3.7zm2 2v5h1V8zm3 0v5h1V8z"></path></svg>';
   let renderVersion = 0;
   let additionalAuthorIndex = 1;
   let activeAuthorRow = null;
   let activeMetadataDialog = null;
+  let pendingMessage = '';
+  const collectionState = { items: [], status: 'all', keyword: '', filters: [], filterMode: 'AND', page: 1, pageSize: 20 };
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -281,7 +296,8 @@
       ${panel('Daftar Nama Sumber Perolehan', table(['Nama', 'Alamat', 'No. Telepon', 'Eksemplar', 'Aksi'], rows, 'Belum ada sumber perolehan.'))}`;
   }
 
-  async function acquisitionForm(isRda) {
+  async function acquisitionForm(isRda, collection = null) {
+    const editing = Boolean(collection);
     const sources = await getItems('/sources');
     const sourceOptions = `<option value="">---Belum ditentukan---</option>${sources.map(item =>
       `<option value="${item.id}">${escapeHtml(item.name)}</option>`).join('')}`;
@@ -297,14 +313,21 @@
     <div class="acq-price-control"><input id="acq-price" name="price" type="number" min="0" max="999999999999" step="0.01" value="0.00">
       <div class="module-field"><label for="acq-price_unit">Satuan harga</label>
         <select id="acq-price_unit" name="price_unit">${choiceOptions('price_unit')}</select></div></div></div>`;
-    return `<form id="acquisition-form" class="module-form acquisition-entry-form" data-form="acquisition" data-record-type="${isRda ? 'rda' : 'standard'}">
+    const entryActions = editing
+      ? `<button class="module-button is-success" type="submit" form="acquisition-form">Simpan</button>
+         <button class="module-button is-info" type="button" data-action="choose-title">Ganti Judul</button>
+         <button class="module-button is-danger" type="button" data-action="correction-quarantine">Pindahkan ke Karantina</button>
+         <a class="module-button is-complete" href="#acq-list">Selesai</a>`
+      : `<button class="module-button is-success" type="submit" form="acquisition-form">Simpan</button>
+         <button class="module-button is-info" type="button" data-action="choose-title">Pilih Judul</button>
+         <button class="module-button is-info" type="button" data-action="copy-catalog-title">Salin Katalog dari</button>
+         <a class="module-button is-complete" href="#acq-list">Selesai</a>`;
+    return `<form id="acquisition-form" class="module-form acquisition-entry-form" data-form="acquisition"
+      data-record-type="${isRda ? 'rda' : 'standard'}" ${editing ? `data-collection-id="${collection.id}"` : ''}>
       <input type="hidden" name="book_id">
       <input type="hidden" name="material_type">
       <div class="module-form-actions acquisition-entry-toolbar">
-        <button class="module-button is-success" type="submit" form="acquisition-form">Simpan</button>
-        <button class="module-button is-info" type="button" data-action="choose-title">Pilih Judul</button>
-        <button class="module-button is-info" type="button" data-action="copy-catalog-title">Salin Katalog dari</button>
-        <a class="module-button is-complete" href="#acq-list">Selesai</a>
+        ${entryActions}
       </div>
       <div class="acquisition-entry-content">
         <p class="acq-selected-title" id="acq-selected-title" hidden></p>
@@ -405,21 +428,12 @@
                     ${field('Bahan Sertaan', 'physical_accompanying_material', { max: 255, placeholder: 'Masukan Bahan Sertaan...' })}
                     ${field('Edisi', 'edition', { max: 120, placeholder: 'Masukan Edisi...' })}
                     <div class="acq-bibliographic-row">
-                      <label for="acq-physical-description">Deskripsi Fisik</label>
-                      <div class="acq-author-input-control" data-metadata-entry="physical">
-                        <input id="acq-physical-description" name="physical_description" type="text" maxlength="255"
-                          placeholder="Masukan Deskripsi Fisik..." data-metadata-value>
-                        <button class="module-button is-warning acq-author-editor-button" type="button"
-                          data-action="open-metadata-fields" data-metadata-kind="physical" aria-label="Buka rincian objek deskripsi fisik">${authorEditorIcon}</button>
-                      </div>
-                    </div>
-                    <div class="acq-bibliographic-row">
                       <label>Subjek</label>
                       <div class="acq-subject-entries">
                       <div class="acq-author-control acq-subject-entry" data-metadata-entry="subject">
                         <select id="acq-subject-type" name="subject_type" data-subject-type>
-                          <option value="person">Nama Orang</option><option value="corporate">Nama Badan</option>
-                          <option value="meeting">Nama Pertemuan</option>
+                          <option value="person">Nama Orang</option><option value="topical">Topikal</option>
+                          <option value="geographic">Nama Geografis</option>
                         </select>
                         <div class="acq-author-input-control">
                           <input id="acq-subject" name="subject" type="text" maxlength="5000"
@@ -519,10 +533,7 @@
           </div>
         </section>
         <div class="module-form-actions acquisition-entry-toolbar">
-          <button class="module-button is-success" type="submit">Simpan</button>
-          <button class="module-button is-info" type="button" data-action="choose-title">Pilih Judul</button>
-          <button class="module-button is-info" type="button" data-action="copy-catalog-title">Salin Katalog dari</button>
-          <a class="module-button is-complete" href="#acq-list">Selesai</a>
+          ${entryActions}
         </div>
       </div>
       <dialog class="acq-title-dialog" aria-labelledby="acq-title-dialog-heading">
@@ -552,43 +563,272 @@
     </form>`;
   }
 
-  async function collectionTable(status) {
-    const query = new URLSearchParams({ status });
-    const items = await getItems(`/collections?${query}`);
-    const rows = items.map(item => {
-      let actions = '';
-      if (item.is_legacy) {
-        actions = '—';
-      } else if (item.lifecycle_status === 'in_stock') {
-        actions = `<button class="module-button" data-action="collection-status" data-id="${item.id}" data-status="basket">Ke keranjang</button>
-          <button class="module-button is-warning" data-action="collection-status" data-id="${item.id}" data-status="quarantine">Karantina</button>
-          <button class="module-button is-danger" data-action="delete-acquisition" data-id="${item.id}">Hapus</button>`;
-      } else if (item.lifecycle_status === 'basket' || item.lifecycle_status === 'quarantine') {
-        actions = `<button class="module-button is-neutral" data-action="collection-status" data-id="${item.id}" data-status="in_stock">Pulihkan</button>`;
-      } else {
-        actions = '—';
+  function populateAcquisitionForm(item) {
+    const form = content.querySelector('#acquisition-form');
+    if (!form) return;
+    const bibliographic = item.rda_metadata?.bibliographic_metadata || {};
+    const acquisition = item.acquisition_metadata || {};
+    const values = {
+      book_id: item.book_id, title: item.title, subtitle: bibliographic.subtitle,
+      responsibility: bibliographic.responsibility, author: item.author, publisher: item.publisher,
+      publication_year: item.publication_year, isbn: item.isbn, category: item.category,
+      subject: item.subject, call_number: item.call_number, edition: bibliographic.edition,
+      publication_place: bibliographic.publication_place, physical_pages: bibliographic.physical_details?.pages,
+      physical_illustrations: bibliographic.physical_details?.illustrations,
+      physical_dimensions: bibliographic.physical_details?.dimensions,
+      physical_accompanying_material: bibliographic.physical_details?.accompanying_material,
+      ddc_class: bibliographic.ddc_class, quantity: item.quantity, accession_no: item.accession_no,
+      barcode: item.barcode, rfid: item.rfid, acquisition_date: item.acquisition_date,
+      source_id: item.source_id, source_type: acquisition.source_type, physical_form: item.physical_form,
+      access_type: item.access_type, location: item.location, room_location: acquisition.room_location,
+      availability: acquisition.availability, currency: acquisition.currency, price: acquisition.price,
+      price_unit: acquisition.price_unit, publication_statement: item.rda_metadata?.publication_statement,
+      series_statement: item.rda_metadata?.series_statement, other_identifier: item.rda_metadata?.other_identifier
+    };
+    for (const [name, value] of Object.entries(values)) {
+      if (value === undefined || value === null) continue;
+      const control = form.querySelector(`[name="${name}"]`);
+      if (control) {
+        if (control.tagName === 'SELECT' && ![...control.options].some(option => option.value === String(value))) {
+          const option = document.createElement('option');
+          option.value = String(value);
+          option.textContent = String(value);
+          control.append(option);
+        }
+        control.value = String(value);
       }
-      return `<tr><td>${escapeHtml(item.barcode || '—')}</td><td>${escapeHtml(item.acquisition_date)}</td>
-        <td>${escapeHtml(item.accession_no || '—')}</td><td><strong>${escapeHtml(item.title)}</strong><br>${escapeHtml(item.author || '')}</td>
-        <td>${escapeHtml(item.physical_form)}</td><td>${escapeHtml(item.source_name || '—')}</td>
-        <td>${escapeHtml(item.category || '—')}</td><td>${escapeHtml(statusLabels[item.lifecycle_status] || item.lifecycle_status)}</td>
-        <td>${escapeHtml(item.quantity)}</td><td><div class="module-inline-actions">${actions}</div></td></tr>`;
+    }
+    const material = acquisitionChoices.material_type.find(choice => choice.value === item.material_type)
+      || acquisitionChoices.material_type.find(choice => choice.label === item.material_type);
+    form.querySelector('[name="material_type"]').value = item.material_type || 'buku';
+    form.querySelector('[name="material_type_label"]').value = material?.label || item.material_type || '';
+    form.querySelector('.acquisition-entry-details').hidden = false;
+    form.querySelector('.acq-bibliographic-fields').disabled = false;
+    const opacCheckbox = form.querySelector('input[type="checkbox"][name="show_in_opac"]');
+    opacCheckbox.checked = acquisition.show_in_opac !== false;
+    form.querySelector('[name="marc_data"]').value = JSON.stringify(bibliographic.marc_data || [], null, 2);
+
+    const mainCreator = bibliographic.main_creator || {};
+    const mainRow = form.querySelector('[data-author-entry="main"]');
+    mainRow.querySelector('[data-author-type]').value = mainCreator.type || bibliographic.creator_type || 'person';
+    mainRow.querySelector('[data-author-value]').value = mainCreator.name || item.author || '';
+    if (mainCreator.tag || mainCreator.subfields) mainRow.dataset.marcEntry = JSON.stringify(mainCreator);
+    const creatorOrder = mainCreator.name_order || bibliographic.creator_name_order;
+    if (creatorOrder) {
+      const radio = [...form.querySelectorAll('input[name="creator_name_order"]')].find(input => input.value === creatorOrder);
+      if (radio) radio.checked = true;
+    }
+
+    const authorsContainer = form.querySelector('.acq-additional-authors');
+    const authors = bibliographic.additional_authors || [];
+    const initialAuthor = authorsContainer.querySelector('[data-author-entry="additional"]');
+    authors.forEach((author, index) => {
+      const row = index === 0 ? initialAuthor : addAdditionalAuthorRow(authorsContainer);
+      row.querySelector('[data-author-type]').value = author.type || 'person';
+      row.querySelector('[data-author-value]').value = author.name || '';
+      if (author.tag || author.subfields) row.dataset.marcEntry = JSON.stringify(author);
+      const radio = [...row.querySelectorAll('input[type="radio"]')].find(input => input.value === (author.name_order || ''));
+      if (radio) radio.checked = true;
+    });
+    if (!authors.length) initialAuthor.querySelector('[data-author-value]').value = '';
+
+    const subjectsContainer = form.querySelector('.acq-subject-entries');
+    const subjects = bibliographic.subjects || [];
+    const initialSubject = subjectsContainer.querySelector('[data-metadata-entry="subject"]');
+    subjects.forEach((subject, index) => {
+      const row = index === 0 ? initialSubject : (addMetadataEntry('subject', subjectsContainer), subjectsContainer.lastElementChild);
+      row.querySelector('[data-subject-type]').value = subject.subject_type || 'person';
+      row.querySelector('[data-metadata-value]').value = subject.value || '';
+      row.querySelector('.acq-name-order').hidden = subject.subject_type !== 'person';
+      const nameOrder = [...row.querySelectorAll('input[type="radio"]')].find(input => input.value === (subject.name_order || ''));
+      if (nameOrder) nameOrder.checked = true;
+      if (subject.tag || subject.subfields) row.dataset.marcEntry = JSON.stringify(subject);
+    });
+    if (!subjects.length) initialSubject.querySelector('[data-metadata-value]').value = item.subject || '';
+
+    for (const fieldName of ['call_number', 'isbn']) {
+      const valuesToSet = [...(bibliographic[fieldName === 'isbn' ? 'isbns' : 'call_numbers'] || [])];
+      if (!valuesToSet.length && values[fieldName]) valuesToSet.push(values[fieldName]);
+      const firstInput = form.querySelector(`[name="${fieldName}"]`);
+      valuesToSet.forEach((value, index) => {
+        const input = index === 0 ? firstInput : (() => {
+          const row = firstInput.closest('.acq-bibliographic-repeat-row');
+          const button = row.querySelector('[data-action="add-bibliographic-input"]');
+          addBibliographicInput(button);
+          return row.nextElementSibling.querySelector('input');
+        })();
+        input.value = value;
+      });
+    }
+
+    const notesContainer = form.querySelector('.acq-notes-list');
+    (bibliographic.notes || []).forEach((note, index) => {
+      const row = index === 0 ? notesContainer.firstElementChild : (addNote(notesContainer), notesContainer.lastElementChild);
+      row.querySelector('[data-note-text]').value = note.text || '';
+      const radio = [...row.querySelectorAll('input[type="radio"]')].find(input => input.value === (note.type || ''));
+      if (radio) radio.checked = true;
+    });
+    const onlineContainer = form.querySelector('.acq-online-locations');
+    (bibliographic.online_locations || []).forEach((url, index) => {
+      const row = index === 0 ? onlineContainer.querySelector('[data-online-location]') : (addMetadataEntry('online', onlineContainer), onlineContainer.lastElementChild);
+      row.querySelector('input[name="online_location"]').value = url;
+    });
+  }
+
+  const collectionFilterFields = [
+    ['barcode', 'No Barcode'], ['acquisition_date', 'Tanggal Pengadaan'], ['accession_no', 'Nomor Induk'],
+    ['title', 'Judul'], ['author', 'Pengarang'], ['physical_form', 'Bentuk Fisik'],
+    ['source_type', 'Jenis Sumber'], ['category', 'Kategori'], ['access_type', 'Akses'],
+    ['availability', 'Ketersediaan'], ['location', 'Lokasi Perpustakaan'],
+    ['room_location', 'Lokasi Ruang'], ['show_in_opac', 'OPAC']
+  ];
+
+  function updateCollectionFilterControl(row) {
+    const field = row.querySelector('[name="filter_field"]').value;
+    const current = row.querySelector('[name="filter_value"]');
+    if (field === 'show_in_opac' && current.tagName !== 'SELECT') {
+      const select = document.createElement('select');
+      select.className = 'module-select';
+      select.name = 'filter_value';
+      select.setAttribute('aria-label', 'Status OPAC');
+      select.innerHTML = '<option value="true">Tampil di OPAC</option><option value="false">Tidak tampil di OPAC</option>';
+      current.replaceWith(select);
+    } else if (field !== 'show_in_opac' && current.tagName !== 'INPUT') {
+      const input = document.createElement('input');
+      input.className = 'module-filter';
+      input.name = 'filter_value';
+      input.placeholder = 'Nilai kriteria';
+      current.replaceWith(input);
+    }
+  }
+
+  function collectionFieldValue(item, fieldName) {
+    const metadata = item.acquisition_metadata || {};
+    if (fieldName === 'source_type' || fieldName === 'availability' || fieldName === 'room_location'
+      || fieldName === 'show_in_opac') return metadata[fieldName];
+    return item[fieldName];
+  }
+
+  function filteredCollections() {
+    const keyword = collectionState.keyword.toLocaleLowerCase('id');
+    let items = collectionState.items.filter(item => !keyword
+      || [item.barcode, item.acquisition_date, item.accession_no, item.title, item.author]
+        .some(value => String(value || '').toLocaleLowerCase('id').includes(keyword)));
+    if (collectionState.filters.length) {
+      const matches = collectionState.filters.map(filter => item => {
+        const value = collectionFieldValue(item, filter.field);
+        if (filter.field === 'show_in_opac') return (value !== false) === (filter.value === 'true');
+        return String(value ?? '').toLocaleLowerCase('id').includes(filter.value.toLocaleLowerCase('id'));
+      });
+      items = items.filter(item => collectionState.filterMode === 'OR'
+        ? matches.some(match => match(item))
+        : matches.every(match => match(item)));
+    }
+    return items;
+  }
+
+  function collectionTableHtml() {
+    const items = filteredCollections();
+    const pages = Math.max(1, Math.ceil(items.length / collectionState.pageSize));
+    collectionState.page = Math.min(collectionState.page, pages);
+    const first = items.length ? (collectionState.page - 1) * collectionState.pageSize : 0;
+    const visible = items.slice(first, first + collectionState.pageSize);
+    const rows = visible.map((item, index) => {
+      const acquisition = item.acquisition_metadata || {};
+      const bibliographic = (item.rda_metadata || {}).bibliographic_metadata || {};
+      const physical = bibliographic.physical_details || {};
+      const publication = [bibliographic.publication_place, item.publisher, item.publication_year]
+        .filter(Boolean).join(' : ');
+      const physicalDetail = [
+        physical.pages && `${physical.pages} hlm`, physical.illustrations,
+        physical.dimensions, physical.accompanying_material, bibliographic.edition
+      ]
+        .filter(Boolean).join(' ; ');
+      const material = acquisitionChoices.material_type.find(choice => choice.value === item.material_type
+        || choice.label === item.material_type);
+      const acquisitionDate = item.acquisition_date
+        ? new Date(`${item.acquisition_date.slice(0, 10)}T00:00:00`).toLocaleDateString('en-US', {
+          month: 'short', day: 'numeric', year: 'numeric'
+        })
+        : '—';
+      const barcode = item.barcode
+        ? (item.is_legacy ? escapeHtml(item.barcode) : `<a href="#acq-correction/${item.id}" class="acq-collection-barcode">${escapeHtml(item.barcode)}</a>`)
+        : '—';
+      return `<tr><td><input type="checkbox" data-collection-select value="${item.id || ''}" aria-label="Pilih koleksi ${escapeHtml(item.barcode || item.title)}" ${item.is_legacy ? 'disabled' : ''}></td>
+        <td>${first + index + 1}</td><td>${barcode}</td><td>${escapeHtml(acquisitionDate)}</td>
+        <td>${escapeHtml(item.accession_no || '—')}</td><td><strong>${escapeHtml(item.title)}</strong>${item.author ? `<br>${escapeHtml(item.author)}` : ''}
+          ${publication ? `<br>${escapeHtml(publication)}` : ''}${physicalDetail ? `<br>${escapeHtml(physicalDetail)}` : ''}
+          <br>${escapeHtml(material?.label.split('(')[0] || item.material_type || 'Monograf')}</td>
+        <td>${escapeHtml(item.physical_form || '—')}</td><td>${escapeHtml(acquisition.source_type || '—')}</td>
+        <td>${escapeHtml(item.category || '—')}</td><td>${escapeHtml(item.access_type || '—')}</td>
+        <td>${escapeHtml(acquisition.availability || statusLabels[item.lifecycle_status] || '—')}</td>
+        <td>${escapeHtml(item.location || '—')}</td><td>${escapeHtml(acquisition.room_location || '—')}</td>
+        <td>${acquisition.show_in_opac === false ? '' : '<span class="acq-opac-check" aria-label="Tampil di OPAC">✓</span>'}</td></tr>`;
     }).join('');
-    return { items, html: table(['No Barcode', 'Tanggal Pengadaan', 'Nomor Induk', 'Data Bibliografis', 'Bentuk Fisik', 'Jenis Sumber', 'Kategori', 'Status', 'Eksemplar', 'Aksi'], rows, 'Tidak ada data yang ditemukan.') };
+    const firstItem = items.length ? first + 1 : 0;
+    const lastItem = Math.min(first + collectionState.pageSize, items.length);
+    return `<div class="acq-collection-table">
+      <div class="acq-collection-table-heading"><strong>▦ Koleksi</strong>
+        <span>Menampilkan ${firstItem}-${lastItem} dari ${items.length} item</span></div>
+      <div class="acq-collection-table-tools"><label>Tampilkan :
+        <select class="module-select" data-collection-page-size aria-label="Jumlah item per halaman">
+          ${[20, 50, 100].map(size => `<option value="${size}" ${collectionState.pageSize === size ? 'selected' : ''}>${size} per halaman</option>`).join('')}
+        </select></label>
+        <button class="module-button is-neutral" type="button" data-action="export-collections">Ekspor CSV</button>
+        <div class="module-inline-actions"><select class="module-select" data-collection-bulk-action aria-label="Aksi koleksi terpilih">
+          <option value="true">Tampilkan di OPAC</option><option value="false">Sembunyikan dari OPAC</option>
+        </select><button class="module-button" type="button" data-action="bulk-collection-opac">Proses</button></div>
+      </div>
+      <div class="module-table-wrap"><table class="module-table acq-collection-table-grid">
+        <thead><tr><th><input type="checkbox" data-action="select-all-collections" aria-label="Pilih semua koleksi"></th>
+          ${['#', 'No Barcode', 'Tanggal Pengadaan', 'Nomor Induk', 'Data Bibliografis', 'Bentuk Fisik',
+      'Jenis Sumber', 'Kategori', 'Akses', 'Ketersediaan', 'Lokasi Perpustakaan', 'Lokasi Ruang', 'OPAC']
+    .map(label => `<th>${escapeHtml(label)}</th>`).join('')}</tr></thead>
+        <tbody>${rows || '<tr><td class="module-table-empty" colspan="14">Tidak ada data yang ditemukan.</td></tr>'}</tbody></table></div>
+      <div class="module-pagination"><span>Halaman ${collectionState.page} dari ${pages}</span>
+        <div class="module-inline-actions"><button class="module-button is-neutral" type="button" data-action="collection-page" data-page="1" ${collectionState.page <= 1 ? 'disabled' : ''}>«</button>
+          <button class="module-button is-neutral" type="button" data-action="collection-page" data-page="${collectionState.page - 1}" ${collectionState.page <= 1 ? 'disabled' : ''}>‹</button>
+          <button class="module-button is-neutral" type="button" data-action="collection-page" data-page="${collectionState.page + 1}" ${collectionState.page >= pages ? 'disabled' : ''}>›</button>
+          <button class="module-button is-neutral" type="button" data-action="collection-page" data-page="${pages}" ${collectionState.page >= pages ? 'disabled' : ''}>»</button></div></div>
+      </div>`;
   }
 
   async function renderCollections(status = 'all', routeKey = 'acq-list') {
-    const result = await collectionTable(status);
+    collectionState.items = await getItems(`/collections?status=${encodeURIComponent(status)}`);
+    collectionState.status = status;
+    collectionState.keyword = '';
+    collectionState.filters = [];
+    collectionState.filterMode = 'AND';
+    collectionState.page = 1;
     const actions = status === 'basket'
       ? `<button class="module-button is-neutral" type="button" data-action="refresh">Segarkan Kembali</button>`
       : `<a class="module-button is-primary" href="#acq-entry">＋ Entri Koleksi</a>
          <a class="module-button is-neutral" href="#acq-import">Import Data</a>`;
-    return `${panel('Cari Koleksi', `<div class="module-panel-body"><form class="module-toolbar" data-form="collection-search">
-      <div class="module-toolbar-group"><input class="module-filter" name="keyword" placeholder="Cari judul, pengarang, barcode, atau nomor induk">
-        <button class="module-button" type="submit">Cari</button>
-        <button class="module-button is-neutral" type="reset">Ulangi</button></div>${actions}
+    const filterRow = `<div class="acq-collection-filter-row" data-collection-filter>
+      <select class="module-select" name="filter_field" aria-label="Kriteria filter">
+        ${collectionFilterFields.map(([value, label]) => `<option value="${value}">${escapeHtml(label)}</option>`).join('')}
+      </select>
+      <input class="module-filter" name="filter_value" placeholder="Nilai kriteria">
+      <button class="module-button is-danger" type="button" data-action="remove-collection-filter">✕ Hapus</button>
+    </div>`;
+    return `${panel('Filter Koleksi', `<div class="module-panel-body">
+      <form class="acq-collection-filters" data-form="collection-search">
+        <div class="acq-collection-filter-heading"><div class="module-inline-actions">
+          <select class="module-select" name="filter_mode" aria-label="Gabungan filter"><option value="AND">Dan</option><option value="OR">Atau</option></select>
+        </div><button class="module-button is-success" type="button" data-action="add-collection-filter">＋ Tambah filter</button></div>
+        <div class="acq-collection-filter-list">${filterRow}</div>
+        <div class="module-toolbar"><div class="module-toolbar-group">
+          <input class="module-filter" name="keyword" placeholder="Cari judul, pengarang, barcode, atau nomor induk">
+          <button class="module-button" type="submit">⌕ Cari</button><button class="module-button is-neutral" type="reset">↻ Ulangi</button>
+        </div>${actions}</div>
       </form></div>`)}
-      ${panel(routeKey === 'acq-basket' ? 'Keranjang Koleksi' : routeKey === 'acq-quarantine' ? 'Karantina Koleksi' : 'Daftar Koleksi', result.html)}`;
+      ${panel(routeKey === 'acq-basket' ? 'Keranjang Koleksi' : routeKey === 'acq-quarantine' ? 'Karantina Koleksi' : 'Koleksi',
+      `<div id="acq-collection-results">${collectionTableHtml()}</div>`)}`;
+  }
+
+  async function renderCollectionCorrection(id) {
+    const result = await api(`/collections/${id}`);
+    return { item: result.item, html: await acquisitionForm(result.item.record_type === 'rda', result.item) };
   }
 
   async function renderBindings() {
@@ -704,10 +944,13 @@
   }
 
   async function render() {
-    const routeKey = window.location.hash.slice(1);
+    const hash = window.location.hash.slice(1);
+    const correctionMatch = /^acq-correction\/(\d+)$/.exec(hash);
+    const routeKey = correctionMatch ? 'acq-correction' : hash;
     const route = moduleRoutes[routeKey];
     if (!route) return;
     const version = ++renderVersion;
+    let collectionBeingEdited = null;
     dashboard.hidden = true;
     module.hidden = false;
     pageTitle.textContent = route.title;
@@ -721,6 +964,11 @@
       if (routeKey === 'acq-sources') body = await renderSources();
       else if (routeKey === 'acq-entry') body = await acquisitionForm(false);
       else if (routeKey === 'acq-entry-rda') body = await acquisitionForm(true);
+      else if (routeKey === 'acq-correction' && correctionMatch) {
+        const correction = await renderCollectionCorrection(correctionMatch[1]);
+        collectionBeingEdited = correction.item;
+        body = correction.html;
+      }
       else if (routeKey === 'acq-list') body = await renderCollections();
       else if (routeKey === 'acq-basket') body = await renderCollections('basket', routeKey);
       else if (routeKey === 'acq-quarantine') body = await renderCollections('quarantine', routeKey);
@@ -731,6 +979,11 @@
       else body = await renderShipping();
       if (version !== renderVersion) return;
       content.innerHTML = shell(routeKey, body);
+      if (collectionBeingEdited) populateAcquisitionForm(collectionBeingEdited);
+      if (pendingMessage) {
+        showMessage(pendingMessage);
+        pendingMessage = '';
+      }
     } catch (error) {
       if (version !== renderVersion) return;
       console.error('Tidak dapat memuat modul Akuisisi:', error);
@@ -824,6 +1077,7 @@
       </div>`;
     markRepeatEntry(row);
     container.append(row);
+    return row;
   }
 
   function markRepeatEntry(row) {
@@ -843,6 +1097,7 @@
     const saved = row.dataset.marcEntry ? JSON.parse(row.dataset.marcEntry) : {};
     return {
       type: row.dataset.metadataEntry,
+      subject_type: row.querySelector('[data-subject-type]')?.value || 'person',
       tag: saved.tag || '',
       value: row.querySelector('[data-metadata-value]')?.value.trim() || '',
       name_order: row.querySelector('input[type="radio"]:checked')?.value || '',
@@ -856,11 +1111,9 @@
     const kind = button.dataset.metadataKind;
     const subjectType = row.querySelector('[data-subject-type]')?.value || 'person';
     const saved = row.dataset.marcEntry ? JSON.parse(row.dataset.marcEntry) : {};
-    const fields = kind === 'physical' ? physicalDescriptionFields : subjectFields;
-    const tag = kind === 'physical'
-      ? '300'
-      : ({ person: '600', corporate: '610', meeting: '611' })[subjectType];
-    const heading = kind === 'physical' ? 'Deskripsi Fisik' : `Subjek - ${creatorTypes[subjectType].label}`;
+    const fields = subjectFields[subjectType];
+    const tag = subjectTypes[subjectType].tag;
+    const heading = `Subjek - ${subjectTypes[subjectType].label}`;
     const initialValues = saved.type === kind && saved.subject_type === subjectType
       ? saved.subfields || {}
       : (row.querySelector('[data-metadata-value]').value.trim() ? { a: row.querySelector('[data-metadata-value]').value.trim() } : {});
@@ -903,8 +1156,8 @@
       row.className = 'acq-author-control acq-subject-entry';
       row.dataset.metadataEntry = 'subject';
       row.innerHTML = `<select name="subject_type" data-subject-type aria-label="Jenis subjek">
-        <option value="person">Nama Orang</option><option value="corporate">Nama Badan</option>
-        <option value="meeting">Nama Pertemuan</option></select>
+        <option value="person">Nama Orang</option><option value="topical">Topikal</option>
+        <option value="geographic">Nama Geografis</option></select>
         <div class="acq-author-input-control">
           <input name="subject" type="text" maxlength="5000" placeholder="Masukan Subjek..." data-metadata-value>
           <button class="module-button is-warning acq-author-editor-button" type="button"
@@ -991,7 +1244,6 @@
           .map(readCreatorEntry).filter(entry => entry.name),
         publication_place: data.publication_place || '',
         edition: data.edition || '',
-        physical_description: readMetadataEntry(form.querySelector('[data-metadata-entry="physical"]')),
         physical_details: {
           pages: data.physical_pages || '',
           illustrations: data.physical_illustrations || '',
@@ -1051,20 +1303,23 @@
       Object.keys(data).filter(key => key.startsWith('subject_name_order_'))
         .forEach(key => delete data[key]);
       delete data.marc_data;
-      await api('/collections', { method: 'POST', body: JSON.stringify(data) });
+      const collectionId = form.dataset.collectionId;
+      await api(collectionId ? `/collections/${collectionId}` : '/collections', {
+        method: collectionId ? 'PUT' : 'POST', body: JSON.stringify(data)
+      });
+      if (collectionId) {
+        pendingMessage = 'Data koleksi berhasil diperbarui.';
+      }
       window.location.hash = '#acq-list';
     } else if (form.dataset.form === 'collection-search') {
-      const query = new URLSearchParams({ status: 'all', keyword: data.keyword || '' });
-      const items = await getItems(`/collections?${query}`);
-      const rows = items.map(item => `<tr><td>${escapeHtml(item.barcode || '—')}</td><td>${escapeHtml(item.acquisition_date)}</td>
-        <td>${escapeHtml(item.accession_no || '—')}</td><td><strong>${escapeHtml(item.title)}</strong><br>${escapeHtml(item.author || '')}</td>
-        <td>${escapeHtml(item.physical_form)}</td><td>${escapeHtml(item.source_name || '—')}</td><td>${escapeHtml(item.category || '—')}</td>
-        <td>${escapeHtml(statusLabels[item.lifecycle_status] || item.lifecycle_status)}</td><td>${item.quantity}</td>
-        <td><div class="module-inline-actions">${item.is_legacy ? '—' : item.lifecycle_status === 'in_stock'
-          ? `<button class="module-button" data-action="collection-status" data-id="${item.id}" data-status="basket">Ke keranjang</button>
-             <button class="module-button is-warning" data-action="collection-status" data-id="${item.id}" data-status="quarantine">Karantina</button>`
-          : '—'}</div></td></tr>`).join('');
-      content.querySelector('.module-table tbody').innerHTML = rows || '<tr><td class="module-table-empty" colspan="10">Tidak ada data yang ditemukan.</td></tr>';
+      collectionState.keyword = String(data.keyword || '').trim();
+      collectionState.filterMode = data.filter_mode === 'OR' ? 'OR' : 'AND';
+      collectionState.filters = [...form.querySelectorAll('[data-collection-filter]')].map(row => ({
+        field: row.querySelector('[name="filter_field"]').value,
+        value: row.querySelector('[name="filter_value"]').value.trim()
+      })).filter(filter => filter.value);
+      collectionState.page = 1;
+      content.querySelector('#acq-collection-results').innerHTML = collectionTableHtml();
     } else if (form.dataset.form === 'binding') {
       await api('/bindings', { method: 'POST', body: JSON.stringify(data) });
       await render();
@@ -1103,6 +1358,30 @@
     URL.revokeObjectURL(url);
   }
 
+  function downloadCollectionExport() {
+    const columns = [
+      ['barcode', 'No Barcode'], ['acquisition_date', 'Tanggal Pengadaan'], ['accession_no', 'Nomor Induk'],
+      ['title', 'Judul'], ['author', 'Pengarang'], ['physical_form', 'Bentuk Fisik'],
+      ['source_type', 'Jenis Sumber'], ['category', 'Kategori'], ['access_type', 'Akses'],
+      ['availability', 'Ketersediaan'], ['location', 'Lokasi Perpustakaan'], ['room_location', 'Lokasi Ruang']
+    ];
+    const csvCell = value => {
+      const text = String(value ?? '');
+      const safeText = /^[\s]*[=+@-]/.test(text) ? `'${text}` : text;
+      return `"${safeText.replace(/"/g, '""')}"`;
+    };
+    const rows = [columns.map(([, label]) => csvCell(label)).join(',')];
+    for (const item of filteredCollections()) {
+      rows.push(columns.map(([fieldName]) => csvCell(collectionFieldValue(item, fieldName))).join(','));
+    }
+    const url = URL.createObjectURL(new Blob([rows.join('\r\n')], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'daftar-koleksi.csv';
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
   content.addEventListener('submit', async event => {
     const form = event.target.closest('form[data-form]');
     if (!form) return;
@@ -1118,11 +1397,61 @@
     }
   });
 
+  content.addEventListener('reset', event => {
+    if (!event.target.matches('[data-form="collection-search"]')) return;
+    setTimeout(() => {
+      collectionState.keyword = '';
+      collectionState.filters = [];
+      collectionState.filterMode = 'AND';
+      collectionState.page = 1;
+      const results = content.querySelector('#acq-collection-results');
+      if (results) results.innerHTML = collectionTableHtml();
+    });
+  });
+
   content.addEventListener('click', async event => {
     const button = event.target.closest('[data-action]');
     if (!button) return;
     try {
-      if (button.dataset.action === 'toggle-material-options') {
+      if (button.dataset.action === 'select-all-collections') {
+        content.querySelectorAll('[data-collection-select]:not(:disabled)').forEach(input => {
+          input.checked = button.checked;
+        });
+      } else if (button.dataset.action === 'add-collection-filter') {
+        const row = document.createElement('div');
+        row.className = 'acq-collection-filter-row';
+        row.dataset.collectionFilter = '';
+        row.innerHTML = `<select class="module-select" name="filter_field" aria-label="Kriteria filter">
+          ${collectionFilterFields.map(([value, label]) => `<option value="${value}">${escapeHtml(label)}</option>`).join('')}
+        </select><input class="module-filter" name="filter_value" placeholder="Nilai kriteria">
+        <button class="module-button is-danger" type="button" data-action="remove-collection-filter">✕ Hapus</button>`;
+        content.querySelector('.acq-collection-filter-list').append(row);
+      } else if (button.dataset.action === 'remove-collection-filter') {
+        const rows = content.querySelectorAll('[data-collection-filter]');
+        if (rows.length > 1) button.closest('[data-collection-filter]').remove();
+        else button.closest('[data-collection-filter]').querySelector('[name="filter_value"]').value = '';
+      } else if (button.dataset.action === 'collection-page') {
+        collectionState.page = Number(button.dataset.page);
+        content.querySelector('#acq-collection-results').innerHTML = collectionTableHtml();
+      } else if (button.dataset.action === 'export-collections') {
+        downloadCollectionExport();
+      } else if (button.dataset.action === 'bulk-collection-opac') {
+        const ids = [...content.querySelectorAll('[data-collection-select]:checked')].map(input => input.value).filter(Boolean);
+        if (!ids.length) throw new Error('Pilih setidaknya satu koleksi terlebih dahulu.');
+        const visible = content.querySelector('[data-collection-bulk-action]').value === 'true';
+        await Promise.all(ids.map(id => api(`/collections/${id}/opac`, {
+          method: 'PATCH', body: JSON.stringify({ visible })
+        })));
+        pendingMessage = 'Pengaturan OPAC koleksi berhasil diperbarui.';
+        await render();
+      } else if (button.dataset.action === 'correction-quarantine') {
+        const form = button.closest('#acquisition-form');
+        await api(`/collections/${form.dataset.collectionId}/status`, {
+          method: 'PATCH', body: JSON.stringify({ status: 'quarantine' })
+        });
+        pendingMessage = 'Koleksi berhasil dipindahkan ke karantina.';
+        window.location.hash = '#acq-list';
+      } else if (button.dataset.action === 'toggle-material-options') {
         const input = content.querySelector('#acq-material_type');
         const options = content.querySelector('#acq-material-type-options');
         const shouldOpen = options.hidden;
@@ -1263,6 +1592,18 @@
   });
 
   content.addEventListener('change', async event => {
+    const pageSize = event.target.closest('[data-collection-page-size]');
+    if (pageSize) {
+      collectionState.pageSize = Number(pageSize.value);
+      collectionState.page = 1;
+      content.querySelector('#acq-collection-results').innerHTML = collectionTableHtml();
+      return;
+    }
+    const filterField = event.target.closest('[name="filter_field"]');
+    if (filterField) {
+      updateCollectionFilterControl(filterField.closest('[data-collection-filter]'));
+      return;
+    }
     const authorType = event.target.closest('[data-author-type]');
     if (authorType) {
       const row = authorType.closest('[data-author-entry]');
@@ -1275,6 +1616,7 @@
       const row = subjectType.closest('[data-metadata-entry]');
       row.dataset.marcEntry = '';
       row.querySelector('[data-metadata-value]').value = '';
+      row.querySelector('.acq-name-order').hidden = subjectType.value !== 'person';
       return;
     }
     const select = event.target.closest('[data-action="proposal-status"]');

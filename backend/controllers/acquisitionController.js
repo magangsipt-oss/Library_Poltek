@@ -166,9 +166,31 @@ const listCollections = asyncHandler(async (req, res) => {
   res.json({ items: await AcquisitionModel.listCollections(status, keyword) });
 });
 
+const getCollection = asyncHandler(async (req, res) => {
+  const item = await AcquisitionModel.getCollection(idValue(req.params.id, 'Koleksi'));
+  if (!item) return res.status(404).json({ error: 'Data koleksi tidak ditemukan.' });
+  return res.json({ item });
+});
+
 const createAcquisition = asyncHandler(async (req, res) => {
   const item = await AcquisitionModel.createAcquisition(acquisitionInput(req.body, req.body.record_type));
   res.status(201).json({ item });
+});
+
+const updateAcquisition = asyncHandler(async (req, res) => {
+  const item = acquisitionInput(req.body, req.body.record_type);
+  if (!await AcquisitionModel.updateAcquisition(idValue(req.params.id, 'Koleksi'), item)) {
+    return res.status(404).json({ error: 'Data koleksi tidak ditemukan.' });
+  }
+  return res.json({ message: 'Data koleksi berhasil diperbarui.' });
+});
+
+const updateCollectionOpacVisibility = asyncHandler(async (req, res) => {
+  if (typeof req.body.visible !== 'boolean') throw validationError('Status OPAC harus berupa pilihan tampil atau tidak tampil.');
+  if (!await AcquisitionModel.setCollectionOpacVisibility(idValue(req.params.id, 'Koleksi'), req.body.visible)) {
+    return res.status(404).json({ error: 'Data koleksi tidak ditemukan.' });
+  }
+  return res.json({ message: 'Pengaturan OPAC koleksi berhasil diperbarui.' });
 });
 
 const updateLifecycle = asyncHandler(async (req, res) => {
@@ -278,6 +300,7 @@ module.exports = {
   createShipment,
   deleteAcquisition,
   deleteSource,
+  getCollection,
   importAcquisitions,
   listBindings,
   listCollections,
@@ -286,6 +309,8 @@ module.exports = {
   listShipments,
   listSources,
   saveSource,
+  updateAcquisition,
+  updateCollectionOpacVisibility,
   updateLifecycle,
   updateProposalStatus
 };
